@@ -282,14 +282,26 @@ const FaceDetection: React.FC = () => {
 
   // Function to handle the screenshot logic
   const takeScreenshot = () => {
-    if (videoRef.current) {
-      html2canvas(videoRef.current as HTMLElement).then((canvas) => {
+    if (videoRef.current && canvasRef.current) {
+      const video = videoRef.current;
+      const canvas = document.createElement("canvas");
+  
+      // Set canvas dimensions to match video dimensions
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+  
+      // Draw the current video frame on the canvas
+      const context = canvas.getContext("2d");
+      if (context) {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  
+        // Convert the canvas to a data URL (image) and trigger the download
         const img = canvas.toDataURL("image/png");
         const link = document.createElement("a");
         link.href = img;
-        link.download = "smart_mirror_screenshot.png";
+        link.download = "smArt_mirror_screenshot.png";
         link.click();
-      });
+      }
     }
   };
 
@@ -314,7 +326,7 @@ const FaceDetection: React.FC = () => {
     <div className="relative h-screen">
       <video
         ref={videoRef}
-        className="object-cover w-[100%] h-[100%] "
+        className="object-cover w-full h-full"
         autoPlay
         muted
         onPlay={handleVideoOnPlay}
