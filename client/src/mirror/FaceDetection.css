@@ -1,10 +1,10 @@
 @keyframes blitz {
     0% {
-      background-color: white; /* or any color you prefer */
+      background-color: white;
       opacity: 1;
     }
     50% {
-      opacity: 0.5; /* Optional: adjust for more or less intensity */
+      opacity: 0.5; 
     }
     100% {
       background-color: transparent;
@@ -13,6 +13,10 @@
   }
   
   .blitz-effect {
-    animation: blitz 0.5s ease-in-out; /* Duration of the blitz effect */
+    animation: blitz 0.5s ease-in-out;
   }
   
+  
+  .inverted-video {
+    transform: scaleX(-1); 
+  }

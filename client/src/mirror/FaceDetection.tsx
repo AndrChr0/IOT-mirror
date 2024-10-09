@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./FaceDetection.css";
+import html2canvas from "html2canvas";
 
 declare const faceapi: any;
 
@@ -11,10 +12,13 @@ const FaceDetection: React.FC = () => {
   const [faceExpressions, setFaceExpressions] = useState<string>("");
   const [countdown, setCountdown] = useState<number | null>(null);
   const [blitz, setBlitz] = useState(false);
-  const [imageData, setImageData] = useState<string | null>(null); // State for image data
-  const [showPreview, setShowPreview] = useState(false); // State to control preview visibility
+  const [imageData, setImageData] = useState<string | null>(null); 
+  const [showPreview, setShowPreview] = useState(false); 
+  const [showMoodPreview, setShowMoodPreview] = useState(false);
+  const [moodImageData, setMoodImageData] = useState<string | null>(null); 
 
   useEffect(() => {
+    
     const loadFaceApiScript = () => {
       return new Promise<void>((resolve, reject) => {
         const script = document.createElement("script");
@@ -23,7 +27,7 @@ const FaceDetection: React.FC = () => {
         script.onload = () => resolve();
         script.onerror = () => reject(new Error("Failed to load face-api.min.js"));
         document.body.appendChild(script);
-      });
+      }); 
     };
 
     const loadModels = async () => {
@@ -108,7 +112,6 @@ const FaceDetection: React.FC = () => {
               dominantExpression = expression;
             }
           }
-
           setFaceExpressions(dominantExpression);
         } else {
           setFaceExpressions("");
@@ -117,28 +120,73 @@ const FaceDetection: React.FC = () => {
     }
   };
 
-  // Function to handle the screenshot logic
+
+  const takeMoodBasedScreenshot = () => {
+    if (videoRef.current && canvasRef.current) {
+        const video = videoRef.current;
+
+        // Create a canvas for the video frame
+        const canvas = document.createElement("canvas");
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const context = canvas.getContext("2d");
+        if (context) {
+            context.save();
+            context.scale(-1, 1); // Flip the video horizontally
+            context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+            context.restore();
+
+            // Use html2canvas to capture the specific HTML element
+            const elementToCapture = document.getElementById("specific");
+
+            if (elementToCapture) {
+              elementToCapture.style.opacity = "1"; 
+                // Capture with allowTaint set to true
+                html2canvas(elementToCapture, { allowTaint: true, backgroundColor: null  }).then((elementCanvas) => {
+                    const elementContext = elementCanvas.getContext("2d");
+                    if (elementContext) {
+                        // Draw the captured element on the original canvas
+                        context.drawImage(elementCanvas, 0, 0); // Adjust position as needed
+                    }
+
+                    // Convert to image and update state
+                    const img = canvas.toDataURL("image/png");
+                    setMoodImageData(img);
+                    setShowMoodPreview(true); // Show the mood-based image preview
+                });
+                elementToCapture.style.opacity = "0"; 
+            } else {
+                console.error("Element to capture not found!");
+            }
+        }
+    }
+};
+
   const takeScreenshot = () => {
     if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = document.createElement("canvas");
-
-      // Set canvas dimensions to match video dimensions
+  
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
-
-      // Draw the current video frame on the canvas
+  
       const context = canvas.getContext("2d");
       if (context) {
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        context.save();
+
+        context.scale(-1, 1);
+        context.drawImage(video, -canvas.width, 0, canvas.width, canvas.height);
+  
+        context.restore();
         
-        // Convert the canvas to a data URL (image) and store it
         const img = canvas.toDataURL("image/png");
         setImageData(img);
-        setShowPreview(true); // Show the image preview
+        setShowPreview(true);
       }
     }
   };
+  
 
   const disableScreenshotButton = () => {
     const button = document.querySelector("#scrnsht_btn");
@@ -153,10 +201,11 @@ const FaceDetection: React.FC = () => {
       button.removeAttribute("disabled");
     }
   }
-  // Function to start the countdown and take a screenshot after 3 seconds
+
+
   const startCountdown = () => {
     setCountdown(3);
-    disableScreenshotButton(); // Disable the screenshot button during countdown
+    disableScreenshotButton();
     const interval = setInterval(() => {
       setCountdown((prevCountdown) => {
         if (prevCountdown && prevCountdown > 1) {
@@ -165,7 +214,26 @@ const FaceDetection: React.FC = () => {
           clearInterval(interval);
           setCountdown(null);
           triggerBlitzEffect();
-          takeScreenshot(); // Call to take screenshot
+          takeScreenshot(); 
+          enableScreenshotButton();
+          return null;
+        }
+      });
+    }, 1000);
+  };
+
+  const startCountdownMood = () => {
+    setCountdown(3);
+    disableScreenshotButton();
+    const interval = setInterval(() => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown && prevCountdown > 1) {
+          return prevCountdown - 1;
+        } else {
+          clearInterval(interval);
+          setCountdown(null);
+          triggerBlitzEffect();
+          takeMoodBasedScreenshot(); 
           enableScreenshotButton();
           return null;
         }
@@ -178,31 +246,64 @@ const FaceDetection: React.FC = () => {
     setTimeout(() => setBlitz(false), 500);
   };
 
-  // Function to handle user confirmation for using the screenshot
+
   const handleConfirmScreenshot = () => {
     const link = document.createElement("a");
     link.href = imageData!;
     link.download = "smArt_mirror_screenshot.png";
     link.click();
-    setShowPreview(false); // Hide the preview after confirming
-    setImageData(null); // Clear the image data
+    setShowPreview(false); 
+    setImageData(null);
   };
 
-  // Function to handle cancellation of the screenshot
+  
   const handleCancelScreenshot = () => {
-    setShowPreview(false); // Hide the preview
-    setImageData(null); // Clear the image data
+    setShowPreview(false); 
+    setImageData(null); 
+  };
+
+
+  const handleConfirmMoodScreenshot = () => {
+    const link = document.createElement("a");
+    link.href = moodImageData!;
+    link.download = "mood_based_screenshot.png";
+    link.click();
+    setShowMoodPreview(false);
+    setMoodImageData(null);
+  };
+
+  const handleCancelMoodScreenshot = () => {
+    setShowMoodPreview(false);
+    setMoodImageData(null);
   };
 
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
+      <div className="absolute z-10 mt-20">
+        <div className="w-[50px] h-[50px] bg-red-500" ></div>
+
+        {faceExpressions === "happy" &&
+          <img id="specific" className="w-[100px] h-[100px] opacity-0" src="/public/images/sun.png" alt="" />
+        
+        }
+
+        {faceExpressions === "sad" &&
+          <img id="specific" className="w-[100px] h-[100px] opacity-0" src="/public/images/rain.png" alt="" />
+        
+        }
+
+
+        
+         
+
+
+      </div>
       <video
         ref={videoRef}
-        className="object-cover w-full h-full"
+        className="object-cover w-full h-full inverted-video"
         autoPlay
         muted
         onPlay={handleVideoOnPlay}
-        style={{ transform: "scaleX(-1)" }}
       />
       <canvas ref={canvasRef} className="hidden" />
       <div className="absolute top-0 left-0 p-4 text-white bg-black">
@@ -219,11 +320,16 @@ const FaceDetection: React.FC = () => {
           className="p-2 text-white bg-blue-500"
           onClick={startCountdown}
         >
-          Capture photo
+          Capture photo (Send to AI)
+        </button>
+        <button
+          className="p-2 ml-2 text-white bg-green-500"
+          onClick={startCountdownMood}
+        >
+          Capture photo (Mood-based art)
         </button>
       </div>
 
-      {/* Image Preview and Confirmation */}
       {showPreview && imageData && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="p-4 bg-white rounded">
@@ -241,6 +347,28 @@ const FaceDetection: React.FC = () => {
                 onClick={handleCancelScreenshot}
               >
                 No
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+{showMoodPreview && moodImageData && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="p-4 bg-white rounded">
+            <img src={moodImageData} alt="Mood Screenshot Preview" className="mb-4" />
+            <div>
+              <button
+                className="px-4 py-2 text-white bg-blue-500"
+                onClick={handleConfirmMoodScreenshot}
+              >
+                Confirm Mood Screenshot
+              </button>
+              <button
+                className="px-4 py-2 ml-2 text-gray-500"
+                onClick={handleCancelMoodScreenshot}
+              >
+                Cancel
               </button>
             </div>
           </div>
