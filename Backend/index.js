@@ -1,14 +1,25 @@
 import fs from "fs";
 import OpenAI from "openai";
 import dotenv from "dotenv";
+import express from "express";
+import {connectDB} from "./utils/connectDB.js";
 
 dotenv.config();
+
+// Set up express server
+const PORT = process.env.PORT || 3101;
+const app = express();
+app.use(express.json());
+connectDB();
+
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const imagePath = "Backend/ng.png";
+const imagePath = "./ng.png";
 const imageMimeType = "image/png";
 
 // Read and encode the image as Base64
