@@ -8,6 +8,9 @@ import {
 import { Button } from "@/components/ui/button";
 
 interface ImageModuleProps {
+  title?: string;
+  confirmText: string;
+  declineText: string;
   imgSrc: string;
   openModule: boolean;
   confirmMoodScreenshot: () => void;
@@ -19,6 +22,9 @@ export default function ImageModule({
   openModule,
   confirmMoodScreenshot,
   cancelMoodScreenshot,
+  confirmText,
+  declineText,
+  title,
 }: ImageModuleProps) {
   const [open, setOpen] = React.useState(openModule);
 
@@ -46,19 +52,20 @@ export default function ImageModule({
           </svg>
         </div>
         <DialogFooter className='sm:justify-start p-4 bg-white'>
+          {title && <h2 className='text-lg font-semibold'>{title}</h2>}
           <Button
             type='submit'
             className='bg-blue-500 hover:bg-blue-600 text-white'
             onClick={() => confirmMoodScreenshot()}
           >
-            Confirm Mood Screenshot
+            {confirmText}
           </Button>
           <Button
             type='button'
             variant='secondary'
             onClick={() => cancelMoodScreenshot()}
           >
-            Cancel
+            {declineText}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -74,10 +74,6 @@ const FaceDetection: React.FC = () => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log("Face Expression Updated:", faceExpressions);
-  // }, [faceExpressions]);
-
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current && faceapi) {
       const video = videoRef.current;
@@ -356,20 +352,6 @@ const FaceDetection: React.FC = () => {
 
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-      {/* background filters, funke isje heilt skikkelig */}
-
-      {/* {faceExpressions === "angry" && (
-      <div className="absolute w-full h-full overflow-hidden z-[-1]">
-          <img className="object-cover w-full h-full opacity specific" src="/images/rainfilter.png" alt="" />
-        </div>
-    )}
-
-    {faceExpressions === "happy" && (
-      <div className="absolute w-full h-full overflow-hidden z-[-1]">
-          <img className="object-cover w-full h-full opacity specific" src="/images/sunray.png" alt="" />
-        </div>
-    )} */}
-
       <div className='absolute z-10 w-full mt-20'>
         {faceExpressions === "happy" && (
           <>
@@ -466,55 +448,28 @@ const FaceDetection: React.FC = () => {
       </div>
 
       {showPreview && imageData && (
-        <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-          <div className='p-4 bg-white rounded'>
-            <img src={imageData} alt='Screenshot Preview' className='mb-4' />
-            <h2>Would you like to submit this image to AI?</h2>
-            <div className='flex justify-end gap-3'>
-              <button
-                className='p-2 text-white bg-blue-500'
-                onClick={handleConfirmScreenshot}
-              >
-                Yes
-              </button>
-              <button
-                className='p-2 text-white bg-red-500'
-                onClick={handleCancelScreenshot}
-              >
-                No
-              </button>
-            </div>
-          </div>
-        </div>
+        <ImageModule
+          title='Would you like to download this image?'
+          confirmText='Yes'
+          declineText='No'
+          imgSrc={imageData}
+          openModule={showPreview}
+          cancelMoodScreenshot={handleCancelScreenshot}
+          confirmMoodScreenshot={handleConfirmScreenshot}
+        />
       )}
 
       {showMoodPreview && moodImageData && (
         <>
           <ImageModule
+            // title='Would you like to download this mood-based art?'
+            confirmText='Yes'
+            declineText='No'
             imgSrc={moodImageData}
             openModule={showMoodPreview}
             cancelMoodScreenshot={handleCancelMoodScreenshot}
             confirmMoodScreenshot={handleConfirmMoodScreenshot}
           />
-          {/* <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="p-4 bg-white rounded">
-        <img src={moodImageData} alt="Mood Screenshot Preview" className="mb-4 " />
-        <div>
-          <button
-            className="px-4 py-2 text-white bg-blue-500"
-            onClick={handleConfirmMoodScreenshot}
-          >
-            Confirm Mood Screenshot
-          </button>
-          <button
-            className="px-4 py-2 ml-2 text-gray-500"
-            onClick={handleCancelMoodScreenshot}
-          >
-            Cancel
-          </button>
-        </div>
-          </div>
-        </div> */}
         </>
       )}
     </div>
