@@ -19,6 +19,7 @@ const FaceDetection: React.FC = () => {
   const [moodImageData, setMoodImageData] = useState<string | null>(null); 
   const [showCapturePhotoButtons, setshowCapturePhotoButtons] = useState(false);
   const [shouldPlayAudio, setShouldPlayAudio] = useState(false);
+  const [expressionNotDetected, setExpressionNotDetected] = useState(false);
 
 
 
@@ -177,7 +178,6 @@ const happyAudio =useRef(new Audio('/assets/happy.mp3'));
 const sadAudio = useRef(new Audio('/assets/sad.mp3')); 
 const angryAudio = useRef(new Audio('/assets/angry.mp3')); 
 const takeMoodBasedScreenshot = () => {
- 
   if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
 
@@ -221,14 +221,19 @@ const takeMoodBasedScreenshot = () => {
                       // Convert to image and update state
                       const img = canvas.toDataURL("image/png");
                       setMoodImageData(img);
-                      setShowMoodPreview(true); // Show the mood-based image preview
+                      setShowMoodPreview(true);
                       setShouldPlayAudio(true);
+
+                      if (img) {
+                        triggerBlitzEffect();
+                      }
                 
                   });
                   elementToCapture.style.opacity = "0"; 
               });
           } else {
               console.error("Elements to capture not found!");
+              setExpressionNotDetected(true);
           }
       }
   }
@@ -297,6 +302,7 @@ const takeMoodBasedScreenshot = () => {
   };
 
   const startCountdownMood = () => {
+    setExpressionNotDetected(false);
     setCountdown(3);
     disableScreenshotButton();
     const interval = setInterval(() => {
@@ -306,7 +312,6 @@ const takeMoodBasedScreenshot = () => {
         } else {
           clearInterval(interval);
           setCountdown(null);
-          triggerBlitzEffect();
           takeMoodBasedScreenshot(); 
           enableScreenshotButton();
           return null;
@@ -448,7 +453,7 @@ const takeMoodBasedScreenshot = () => {
 
       <button
           id="scrnsht_btn" 
-          className="rounded p-3 text-white bg-purple-500 hover:scale-[1.1] transform transition duration-150"
+          className="rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150"
           onClick={openCapturePhotoButtons}
         >
           <FaCamera />
@@ -457,13 +462,14 @@ const takeMoodBasedScreenshot = () => {
         {showCapturePhotoButtons && (<>
           <button
           id="scrnsht_btn" 
-          className="p-2 ml-2 text-white bg-blue-500 rounded"
+          className="p-1 ml-2 text-blue-500 bg-[rgb(255,255,255,0.8)] border-2 border-blue-500 rounded"
+
           onClick={startCountdown}
         >
           Capture photo (Send to AI)
         </button>
         <button
-          className="p-2 ml-2 text-white bg-green-500 rounded"
+          className="p-1 ml-2 text-blue-500 bg-[rgb(255,255,255,0.8)] border-2 border-blue-500 rounded"
           onClick={startCountdownMood}
         >
           Capture photo (Mood-based art)
@@ -479,13 +485,13 @@ const takeMoodBasedScreenshot = () => {
             <h2>Would you like to submit this image to AI?</h2>
             <div className="flex justify-end gap-3">
               <button
-                className="p-2 text-white bg-blue-500"
+                className="p-2 text-white bg-blue-500 rounded"
                 onClick={handleConfirmScreenshot}
               >
                 Yes
               </button>
               <button
-                className="p-2 text-white bg-red-500"
+                className="p-2 text-white bg-red-500 rounded"
                 onClick={handleCancelScreenshot}
               >
                 No
@@ -502,7 +508,7 @@ const takeMoodBasedScreenshot = () => {
         <img src={moodImageData} alt="Mood Screenshot Preview" className="mb-4 " />
         <div>
           <button
-            className="px-4 py-2 text-white bg-blue-500"
+            className="px-4 py-2 text-white bg-blue-500 rounded"
             onClick={handleConfirmMoodScreenshot}
           >
             Confirm Mood Screenshot
@@ -510,6 +516,32 @@ const takeMoodBasedScreenshot = () => {
           <button
             className="px-4 py-2 ml-2 text-gray-500"
             onClick={handleCancelMoodScreenshot}
+          >
+            Cancel
+          </button>
+        </div>
+          </div>
+        </div>
+      
+      </>
+      
+      )}
+{expressionNotDetected && (
+      <>
+      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="p-4 bg-white rounded">
+        <h2 className="text-2xl text-red-500">Error capturing image</h2>
+        <p>Your facial expression could not be detected. <br/>Please try again.</p>
+        <div className="mt-10">
+          <button
+            className="px-4 py-2 text-white bg-blue-500 rounded"
+            onClick={startCountdownMood}
+          >
+            Try again
+          </button>
+          <button
+            className="px-4 py-2 ml-2 text-gray-500"
+            onClick={() => setExpressionNotDetected(false)}
           >
             Cancel
           </button>
