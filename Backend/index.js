@@ -9,7 +9,7 @@ const openai = new OpenAI({
 });
 
 const imagePath = "Backend/ng.png";
-const imageMimeType = "image/png"; // Adjust if your image is a different type
+const imageMimeType = "image/png";
 
 // Read and encode the image as Base64
 const imageBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
@@ -17,6 +17,7 @@ const imageBase64 = fs.readFileSync(imagePath, { encoding: "base64" });
 // Construct the data URL
 const imageDataUrl = `data:${imageMimeType};base64,${imageBase64}`;
 
+// Function to generate an image from a the image description
 async function generateImage(description) {
   try {
     const response = await openai.images.generate({
@@ -37,10 +38,11 @@ async function generateImage(description) {
   }
 }
 
+// function to generate a description of the image
 async function main() {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // Updated model name
+      model: "gpt-4o-mini",
       messages: [
         {
           role: "user",
@@ -59,7 +61,6 @@ async function main() {
           ],
         },
       ],
-      // Optionally, set max_tokens if needed
       max_tokens: 500,
     });
 
@@ -67,7 +68,7 @@ async function main() {
 
     const imageDescription = response.choices[0].message.content;
 
-    await generateImage(imageDescription);
+    await generateImage(imageDescription); // Generate an image from the description
   } catch (error) {
     if (error.response) {
       console.log("Status:", error.response.status);
