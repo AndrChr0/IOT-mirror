@@ -20,6 +20,7 @@ const FaceDetection: React.FC = () => {
   const [moodImageData, setMoodImageData] = useState<string | null>(null);
   const [showCapturePhotoButtons, setshowCapturePhotoButtons] = useState(false);
   const [shouldPlayAudio, setShouldPlayAudio] = useState(false);
+  const [expressionNotDetected, setExpressionNotDetected] = useState(false);
 
   useEffect(() => {
     const loadFaceApiScript = () => {
@@ -223,13 +224,18 @@ const FaceDetection: React.FC = () => {
               // Convert to image and update state
               const img = canvas.toDataURL("image/png");
               setMoodImageData(img);
-              setShowMoodPreview(true); // Show the mood-based image preview
+              setShowMoodPreview(true);
               setShouldPlayAudio(true);
+
+              if (img) {
+                triggerBlitzEffect();
+              }
             });
             elementToCapture.style.opacity = "0";
           });
         } else {
           console.error("Elements to capture not found!");
+          setExpressionNotDetected(true);
         }
       }
     }
@@ -293,6 +299,7 @@ const FaceDetection: React.FC = () => {
   };
 
   const startCountdownMood = () => {
+    setExpressionNotDetected(false);
     setCountdown(3);
     disableScreenshotButton();
     const interval = setInterval(() => {
@@ -302,7 +309,6 @@ const FaceDetection: React.FC = () => {
         } else {
           clearInterval(interval);
           setCountdown(null);
-          triggerBlitzEffect();
           takeMoodBasedScreenshot();
           enableScreenshotButton();
           return null;
@@ -422,7 +428,7 @@ const FaceDetection: React.FC = () => {
       <div className='absolute bottom-0 left-0 flex p-4'>
         <button
           id='scrnsht_btn'
-          className='rounded p-3 text-white bg-purple-500 hover:scale-[1.1] transform transition duration-150'
+          className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'
           onClick={openCapturePhotoButtons}
         >
           <FaCamera />
@@ -432,13 +438,13 @@ const FaceDetection: React.FC = () => {
           <>
             <button
               id='scrnsht_btn'
-              className='p-2 ml-2 text-white bg-blue-500 rounded'
+              className='p-1 ml-2 text-blue-500 bg-[rgb(255,255,255,0.8)] border-2 border-blue-500 rounded'
               onClick={startCountdown}
             >
               Capture photo (Send to AI)
             </button>
             <button
-              className='p-2 ml-2 text-white bg-green-500 rounded'
+              className='p-1 ml-2 text-blue-500 bg-[rgb(255,255,255,0.8)] border-2 border-blue-500 rounded'
               onClick={startCountdownMood}
             >
               Capture photo (Mood-based art)
@@ -470,6 +476,33 @@ const FaceDetection: React.FC = () => {
             cancelMoodScreenshot={handleCancelMoodScreenshot}
             confirmMoodScreenshot={handleConfirmMoodScreenshot}
           />
+        </>
+      )}
+      {expressionNotDetected && (
+        <>
+          <div className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+            <div className='p-4 bg-white rounded'>
+              <h2 className='text-2xl text-red-500'>Error capturing image</h2>
+              <p>
+                Your facial expression could not be detected. <br />
+                Please try again.
+              </p>
+              <div className='mt-10'>
+                <button
+                  className='px-4 py-2 text-white bg-blue-500 rounded'
+                  onClick={startCountdownMood}
+                >
+                  Try again
+                </button>
+                <button
+                  className='px-4 py-2 ml-2 text-gray-500'
+                  onClick={() => setExpressionNotDetected(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
         </>
       )}
     </div>
