@@ -33,7 +33,7 @@ export default function ImageModule({
       {/* <DialogTrigger asChild>
         <Button variant='outline'>Open Mood Screenshot</Button>
       </DialogTrigger> */}
-      <DialogContent className='sm:max-w-[425px] p-0 overflow-hidden' onInteractOutside={(event) => event.preventDefault()}>
+      <DialogContent className='sm:max-w-[525px] p-4 !rounded overflow-hidden' onInteractOutside={(event) => event.preventDefault()}>
         <div className='relative'>
           <img src={imgSrc} alt='Mood screenshot' className='w-full h-auto' />
           {/* <svg
@@ -51,11 +51,11 @@ export default function ImageModule({
             <path d='M10.5,7h3c0.28,0,0.5-0.22,0.5-0.5v-2C14,3.67,13.33,3,12.5,3h-1C10.67,3,10,3.67,10,4.5v2C10,6.78,10.22,7,10.5,7z M16.77,8.61c-0.29-0.29-0.77-0.29-1.06,0l-2.12,2.12l-2.12-2.12c-0.29-0.29-0.77-0.29-1.06,0s-0.29,0.77,0,1.06L12.53,12 l-2.12,2.12c-0.29,0.29-0.29,0.77,0,1.06c0.15,0.15,0.34,0.22,0.53,0.22s0.38-0.07,0.53-0.22l2.12-2.12l2.12,2.12 c0.15,0.15,0.34,0.22,0.53,0.22s0.38-0.07,0.53-0.22c0.29-0.29,0.29-0.77,0-1.06L14.65,12l2.12-2.12 C17.06,9.39,17.06,8.9,16.77,8.61z M21,14c0-0.55-0.45-1-1-1h-2c-0.55,0-1,0.45-1,1s0.45,1,1,1h2C20.55,15,21,14.55,21,14z M3,13 c-0.55,0-1,0.45-1,1s0.45,1,1,1h2c0.55,0,1-0.45,1-1s-0.45-1-1-1H3z M13,19c0-0.55-0.45-1-1-1s-1,0.45-1,1v2c0,0.55,0.45,1,1,1 s1-0.45,1-1V19z' />
           </svg> */}
         </div>
-        <DialogFooter className='p-4 bg-white sm:justify-start'>
-          {title && <h2 className='text-lg '>{title}</h2>}
+        {title && <h2 className='p-0 text-lg'>{title}</h2>}
+        <DialogFooter className='flex p-0 bg-white md:items-center sm:justify-end'>
           <Button
             type='submit'
-            className='text-white bg-blue-500 hover:bg-blue-600'
+            className='text-white bg-blue-500 rounded hover:bg-blue-600'
             onClick={() => confirmMoodScreenshot()}
           >
             {confirmText}
@@ -63,6 +63,7 @@ export default function ImageModule({
           <Button
             type='button'
             variant='secondary'
+            className="rounded"
             onClick={() => cancelMoodScreenshot()}
           >
             {declineText}
