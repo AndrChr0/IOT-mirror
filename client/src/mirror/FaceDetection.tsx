@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import "./FaceDetection.css";
 import html2canvas from "html2canvas";
 import { FaCamera } from "react-icons/fa";
-import ImageModule from "@/ImageModule";
+import ImageModal from "@/ImageModal";
 
 declare const faceapi: any;
 
@@ -454,7 +454,7 @@ const FaceDetection: React.FC = () => {
       </div>
 
       {showPreview && imageData && (
-        <ImageModule
+        <ImageModal
           title='Would you like to download this image?'
           confirmText='Yes'
           declineText='No'
@@ -467,7 +467,7 @@ const FaceDetection: React.FC = () => {
 
       {showMoodPreview && moodImageData && (
         <>
-          <ImageModule
+          <ImageModal
             // title='Would you like to download this mood-based art?'
             confirmText='Yes'
             declineText='No'
