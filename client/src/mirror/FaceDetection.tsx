@@ -322,6 +322,7 @@ const FaceDetection: React.FC = () => {
     setTimeout(() => setBlitz(false), 500);
   };
 
+  // SKAL BRUKES TIL Å SENDE IMG TIL BACKEND
   const handleConfirmScreenshot = () => {
     const link = document.createElement("a");
     link.href = imageData!;
