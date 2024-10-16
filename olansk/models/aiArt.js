@@ -15,4 +15,5 @@ const aiArtSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("aiArt", aiArtSchema);
+// module.exports = mongoose.model("aiArt", aiArtSchema);
+export default mongoose.model("aiArt", aiArtSchema);
