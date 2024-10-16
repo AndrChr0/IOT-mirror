@@ -42,26 +42,26 @@ export default function AiArtMirror() {
       recognition.onresult = (event: SpeechRecognitionEvent) => {
         const transcript = event.results[event.resultIndex][0].transcript.trim().toLowerCase();
         console.log("Voice input: ", transcript);
-
-
+        
+        // voice commands
         if (transcript.includes("open blue camera")) {
           setShowCapturePhotoButtons(true);
         } else if (transcript.includes("close blue camera")) {
           setShowCapturePhotoButtons(false);
         }
 
-        if (showCapturePhotoButtons===true && transcript.includes("capture photo")) {
+        if (showCapturePhotoButtons === true && transcript.includes("capture photo")) {
           startCountdown();
-          console.log("Capturing photo");
+          console.log("Capturing photo..");
         }
 
         if (showPreview && imageData){
           if (transcript.includes("yes")) {
             handleConfirmScreenshot();
-            console.log("downloading");
+            console.log("Downloading..");
           } else if (transcript.includes("no")) {
             handleCancelScreenshot();
-            console.log("cancelling");
+            console.log("Cancelling..");
           }
         }
       };
@@ -70,7 +70,7 @@ export default function AiArtMirror() {
     } else {
       console.error("Speech Recognition not supported in this browser.");
     }
-  }, [showCapturePhotoButtons,showPreview,imageData]);
+  }, [showCapturePhotoButtons, showPreview, imageData]);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
