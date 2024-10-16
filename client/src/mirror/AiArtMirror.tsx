@@ -101,11 +101,34 @@ export default function AiArtMirror() {
   };
 
   // SKAL BRUKES TIL Å SENDE IMG TIL BACKEND
-  const handleConfirmScreenshot = () => {
-    const link = document.createElement("a");
-    link.href = imageData!;
-    link.download = "smArt_mirror_screenshot.png";
-    link.click();
+  const handleConfirmScreenshot = async () => {
+    if (imageData) {
+      // Send POST request to the backend with base64 image data
+      try {
+        const response = await fetch("http://localhost:5353/upload-base64", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ imageData }),
+        });
+        console.log(response.body);
+        if (response.ok) {
+          console.log("Image uploaded successfully");
+          // Handle any response data if needed
+        } else {
+          console.error("Error uploading image");
+          // Optionally, read the response for more details
+          const errorData = await response.json();
+          console.error("Error details:", errorData);
+        }
+      } catch (error) {
+        console.error("Error uploading image", error);
+      }
+    } else {
+      console.error("No image data to send");
+    }
+
     setShowPreview(false);
     setImageData(null);
   };
