@@ -3,7 +3,8 @@ import OpenAI from "openai/index.js";
 import dotenv from "dotenv";
 import express from "express";
 import { connectDB } from "./utils/connectDB.js";
-import carouselRoutes from "../backend/routes/carouselRoutes.js";
+import carouselRoutes from "./routes/carouselRoutes.js";
+import mirrorRoutes from "./routes/mirrorRoutes.js";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 connectDB();
 
 app.use("/", carouselRoutes);
+app.use("/", mirrorRoutes);
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
