@@ -13,7 +13,6 @@ export default function AiArtMirror() {
   const [imageData, setImageData] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [showCapturePhotoButtons, setShowCapturePhotoButtons] = useState(false);
-  // const [isListening, setIsListening] = useState(false);
 
   useEffect(() => {
     const startVideo = () => {
@@ -33,8 +32,6 @@ export default function AiArtMirror() {
   useEffect(() => {
     const SpeechRecognition =
       (window.SpeechRecognition || window.webkitSpeechRecognition) as typeof window.SpeechRecognition;
-
-      
 
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
@@ -59,10 +56,10 @@ export default function AiArtMirror() {
         }
 
         if (showPreview && imageData){
-          if (transcript.includes("option yes")) {
+          if (transcript.includes("yes")) {
             handleConfirmScreenshot();
             console.log("downloading");
-          } else if (transcript.includes("option no")) {
+          } else if (transcript.includes("no")) {
             handleCancelScreenshot();
             console.log("cancelling");
           }
