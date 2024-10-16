@@ -3,6 +3,7 @@ import "./FaceDetection.css";
 import { FaCamera } from "react-icons/fa";
 import ImageModal from "@/ImageModal";
 
+
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -11,7 +12,8 @@ export default function AiArtMirror() {
   const [blitz, setBlitz] = useState(false);
   const [imageData, setImageData] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [showCapturePhotoButtons, setshowCapturePhotoButtons] = useState(false);
+  const [showCapturePhotoButtons, setShowCapturePhotoButtons] = useState(false);
+  // const [isListening, setIsListening] = useState(false);
 
   useEffect(() => {
     const startVideo = () => {
@@ -27,6 +29,51 @@ export default function AiArtMirror() {
 
     startVideo();
   }, []);
+
+  useEffect(() => {
+    const SpeechRecognition =
+      (window.SpeechRecognition || window.webkitSpeechRecognition) as typeof window.SpeechRecognition;
+
+      
+
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.lang = "en-US";
+      recognition.interimResults = false;
+
+      recognition.onresult = (event: SpeechRecognitionEvent) => {
+        const transcript = event.results[event.resultIndex][0].transcript.trim().toLowerCase();
+        console.log("Voice input: ", transcript);
+
+
+        if (transcript.includes("open blue camera")) {
+          setShowCapturePhotoButtons(true);
+        } else if (transcript.includes("close blue camera")) {
+          setShowCapturePhotoButtons(false);
+        }
+
+        if (showCapturePhotoButtons===true && transcript.includes("capture photo")) {
+          startCountdown();
+          console.log("Capturing photo");
+        }
+
+        if (showPreview && imageData){
+          if (transcript.includes("option yes")) {
+            handleConfirmScreenshot();
+            console.log("downloading");
+          } else if (transcript.includes("option no")) {
+            handleCancelScreenshot();
+            console.log("cancelling");
+          }
+        }
+      };
+
+      recognition.start();
+    } else {
+      console.error("Speech Recognition not supported in this browser.");
+    }
+  }, [showCapturePhotoButtons,showPreview,imageData]);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
@@ -100,7 +147,6 @@ export default function AiArtMirror() {
     setTimeout(() => setBlitz(false), 500);
   };
 
-  // SKAL BRUKES TIL Å SENDE IMG TIL BACKEND
   const handleConfirmScreenshot = () => {
     const link = document.createElement("a");
     link.href = imageData!;
@@ -116,7 +162,7 @@ export default function AiArtMirror() {
   };
 
   const openCapturePhotoButtons = () => {
-    setshowCapturePhotoButtons((prev) => !prev);
+    setShowCapturePhotoButtons((prev) => !prev);
   };
 
   return (
