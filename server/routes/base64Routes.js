@@ -4,15 +4,15 @@ import fs from "fs";
 
 import main from "../apiFunc/generator.js";
 
-router.post("/upload-base64", (req, res) => {
+router.post("/upload-base64", async function (req, res) {
   const { imageData } = req.body;
 
   if (!imageData) {
     return res.status(400).json({ message: "No image data provided" });
   } else {
-    main(imageData);
+    const generatedImage = await main(imageData);
 
-    res.status(200).json({ message: "Image uploaded" });
+    res.status(200).json({ message: "Image uploaded", aiImg: generatedImage });
   }
 });
 

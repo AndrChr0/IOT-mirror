@@ -35,7 +35,9 @@ export default async function main(base64code) {
 
     const imageDescription = response.choices[0].message.content;
 
-    await generateImage(imageDescription); // Generate an image from the description
+    const imgURL = await generateImage(imageDescription); // Generate an image from the description
+    console.log("from main function:", imgURL);
+    return imgURL;
   } catch (error) {
     if (error.response) {
       console.log("Status:", error.response.status);
@@ -55,7 +57,8 @@ async function generateImage(description) {
       size: "1024x1024",
     });
     const image_url = response.data[0].url;
-    console.log(image_url);
+    // console.log(image_url);
+    return image_url;
   } catch (error) {
     if (error.response) {
       console.log("Status:", error.response.status);

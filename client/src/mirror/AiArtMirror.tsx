@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import "./FaceDetection.css";
 import { FaCamera } from "react-icons/fa";
 import ImageModal from "@/ImageModal";
-
+import AiImagePreview from "./AiImagePreview";
+import Processing from "./Processing";
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -13,6 +14,10 @@ export default function AiArtMirror() {
   const [imageData, setImageData] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [showCapturePhotoButtons, setShowCapturePhotoButtons] = useState(false);
+  const [recievedImg, setRecievedImg] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  console.log("recievedImg", recievedImg);
 
   useEffect(() => {
     const startVideo = () => {
@@ -30,8 +35,8 @@ export default function AiArtMirror() {
   }, []);
 
   useEffect(() => {
-    const SpeechRecognition =
-      (window.SpeechRecognition || window.webkitSpeechRecognition) as typeof window.SpeechRecognition;
+    const SpeechRecognition = (window.SpeechRecognition ||
+      window.webkitSpeechRecognition) as typeof window.SpeechRecognition;
 
     if (SpeechRecognition) {
       const recognition = new SpeechRecognition();
@@ -40,9 +45,10 @@ export default function AiArtMirror() {
       recognition.interimResults = false;
 
       recognition.onresult = (event: SpeechRecognitionEvent) => {
-        const transcript = event.results[event.resultIndex][0].transcript.trim().toLowerCase();
+        const transcript = event.results[event.resultIndex][0].transcript
+          .trim()
+          .toLowerCase();
         console.log("Voice input: ", transcript);
-
 
         if (transcript.includes("open blue camera")) {
           setShowCapturePhotoButtons(true);
@@ -50,12 +56,15 @@ export default function AiArtMirror() {
           setShowCapturePhotoButtons(false);
         }
 
-        if (showCapturePhotoButtons===true && transcript.includes("capture photo")) {
+        if (
+          showCapturePhotoButtons === true &&
+          transcript.includes("capture photo")
+        ) {
           startCountdown();
           console.log("Capturing photo");
         }
 
-        if (showPreview && imageData){
+        if (showPreview && imageData) {
           if (transcript.includes("yes")) {
             handleConfirmScreenshot();
             console.log("downloading");
@@ -70,7 +79,7 @@ export default function AiArtMirror() {
     } else {
       console.error("Speech Recognition not supported in this browser.");
     }
-  }, [showCapturePhotoButtons,showPreview,imageData]);
+  }, [showCapturePhotoButtons, showPreview, imageData]);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
@@ -146,8 +155,10 @@ export default function AiArtMirror() {
 
   // SKAL BRUKES TIL Å SENDE IMG TIL BACKEND
   const handleConfirmScreenshot = async () => {
+    setIsProcessing(true);
+    setShowPreview(false);
+
     if (imageData) {
-      // Send POST request to the backend with base64 image data
       try {
         const response = await fetch("http://localhost:5353/upload-base64", {
           method: "POST",
@@ -156,24 +167,31 @@ export default function AiArtMirror() {
           },
           body: JSON.stringify({ imageData }),
         });
-        console.log(response.body);
+
         if (response.ok) {
+          const responseData = await response.json();
           console.log("Image uploaded successfully");
-          // Handle any response data if needed
+          console.log("Response data:", responseData);
+
+          // Extract the AI image URL from the response
+          const { aiImg } = responseData;
+          setRecievedImg(aiImg); // Set the received AI image
+          setIsProcessing(false);
         } else {
           console.error("Error uploading image");
-          // Optionally, read the response for more details
           const errorData = await response.json();
           console.error("Error details:", errorData);
+          setIsProcessing(false);
         }
       } catch (error) {
         console.error("Error uploading image", error);
+        setIsProcessing(false);
       }
     } else {
       console.error("No image data to send");
+      setIsProcessing(false);
     }
 
-    setShowPreview(false);
     setImageData(null);
   };
 
@@ -184,6 +202,10 @@ export default function AiArtMirror() {
 
   const openCapturePhotoButtons = () => {
     setShowCapturePhotoButtons((prev) => !prev);
+  };
+
+  const handleRecievedImg = (img: string | null) => {
+    setRecievedImg(img);
   };
 
   return (
@@ -236,6 +258,13 @@ export default function AiArtMirror() {
           confirmMoodScreenshot={handleConfirmScreenshot}
         />
       )}
+      {recievedImg && (
+        <AiImagePreview
+          image={recievedImg}
+          handleImageData={handleRecievedImg}
+        />
+      )}
+      {isProcessing && <Processing />}
     </div>
   );
 }
