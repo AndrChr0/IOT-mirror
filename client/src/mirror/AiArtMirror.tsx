@@ -61,16 +61,16 @@ export default function AiArtMirror() {
           transcript.includes("capture photo")
         ) {
           startCountdown();
-          console.log("Capturing photo");
+          console.log("Capturing photo..");
         }
 
         if (showPreview && imageData) {
           if (transcript.includes("yes")) {
             handleConfirmScreenshot();
-            console.log("downloading");
+            console.log("Downloading..");
           } else if (transcript.includes("no")) {
             handleCancelScreenshot();
-            console.log("cancelling");
+            console.log("Cancelling..");
           }
         }
       };
@@ -80,6 +80,8 @@ export default function AiArtMirror() {
       console.error("Speech Recognition not supported in this browser.");
     }
   }, [showCapturePhotoButtons, showPreview, imageData]);
+
+  // }, [showCapturePhotoButtons, showPreview, imageData]);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
