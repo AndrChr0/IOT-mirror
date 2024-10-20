@@ -4,6 +4,8 @@ import { FaCamera } from "react-icons/fa";
 import ImageModal from "@/ImageModal";
 import AiImagePreview from "./AiImagePreview";
 import Processing from "./Processing";
+import SelectStyle from "./SelectStyle";
+import { Style, styles } from "./styles";
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -16,6 +18,9 @@ export default function AiArtMirror() {
   const [showCapturePhotoButtons, setShowCapturePhotoButtons] = useState(false);
   const [recievedImg, setRecievedImg] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedStyle, setSelectedStyle] = useState<Style | null>(null);
+  const [voiceOptions, setVoiceOptions] = useState(false);
+  const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
 
   console.log("recievedImg", recievedImg);
 
@@ -73,6 +78,22 @@ export default function AiArtMirror() {
             console.log("Cancelling..");
           }
         }
+        
+        if (showCapturePhotoButtons) {
+          if (transcript.includes("options")) {
+            handleVoiceOptions();
+            setStyleDropdownOpen(true);
+          }
+          const matchedStyle = styles.find((style) =>
+            transcript.includes(style.name.toLowerCase())
+          );
+          if (matchedStyle) {
+            handleStyleSelect(matchedStyle);
+            setStyleDropdownOpen(false);
+            console.log(styleDropdownOpen);
+          }
+        }
+       
       };
 
       recognition.start();
@@ -80,8 +101,6 @@ export default function AiArtMirror() {
       console.error("Speech Recognition not supported in this browser.");
     }
   }, [showCapturePhotoButtons, showPreview, imageData]);
-
-  // }, [showCapturePhotoButtons, showPreview, imageData]);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
@@ -134,6 +153,7 @@ export default function AiArtMirror() {
   const startCountdown = () => {
     setCountdown(3);
     disableScreenshotButton();
+    setShowCapturePhotoButtons(false);
     const interval = setInterval(() => {
       setCountdown((prevCountdown) => {
         if (prevCountdown && prevCountdown > 1) {
@@ -200,6 +220,7 @@ export default function AiArtMirror() {
   const handleCancelScreenshot = () => {
     setShowPreview(false);
     setImageData(null);
+    setShowCapturePhotoButtons(true);
   };
 
   const openCapturePhotoButtons = () => {
@@ -210,55 +231,68 @@ export default function AiArtMirror() {
     setRecievedImg(img);
   };
 
+  const handleStyleSelect = (style: Style) => {
+    setSelectedStyle(style);
+    setStyleDropdownOpen(false);
+    console.log("Selected style via voice:", style.name);
+  };
+
+  const handleVoiceOptions = () => {
+    setVoiceOptions(true);
+  };
+
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-      <div className='absolute z-10 w-full mt-20'></div>
+      <div className="absolute z-10 w-full mt-20"></div>
 
       <video
         ref={videoRef}
-        className='object-cover w-full h-full inverted-video'
+        className="object-cover w-full h-full inverted-video"
         autoPlay
         muted
         onPlay={handleVideoOnPlay}
       />
-      <canvas ref={canvasRef} className='hidden' />
+      <canvas ref={canvasRef} className="hidden" />
       {countdown !== null && (
-        <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
+        <div className="absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2">
           {countdown}
         </div>
       )}
-      <div className='absolute bottom-0 left-0 flex p-4'>
+      <div className="absolute bottom-0 left-0 flex p-4">
         <button
-          id='scrnsht_btn'
-          className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'
+          id="scrnsht_btn"
+          className="rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150"
           onClick={openCapturePhotoButtons}
         >
           <FaCamera />
         </button>
-
-        {showCapturePhotoButtons && (
-          <>
-            <button
-              id='scrnsht_btn'
-              className='p-1 ml-2 text-blue-500 bg-[rgb(255,255,255,0.8)] border-2 border-blue-500 rounded'
-              onClick={startCountdown}
-            >
-              Capture photo (Send to AI)
-            </button>
-          </>
-        )}
       </div>
+      {showCapturePhotoButtons && (
+        <>
+          <SelectStyle
+            onCapturePhoto={startCountdown}
+            onCloseModal={() => setShowCapturePhotoButtons(false)}
+            onStyleSelect={handleStyleSelect}
+            voiceOptions={voiceOptions}
+            onResetVoiceOptions={() => setVoiceOptions(false)}
+            selectedStyleDrop={selectedStyle}
+            styleDropdownOpen={styleDropdownOpen}
+          />
+        </>
+      )}
 
       {showPreview && imageData && (
-        <ImageModal
-          title='Would you like to download this image?'
-          confirmText='Yes'
-          declineText='No'
-          imgSrc={imageData}
-          openModule={showPreview}
-          cancelMoodScreenshot={handleCancelScreenshot}
-          confirmMoodScreenshot={handleConfirmScreenshot}
-        />
+        <>
+          <ImageModal
+            title={`Do you want to transform this image into "${selectedStyle ? selectedStyle.name : ''}" style?`}
+            confirmText="Yes"
+            declineText="No"
+            imgSrc={imageData}
+            openModule={showPreview}
+            cancelMoodScreenshot={handleCancelScreenshot}
+            confirmMoodScreenshot={handleConfirmScreenshot}
+          />
+        </>
       )}
       {recievedImg && (
         <AiImagePreview

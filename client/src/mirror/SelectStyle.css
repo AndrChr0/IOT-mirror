@@ -1,0 +1,52 @@
+.artists{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: white;
+    height: 100vh;
+    padding: 1em;
+    width: 20em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.selectedStyle{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.select-styles_close-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0.5em;
+    z-index: 100000;
+
+    && span{
+        cursor: pointer;
+        transition: 0.18s ease-in-out;
+
+        &&:hover{
+            scale: 1.1;
+        }
+    }
+}
+
+.styleDropdown{
+    position: absolute;
+    z-index: 99999990;
+    background-color: white;
+    width: 100%;
+}
+
+.dropdown-menu{
+    outline: 0.5px solid rgb(109, 109, 109);
+
+}
