@@ -1,6 +1,5 @@
 import express from "express";
 const router = express.Router();
-import fs from "fs";
 
 import main from "../apiFunc/generator.js";
 

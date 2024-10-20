@@ -18,7 +18,6 @@ export default function AiImagePreview({
         <button
           className='bg-red-600 text-white p-2'
           onClick={() => {
-            // setShowPreview(false);
             handleImageData(null);
           }}
         >

@@ -1,11 +1,13 @@
-import { useState, useEffect } from 'react';
-import './Processing.css';
+import { useState, useEffect } from "react";
+import "./Processing.css";
 
 export default function Processing() {
   const messages = [
-    'Processing',
-    'Transforming you into a masterpiece',
-    'Just a moment',
+    "Sending image",
+    "Processing",
+    "Generating prompt",
+    "Generating image",
+    "Rendering image",
   ];
 
   const [currentMessage, setCurrentMessage] = useState(messages[0]);
@@ -17,7 +19,7 @@ export default function Processing() {
         const nextIndex = (currentIndex + 1) % messages.length;
         return messages[nextIndex];
       });
-    }, 2700);
+    }, 4500);
 
     return () => clearInterval(interval);
   }, [messages]);
