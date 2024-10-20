@@ -20,3 +20,7 @@
   .inverted-video {
     transform: scaleX(-1); 
   }
+
+#scrnsht_btn-container{
+    z-index: 1000000;
+  }
