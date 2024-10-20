@@ -1,99 +1,106 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./SelectStyle.css";
 import { IoClose } from "react-icons/io5";
+import { RiArrowDropDownLine } from "react-icons/ri";
+import { Style, styles } from "./styles";
 
-interface Style {
-  id: number;
-  name: string;
-  img: string;
-  description: string;
-}
 
 interface SelectStyleProps {
   onCapturePhoto: () => void;
   onCloseModal: () => void;
   onStyleSelect: (style: Style) => void;
+  voiceOptions: boolean;
+  onResetVoiceOptions: () => void;
+  selectedStyleDrop: Style | null;
+  styleDropdownOpen: boolean;
 }
 
-const styles: Style[] = [
-  {
-    id: 1,
-    name: "Van Gogh",
-    img: "https://magazine.artland.com/wp-content/uploads/2022/07/van-gogh-starry-night-min.jpg",
-    description:
-      "Famous for his expressive brushstrokes and vibrant colors, Van Gogh's style is iconic in Post-Impressionism. His works often depict emotional depth and movement.",
-  },
-  {
-    id: 2,
-    name: "Renaissance",
-    img: "https://cdn.britannica.com/41/3341-050-825E2B57/The-Creation-of-Adam-ceiling-fresco-Sistine.jpg",
-    description:
-      "Characterized by a focus on realism, proportion, and humanism, Renaissance art emphasizes detail, perspective, and lifelike representations of figures.",
-  },
-  {
-    id: 3,
-    name: "Cubism",
-    img: "https://theartiz.ai/wp-content/uploads/2024/06/ec4-scaled.jpg",
-    description:
-      "An avant-garde movement that fragments objects into geometric shapes, presenting multiple viewpoints simultaneously. Developed by Picasso and Braque.",
-  },
-  {
-    id: 4,
-    name: "Surrealism",
-    img: "https://media.cnn.com/api/v1/images/stellar/prod/rene-magritte-le-double.jpg?c=original",
-    description:
-      "A movement that merges the dream world with reality, Surrealism features strange, dreamlike scenes and symbolic imagery that challenges logic.",
-  },
-  {
-    id: 5,
-    name: "Baroque",
-    img: "https://cdn.thecollector.com/wp-content/uploads/2023/12/important-baroque-paintings.jpg",
-    description:
-      "Known for its dramatic lighting, intense emotions, and ornate details, Baroque art is characterized by grandeur, movement, and opulence.",
-  },
-  {
-    id: 6,
-    name: "Abstract",
-    img: "https://www.meisterdrucke.ie/kunstwerke/1260px/fachtali_abderrahim_-_Abstract_painting_silhouette_of_dancing_woman_Printable_digital_Art_-_%28MeisterDrucke-1469538%29.jpg",
-    description:
-      "Abstract art breaks away from traditional representation, focusing on color, form, and line to create compositions that are non-representational and subjective.",
-  },
-];
+const SelectStyle = ({
+  onCapturePhoto,
+  onCloseModal,
+  onStyleSelect,
+  voiceOptions,
+  onResetVoiceOptions,
+  selectedStyleDrop,
+  styleDropdownOpen,
+}: SelectStyleProps) => {
+  const [selectedStyle, setSelectedStyle] = useState<Style | null>(
+    selectedStyleDrop
+  );
 
-const SelectStyle = ({ onCapturePhoto, onCloseModal, onStyleSelect }: SelectStyleProps) => {
-  const [selectedStyle, setSelectedStyle] = useState<Style | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(styleDropdownOpen);
+
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   const handleSelectStyle = (style: Style) => {
     setSelectedStyle(style);
     onStyleSelect(style);
-    console.log("Selected Style:", style.name, style);
+    setDropdownOpen(false);
+    console.log("Selected Style:", style.name);
   };
+
+  useEffect(() => {
+    setDropdownOpen(styleDropdownOpen);
+    console.log("Dropdown Open:", styleDropdownOpen);
+  }, [styleDropdownOpen]);
+
+  useEffect(() => {
+    setSelectedStyle(selectedStyleDrop);
+  }, [selectedStyleDrop]);
+
+  useEffect(() => {
+    if (voiceOptions) {
+      setDropdownOpen(true);
+      onResetVoiceOptions();
+    }
+  }, [voiceOptions, onResetVoiceOptions]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <>
-    <div className="select-styles_close-btn"><span onClick={onCloseModal}><IoClose size={25}/></span></div>
+      <div className="select-styles_close-btn">
+        <span onClick={onCloseModal}>
+          <IoClose size={25} />
+        </span>
+      </div>
       <div className="artists">
-        <div className="w-full">
-          <h1 className="mb-4 text-2xl ">Choose a style</h1>
-
-          <div className="mb-4">
-            <select
+        <div className="relative w-full">
+          <h1 className="mb-4 text-2xl">Choose a style</h1>
+          <div className="custom-dropdown" ref={dropdownRef}>
+            <button
               className="w-full p-2 border rounded"
-              onChange={(e) => {
-                const selectedId = parseInt(e.target.value);
-                const style = styles.find((s) => s.id === selectedId);
-                if (style) handleSelectStyle(style);
-              }}
+              onClick={() => setDropdownOpen((prev) => !prev)}
             >
-              <option value="" disabled selected>
-                Select an Art Style
-              </option>
-              {styles.map((style) => (
-                <option key={style.id} value={style.id}>
-                  {style.name}
-                </option>
-              ))}
-            </select>
+              <div className="flex items-center justify-between w-full"><span>{selectedStyle ? selectedStyle.name : "Select an Art Style"}</span><span><RiArrowDropDownLine size={22} /></span></div>
+            </button>
+            {dropdownOpen && (
+              <ul className="w-full p-2 mt-2 border rounded styleDropdown dropdown-menu">
+                {styles.map((style) => (
+                  <li
+                    key={style.id}
+                    className="p-1 cursor-pointer dropdown-item hover:bg-blue-500 hover:text-white"
+                    onClick={() => handleSelectStyle(style)}
+                  >
+                    {style.name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           {selectedStyle && (

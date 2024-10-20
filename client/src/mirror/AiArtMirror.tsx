@@ -5,10 +5,7 @@ import ImageModal from "@/ImageModal";
 import AiImagePreview from "./AiImagePreview";
 import Processing from "./Processing";
 import SelectStyle from "./SelectStyle";
-
-interface Style {
-  name: string;
-}
+import { Style, styles } from "./styles";
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -22,6 +19,8 @@ export default function AiArtMirror() {
   const [recievedImg, setRecievedImg] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<Style | null>(null);
+  const [voiceOptions, setVoiceOptions] = useState(false);
+  const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
 
   console.log("recievedImg", recievedImg);
 
@@ -79,6 +78,22 @@ export default function AiArtMirror() {
             console.log("Cancelling..");
           }
         }
+        
+        if (showCapturePhotoButtons) {
+          if (transcript.includes("options")) {
+            handleVoiceOptions();
+            setStyleDropdownOpen(true);
+          }
+          const matchedStyle = styles.find((style) =>
+            transcript.includes(style.name.toLowerCase())
+          );
+          if (matchedStyle) {
+            handleStyleSelect(matchedStyle);
+            setStyleDropdownOpen(false);
+            console.log(styleDropdownOpen);
+          }
+        }
+       
       };
 
       recognition.start();
@@ -86,8 +101,6 @@ export default function AiArtMirror() {
       console.error("Speech Recognition not supported in this browser.");
     }
   }, [showCapturePhotoButtons, showPreview, imageData]);
-
-  // }, [showCapturePhotoButtons, showPreview, imageData]);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
@@ -218,9 +231,15 @@ export default function AiArtMirror() {
     setRecievedImg(img);
   };
 
-  const handleStyleSelect = (style: any) => {
-    setSelectedStyle(style.name);
-  }
+  const handleStyleSelect = (style: Style) => {
+    setSelectedStyle(style);
+    setStyleDropdownOpen(false);
+    console.log("Selected style via voice:", style.name);
+  };
+
+  const handleVoiceOptions = () => {
+    setVoiceOptions(true);
+  };
 
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
@@ -250,14 +269,22 @@ export default function AiArtMirror() {
       </div>
       {showCapturePhotoButtons && (
         <>
-          <SelectStyle onCapturePhoto={startCountdown} onCloseModal={()=>setShowCapturePhotoButtons(false)} onStyleSelect={handleStyleSelect}/>
+          <SelectStyle
+            onCapturePhoto={startCountdown}
+            onCloseModal={() => setShowCapturePhotoButtons(false)}
+            onStyleSelect={handleStyleSelect}
+            voiceOptions={voiceOptions}
+            onResetVoiceOptions={() => setVoiceOptions(false)}
+            selectedStyleDrop={selectedStyle}
+            styleDropdownOpen={styleDropdownOpen}
+          />
         </>
       )}
 
       {showPreview && imageData && (
         <>
           <ImageModal
-            title={`Do you want to transform this image into "${selectedStyle}"?`}
+            title={`Do you want to transform this image into "${selectedStyle ? selectedStyle.name : ''}" style?`}
             confirmText="Yes"
             declineText="No"
             imgSrc={imageData}

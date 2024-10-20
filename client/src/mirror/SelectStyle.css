@@ -38,3 +38,15 @@
         }
     }
 }
+
+.styleDropdown{
+    position: absolute;
+    z-index: 99999990;
+    background-color: white;
+    width: 100%;
+}
+
+.dropdown-menu{
+    outline: 0.5px solid rgb(109, 109, 109);
+
+}
