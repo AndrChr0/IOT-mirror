@@ -1,4 +1,4 @@
-// import mongoose from "mongoose";
+import mongoose from "mongoose";
 
 const aiArtSchema = new mongoose.Schema({
   generation_date: {
@@ -9,7 +9,7 @@ const aiArtSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  artist: {
+  art_style: {
     type: String,
     required: true,
   },
