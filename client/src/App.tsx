@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-// import FaceDetection from "./mirror/FaceDetection";
 import MuseumDisplay from "./MuseumDisplay";
 import AiArtMirror from "./mirror/AiArtMirror";
 

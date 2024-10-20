@@ -78,7 +78,7 @@ export default function AiArtMirror() {
             console.log("Cancelling..");
           }
         }
-        
+
         if (showCapturePhotoButtons) {
           if (transcript.includes("options")) {
             handleVoiceOptions();
@@ -92,8 +92,11 @@ export default function AiArtMirror() {
             setStyleDropdownOpen(false);
             console.log(styleDropdownOpen);
           }
+
+          if (transcript.includes("go back")) {
+            handleGoBack();
+          }
         }
-       
       };
 
       recognition.start();
@@ -187,7 +190,10 @@ export default function AiArtMirror() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ imageData }),
+          body: JSON.stringify({
+            imageData,
+            selectedStyle: selectedStyle?.style_prompt,
+          }),
         });
 
         if (response.ok) {
@@ -241,27 +247,35 @@ export default function AiArtMirror() {
     setVoiceOptions(true);
   };
 
+  const handleGoBack = () => {
+    setSelectedStyle(null);
+  };
+
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-      <div className="absolute z-10 w-full mt-20"></div>
+      <div className='absolute z-10 w-full mt-20'></div>
 
       <video
         ref={videoRef}
-        className="object-cover w-full h-full inverted-video"
+        className='object-cover w-full h-full inverted-video'
         autoPlay
         muted
         onPlay={handleVideoOnPlay}
       />
-      <canvas ref={canvasRef} className="hidden" />
+      <canvas ref={canvasRef} className='hidden' />
       {countdown !== null && (
-        <div className="absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2">
+        <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
           {countdown}
         </div>
       )}
-      <div className="absolute bottom-0 left-0 flex p-4">
+
+      <div
+        id='scrnsht_btn-container'
+        className='absolute bottom-0 left-0 flex p-4'
+      >
         <button
-          id="scrnsht_btn"
-          className="rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150"
+          id='scrnsht_btn'
+          className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'
           onClick={openCapturePhotoButtons}
         >
           <FaCamera />
@@ -277,6 +291,7 @@ export default function AiArtMirror() {
             onResetVoiceOptions={() => setVoiceOptions(false)}
             selectedStyleDrop={selectedStyle}
             styleDropdownOpen={styleDropdownOpen}
+            onGoBack={handleGoBack}
           />
         </>
       )}
@@ -284,9 +299,11 @@ export default function AiArtMirror() {
       {showPreview && imageData && (
         <>
           <ImageModal
-            title={`Do you want to transform this image into "${selectedStyle ? selectedStyle.name : ''}" style?`}
-            confirmText="Yes"
-            declineText="No"
+            title={`Do you want to transform this image into "${
+              selectedStyle ? selectedStyle.name : ""
+            }" style?`}
+            confirmText='Yes'
+            declineText='No'
             imgSrc={imageData}
             openModule={showPreview}
             cancelMoodScreenshot={handleCancelScreenshot}
@@ -296,6 +313,7 @@ export default function AiArtMirror() {
       )}
       {recievedImg && (
         <AiImagePreview
+          artStyle={selectedStyle ? selectedStyle.description : ""}
           image={recievedImg}
           handleImageData={handleRecievedImg}
         />
