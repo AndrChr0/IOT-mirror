@@ -40,7 +40,7 @@ export default function MuseumDisplay() {
   return (
     <div>
       <h1>AI Art Museum</h1>
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+      <div>
         {aiArtList.length > 0 ? (
           aiArtList.map((art) => (
             <div key={art._id}>
