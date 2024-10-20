@@ -31,7 +31,7 @@ export default function MuseumDisplay() {
     };
 
     fetchAiArt();
-  }, []);
+  }, [aiArtList]);
 
   if (loading) {
     return <p>Loading AI art...</p>;

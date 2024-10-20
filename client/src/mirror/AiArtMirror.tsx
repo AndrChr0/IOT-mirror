@@ -249,7 +249,7 @@ export default function AiArtMirror() {
 
   const handleGoBack = () => {
     setSelectedStyle(null);
-  }
+  };
 
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
@@ -269,8 +269,10 @@ export default function AiArtMirror() {
         </div>
       )}
 
-      <div id="scrnsht_btn-container" className="absolute bottom-0 left-0 flex p-4">
-
+      <div
+        id='scrnsht_btn-container'
+        className='absolute bottom-0 left-0 flex p-4'
+      >
         <button
           id='scrnsht_btn'
           className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'

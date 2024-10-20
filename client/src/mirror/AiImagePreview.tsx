@@ -31,6 +31,7 @@ export default function AiImagePreview({
       if (response.status === 201) {
         console.log("AI art created successfully!");
         console.log(data); // The saved AI art object returned from the server
+        handleImageData(null);
       } else {
         console.log("Error creating AI art");
         console.error(data);

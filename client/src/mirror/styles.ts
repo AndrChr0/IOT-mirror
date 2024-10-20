@@ -5,8 +5,43 @@ export interface Style {
     img: string;
     description: string;
     style_prompt: string;
-
   }
+
+  export interface Name {
+    id: number;
+    name: string;
+  } 
+
+  export const names: Name[] = [
+    {
+      id: 1,
+      name: "post impressionism"
+
+    }, 
+    {
+      id: 2,
+      name: "renaissance"
+    },
+    { 
+      id: 3,
+      name: "cubism"
+    },
+    {
+      id: 4,
+      name: "surrealism"
+    },
+    { 
+      id: 5,
+      name: "barok"
+    },
+    {
+      id: 6,  
+      name: "abstract"
+    },
+ 
+  
+  
+  ]
   
   export const styles: Style[] = [
     {
