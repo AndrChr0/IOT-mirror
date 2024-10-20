@@ -9,10 +9,10 @@ export interface Style {
   export const styles: Style[] = [
     {
       id: 1,
-      name: "Van Gogh",
+      name: "Post-Impressionism",
       img: "https://magazine.artland.com/wp-content/uploads/2022/07/van-gogh-starry-night-min.jpg",
       description:
-        "Famous for his expressive brushstrokes and vibrant colors, Van Gogh's style is iconic in Post-Impressionism. His works often depict emotional depth and movement.",
+        "Post-Impressionism is an art movement that emerged in the late 19th century as a reaction to Impressionism. While Impressionists focused on capturing fleeting moments and the effects of light, Post-Impressionist artists sought to express deeper emotions and explore symbolic content. This movement, led by artists like Vincent van Gogh, Paul Cézanne, Paul Gauguin, and Georges Seurat, emphasized bold colors, distinctive brushstrokes, and a more abstract approach to form.",
     },
     {
       id: 2,
