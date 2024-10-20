@@ -16,6 +16,7 @@ export interface Style {
       description:
         "A Post-Impressionism is an art movement that emerged in the late 19th century as a reaction to Impressionism. While Impressionists focused on capturing fleeting moments and the effects of light, Post-Impressionist artists sought to express deeper emotions and explore symbolic content. This movement, led by artists like Vincent van Gogh, Paul Cézanne, Paul Gauguin, and Georges Seurat, emphasized bold colors, distinctive brushstrokes, and a more abstract approach to form.",
       style_prompt: "Post-Impressionist painting with vivid, expressive colors and bold, visible brushstrokes. The scene captures a landscape or still life, but with a more abstract, personal interpretation. The forms are slightly distorted, and the colors are exaggerated to create emotional intensity. The painting emphasizes texture and the artist's individual style, with less focus on naturalism and more on the expressive qualities of color and composition. The influence of artists like Van Gogh and Cézanne is evident."
+
     },
     {
       id: 2,

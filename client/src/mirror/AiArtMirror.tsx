@@ -92,6 +92,10 @@ export default function AiArtMirror() {
             setStyleDropdownOpen(false);
             console.log(styleDropdownOpen);
           }
+
+          if (transcript.includes("go back")) {
+            handleGoBack();
+          }
         }
       };
 
@@ -243,6 +247,10 @@ export default function AiArtMirror() {
     setVoiceOptions(true);
   };
 
+  const handleGoBack = () => {
+    setSelectedStyle(null);
+  }
+
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
       <div className='absolute z-10 w-full mt-20'></div>
@@ -260,7 +268,9 @@ export default function AiArtMirror() {
           {countdown}
         </div>
       )}
-      <div className='absolute bottom-0 left-0 flex p-4'>
+
+      <div id="scrnsht_btn-container" className="absolute bottom-0 left-0 flex p-4">
+
         <button
           id='scrnsht_btn'
           className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'
@@ -279,6 +289,7 @@ export default function AiArtMirror() {
             onResetVoiceOptions={() => setVoiceOptions(false)}
             selectedStyleDrop={selectedStyle}
             styleDropdownOpen={styleDropdownOpen}
+            onGoBack={handleGoBack}
           />
         </>
       )}
