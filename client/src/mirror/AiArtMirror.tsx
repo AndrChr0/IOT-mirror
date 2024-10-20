@@ -4,6 +4,11 @@ import { FaCamera } from "react-icons/fa";
 import ImageModal from "@/ImageModal";
 import AiImagePreview from "./AiImagePreview";
 import Processing from "./Processing";
+import SelectStyle from "./SelectStyle";
+
+interface Style {
+  name: string;
+}
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -16,6 +21,7 @@ export default function AiArtMirror() {
   const [showCapturePhotoButtons, setShowCapturePhotoButtons] = useState(false);
   const [recievedImg, setRecievedImg] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedStyle, setSelectedStyle] = useState<Style | null>(null);
 
   console.log("recievedImg", recievedImg);
 
@@ -134,6 +140,7 @@ export default function AiArtMirror() {
   const startCountdown = () => {
     setCountdown(3);
     disableScreenshotButton();
+    setShowCapturePhotoButtons(false);
     const interval = setInterval(() => {
       setCountdown((prevCountdown) => {
         if (prevCountdown && prevCountdown > 1) {
@@ -200,6 +207,7 @@ export default function AiArtMirror() {
   const handleCancelScreenshot = () => {
     setShowPreview(false);
     setImageData(null);
+    setShowCapturePhotoButtons(true);
   };
 
   const openCapturePhotoButtons = () => {
@@ -210,55 +218,54 @@ export default function AiArtMirror() {
     setRecievedImg(img);
   };
 
+  const handleStyleSelect = (style: any) => {
+    setSelectedStyle(style.name);
+  }
+
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-      <div className='absolute z-10 w-full mt-20'></div>
+      <div className="absolute z-10 w-full mt-20"></div>
 
       <video
         ref={videoRef}
-        className='object-cover w-full h-full inverted-video'
+        className="object-cover w-full h-full inverted-video"
         autoPlay
         muted
         onPlay={handleVideoOnPlay}
       />
-      <canvas ref={canvasRef} className='hidden' />
+      <canvas ref={canvasRef} className="hidden" />
       {countdown !== null && (
-        <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
+        <div className="absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2">
           {countdown}
         </div>
       )}
-      <div className='absolute bottom-0 left-0 flex p-4'>
+      <div className="absolute bottom-0 left-0 flex p-4">
         <button
-          id='scrnsht_btn'
-          className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'
+          id="scrnsht_btn"
+          className="rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150"
           onClick={openCapturePhotoButtons}
         >
           <FaCamera />
         </button>
-
-        {showCapturePhotoButtons && (
-          <>
-            <button
-              id='scrnsht_btn'
-              className='p-1 ml-2 text-blue-500 bg-[rgb(255,255,255,0.8)] border-2 border-blue-500 rounded'
-              onClick={startCountdown}
-            >
-              Capture photo (Send to AI)
-            </button>
-          </>
-        )}
       </div>
+      {showCapturePhotoButtons && (
+        <>
+          <SelectStyle onCapturePhoto={startCountdown} onCloseModal={()=>setShowCapturePhotoButtons(false)} onStyleSelect={handleStyleSelect}/>
+        </>
+      )}
 
       {showPreview && imageData && (
-        <ImageModal
-          title='Would you like to download this image?'
-          confirmText='Yes'
-          declineText='No'
-          imgSrc={imageData}
-          openModule={showPreview}
-          cancelMoodScreenshot={handleCancelScreenshot}
-          confirmMoodScreenshot={handleConfirmScreenshot}
-        />
+        <>
+          <ImageModal
+            title={`Do you want to transform this image into "${selectedStyle}"?`}
+            confirmText="Yes"
+            declineText="No"
+            imgSrc={imageData}
+            openModule={showPreview}
+            cancelMoodScreenshot={handleCancelScreenshot}
+            confirmMoodScreenshot={handleConfirmScreenshot}
+          />
+        </>
       )}
       {recievedImg && (
         <AiImagePreview
