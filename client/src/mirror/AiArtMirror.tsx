@@ -21,6 +21,7 @@ export default function AiArtMirror() {
   const [selectedStyle, setSelectedStyle] = useState<Style | null>(null);
   const [voiceOptions, setVoiceOptions] = useState(false);
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
+  const [transcription, setTranscription] = useState<string | null>(null);
 
   console.log("recievedImg", recievedImg);
 
@@ -54,6 +55,7 @@ export default function AiArtMirror() {
           .trim()
           .toLowerCase();
         console.log("Voice input: ", transcript);
+        setTranscription(transcript);
 
         if (transcript.includes("open blue camera")) {
           setShowCapturePhotoButtons(true);
@@ -104,6 +106,16 @@ export default function AiArtMirror() {
       console.error("Speech Recognition not supported in this browser.");
     }
   }, [showCapturePhotoButtons, showPreview, imageData]);
+
+  useEffect(() => {
+    if (transcription) {
+      const timer = setTimeout(() => {
+        setTranscription(null); 
+      }, 2500);
+  
+      return () => clearTimeout(timer); 
+    }
+  }, [transcription]);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
@@ -319,6 +331,14 @@ export default function AiArtMirror() {
         />
       )}
       {isProcessing && <Processing />}
+      {transcription && (
+        <div className='absolute bottom-0 right-0 w-full transcription-wrapper'>
+          <div className="h-auto text-white bg-black bg-opacity-50 transcription-container">
+          "{transcription}"
+          </div>
+        
+        </div>
+      )}
     </div>
   );
 }
