@@ -300,6 +300,7 @@ export default function AiArtMirror() {
       )}
       {recievedImg && (
         <AiImagePreview
+          artStyle={selectedStyle ? selectedStyle.description : ""}
           image={recievedImg}
           handleImageData={handleRecievedImg}
         />
