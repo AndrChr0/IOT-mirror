@@ -6,7 +6,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function main(base64code) {
+export default async function main(base64code, stylePrompt) {
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -35,7 +35,7 @@ export default async function main(base64code) {
 
     const imageDescription = response.choices[0].message.content;
 
-    const imgURL = await generateImage(imageDescription); // Generate an image from the description
+    const imgURL = await generateImage(imageDescription, stylePrompt); // Generate an image from the description
     console.log("from main function:", imgURL);
     return imgURL;
   } catch (error) {
@@ -48,11 +48,11 @@ export default async function main(base64code) {
   }
 }
 
-async function generateImage(description) {
+async function generateImage(description, stylePrompt) {
   try {
     const response = await openai.images.generate({
       model: "dall-e-3",
-      prompt: description,
+      prompt: `Genarate an image with the following description: ${description} And style it like this: ${stylePrompt}`,
       n: 1,
       size: "1024x1024",
     });
