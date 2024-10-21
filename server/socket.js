@@ -86,6 +86,11 @@ io.on('connection', (socket) => {
     console.log('Refresh remote');
     io.emit('handle-remote-refresh');
   });
+
+  socket.on('disconnect', () => {
+    console.log('A user disconnected:', socket.id);
+    io.emit('handle-remote-refresh');
+  });
 });
 
 server.listen(3000, () => {

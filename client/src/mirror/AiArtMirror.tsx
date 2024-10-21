@@ -82,7 +82,7 @@ export default function AiArtMirror() {
     });
 
     socket.on("handle-remote-refresh", () => {
-      setShowQrCode(false);
+      setShowQrCode(true);
     });
 
     return () => {

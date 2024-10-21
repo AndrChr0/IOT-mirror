@@ -2,12 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Remote Control</title>
     <script src="/socket.io/socket.io.js"></script>
-    
+
     <style>
-      html, body {margin: 0; height: 100%; overflow: hidden}
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+      }
       body {
         overflow: hidden;
         display: flex;
@@ -16,28 +24,26 @@
         width: 100dvw;
         height: 100dvh;
         justify-content: flex-start;
-        align-items: center; 
+        align-items: center;
         background-color: black;
       }
       .swipe-area {
         margin-top: 20px;
-        width: 300px; 
+        width: 300px;
         height: 350px;
         background-color: rgb(38, 38, 38);
         /* outline: 1px solid white; */
         border-radius: 30px;
       }
 
-      
-
-      .camera-container{
+      .camera-container {
         color: white;
         width: 300px;
         display: flex;
         gap: 20px;
       }
 
-      .button{
+      .button {
         width: 80px;
         height: 80px;
         display: flex;
@@ -49,22 +55,22 @@
         padding: 2px;
       }
 
-      .camera{
+      .camera {
         border: 2px solid rgb(38, 38, 38);
       }
 
-      .mic{
+      .mic {
         border: 2px solid rgb(38, 38, 38);
       }
 
-      img{
+      img {
         object-fit: contain;
         filter: invert(1);
         width: 50%;
         height: 50%;
       }
 
-      .slash{
+      .slash {
         width: 100px;
         height: 2px;
         background-color: red;
@@ -73,103 +79,197 @@
         z-index: 1000;
       }
 
-      .border{
+      .border {
         outline: 1px solid white;
       }
 
+      .confirmation {
+        position: absolute;
+        width: 100dvw;
+        height: 100dvh;
 
+        background-color: rgba(0, 0, 0, 0.9);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 24px;
+        margin-top: 20px;
+        z-index: 999999999;
+        text-align: center;
+      }
+
+      .confirmation .wrappy {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        flex-direction: column;
+        background-color: white;
+        color: black;
+        height: 50%;
+        width: 80%;
+        border-radius: 12px;
+      }
+
+      .confirmation-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .confirmation-buttons button {
+        padding: 10px;
+        margin: 10px;
+        font-size: 24px;
+        background-color: white;
+        color: black;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .confirmation-buttons button#yes{
+        background-color: rgb(75,131, 234);
+        color: white;
+      }
+
+      .confirmation-buttons button#no{
+        background-color: white;
+        color: rgb(75,131, 234);;
+        border: 2px solid rgb(75,131, 234);
+      }
     </style>
   </head>
   <body>
+    <div class="confirmation">
+      <div class="wrappy">
+        <span>Do you want to connect to the SmArt Mirror? </span>
+
+        <div class="confirmation-buttons">
+          <button id="yes">Yes</button>
+          <button id="no">No</button>
+        </div>
+      </div>
+    </div>
     <div class="swipe-area" tabindex="1"></div>
     <div class="camera-container">
-        <div id="toggle-camera" class="button camera"><img src="https://i.pinimg.com/originals/36/d9/44/36d944e4369dcf8b6ac4f722a2dd3449.png" alt=""></div>
-        <div id="toggle-recognizing" class="button mic"><div id="slash" class="slash"></div><img src="https://static-00.iconduck.com/assets.00/mic-icon-1433x2048-yncr751o.png" alt=""></div>
+      <div id="toggle-camera" class="button camera">
+        <img
+          src="https://i.pinimg.com/originals/36/d9/44/36d944e4369dcf8b6ac4f722a2dd3449.png"
+          alt=""
+        />
+      </div>
+      <div id="toggle-recognizing" class="button mic">
+        <div id="slash" class="slash"></div>
+        <img
+          src="https://static-00.iconduck.com/assets.00/mic-icon-1433x2048-yncr751o.png"
+          alt=""
+        />
+      </div>
     </div>
 
     <script>
-      const socket = io("http://192.168.2.142:3000"); 
+      const confirmation = document.querySelector(".confirmation");
+      const confirmationButtons = document.querySelectorAll(
+        ".confirmation-buttons button"
+      );
+
+      const socket = io("http://192.168.2.142:3000");
       let startX, startY;
 
+      confirmationButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          if (button.textContent === "Yes") {
+            confirmation.style.display = "none";
+            socket.emit("scanned-qr-code");
+          } else {
+            window.location.href = "http://google.com";
+          }
+        });
+      });
+
+      socket.on("disconnect", () => {
+        io.emit('handle-remote-refresh');
+      });
+
       document.querySelector("#toggle-camera").addEventListener("click", () => {
-        console.log("Toggle camera"); 
-        socket.emit("toggle-camera"); 
+        console.log("Toggle camera");
+        socket.emit("toggle-camera");
 
         const camera = document.querySelector("#toggle-camera");
-        if(camera.classList.contains("border")){
+        if (camera.classList.contains("border")) {
           camera.classList.remove("border");
-        }else{
-            camera.classList.add("border");
-            }
-
-            
-
+        } else {
+          camera.classList.add("border");
+        }
       });
 
-        document.querySelector("#toggle-recognizing").addEventListener("click", () => {
-            console.log("Toggle recognizing"); 
-            socket.emit("toggle-recognizing"); 
+      document
+        .querySelector("#toggle-recognizing")
+        .addEventListener("click", () => {
+          console.log("Toggle recognizing");
+          socket.emit("toggle-recognizing");
 
-            const slash = document.querySelector("#slash");
-            if(slash.style.display === "none"){
-                slash.style.display = "block";
-            }else{
-                slash.style.display = "none";
-            }
-            
+          const slash = document.querySelector("#slash");
+          if (slash.style.display === "none") {
+            slash.style.display = "block";
+          } else {
+            slash.style.display = "none";
+          }
         });
-
-       socket.on("connect", () => {
-        socket.emit("scanned-qr-code");
-      });
-
-    
-
 
       const handleSwipe = (direction) => {
         console.log(`Swipe ${direction}`);
-        socket.emit("handle-swipe", direction); 
+        socket.emit("handle-swipe", direction);
       };
 
       const handleClick = () => {
-        console.log("Click detected"); 
-        socket.emit("handle-click"); 
+        console.log("Click detected");
+        socket.emit("handle-click");
       };
 
-      document.querySelector(".swipe-area").addEventListener("touchstart", (e) => {
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-      });
+      document
+        .querySelector(".swipe-area")
+        .addEventListener("touchstart", (e) => {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        });
 
-      document.querySelector(".swipe-area").addEventListener("touchend", (e) => {
-        const endX = e.changedTouches[0].clientX;
-        const endY = e.changedTouches[0].clientY;
+      document
+        .querySelector(".swipe-area")
+        .addEventListener("touchend", (e) => {
+          const endX = e.changedTouches[0].clientX;
+          const endY = e.changedTouches[0].clientY;
 
-        const diffX = endX - startX;
-        const diffY = endY - startY;
+          const diffX = endX - startX;
+          const diffY = endY - startY;
 
-        // Adjust sensitivity for both horizontal and vertical swipes
-        const sensitivity = 50;
+          // Adjust sensitivity for both horizontal and vertical swipes
+          const sensitivity = 50;
 
-        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > sensitivity) {
-          // Horizontal swipe
-          if (diffX > 0) {
-            handleSwipe("right");
+          if (
+            Math.abs(diffX) > Math.abs(diffY) &&
+            Math.abs(diffX) > sensitivity
+          ) {
+            // Horizontal swipe
+            if (diffX > 0) {
+              handleSwipe("right");
+            } else {
+              handleSwipe("left");
+            }
+          } else if (Math.abs(diffY) > sensitivity) {
+            // Vertical swipe
+            if (diffY > 0) {
+              handleSwipe("down");
+            } else {
+              handleSwipe("up");
+            }
           } else {
-            handleSwipe("left");
+            // If no swipe detected, treat it as a click
+            handleClick();
           }
-        } else if (Math.abs(diffY) > sensitivity) {
-          // Vertical swipe
-          if (diffY > 0) {
-            handleSwipe("down");
-          } else {
-            handleSwipe("up");
-          }
-        } else {
-          // If no swipe detected, treat it as a click
-          handleClick();
-        }
-      });
+        });
     </script>
   </body>
 </html>
