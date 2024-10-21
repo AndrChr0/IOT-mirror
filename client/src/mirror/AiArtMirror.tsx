@@ -105,7 +105,7 @@ export default function AiArtMirror() {
 
       const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
 
-      if (direction === "left") {
+      if (direction === "left" || direction === "up") {
         const previousIndex =
           (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
         const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
@@ -113,7 +113,7 @@ export default function AiArtMirror() {
           previousElement.focus();
           focusedElementRef.current = previousElement; // Update ref
         }
-      } else if (direction === "right") {
+      } else if (direction === "right" || direction === "down") {
         const nextIndex = (currentIndex + 1) % elementsToSwipe.length;
         const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
         if (nextElement) {

@@ -81,9 +81,9 @@ const SelectStyle = ({
         <div className="flex items-center justify-between w-full px-[24px]">
             <h1 className="text-2xl">{selectedStyle ? selectedStyle.name : 'Choose a style'}</h1>
             <div className="select-styles_close-btn">
-            <span tabIndex={1} className="selectedTabIndex" onClick={onCloseModal}>
+            <div tabIndex={1} className="selectedTabIndex closey" onClick={onCloseModal}>
               <IoClose size={25} />
-            </span>
+            </div>
           </div>
             </div>
           

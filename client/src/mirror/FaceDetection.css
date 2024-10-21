@@ -65,3 +65,15 @@
   0 0 40px rgba(97, 176, 255, 0.5);
 
 }
+
+:focus,
+:focus-visible {
+  /* outline: 5px solid rgb(59 130 246); */
+  outline: 5px solid black;
+  outline-offset: 5px;
+  transition: outline-offset 0.15s ease-in-out, outline-width 0.15s ease-in-out !important;
+}
+
+.closey{
+  border-radius: 5px;
+}
