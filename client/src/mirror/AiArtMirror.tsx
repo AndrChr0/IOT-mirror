@@ -7,6 +7,8 @@ import Processing from "./Processing";
 import SelectStyle from "./SelectStyle";
 import { Style, styles } from "./styles";
 import io from "socket.io-client";
+import { IoIosMic } from "react-icons/io";
+import { IoIosMicOff } from "react-icons/io";
 
 const socket = io("http://192.168.2.142:3000");
 
@@ -26,7 +28,9 @@ export default function AiArtMirror() {
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
   const [transcription, setTranscription] = useState<string | null>(null);
   const [skibidi, setSkibidi] = useState(false);
-  const focusedElementRef = useRef<HTMLElement | null>(null); 
+  const focusedElementRef = useRef<HTMLElement | null>(null);
+  const [isRecognizing, setIsRecognizing] = useState(false);
+  const [wiggleClass, setWiggleClass] = useState("");
 
   console.log("recievedImg", recievedImg);
 
@@ -60,23 +64,35 @@ export default function AiArtMirror() {
       console.log("Simulate click on desktop");
     });
 
+    socket.on("toggle-recognizing", () => {
+      setIsRecognizing((prev) => !prev);
+      console.log("Recognizing:", isRecognizing);
+    });
+
     return () => {
       socket.off("style-changed");
       socket.off("toggle-camera");
       socket.off("handle-go-back");
       socket.off("handle-click");
       socket.off("handle-swipe");
+      socket.off("toggle-recognizing");
     };
   }, []);
 
   useEffect(() => {
     const handleSwipe = (direction: string) => {
-      const focusableElements = Array.from(document.querySelectorAll("[tabindex]")); 
-      const selectedTabIndexElements = Array.from(document.querySelectorAll(".selectedTabIndex")); 
-  
+      const focusableElements = Array.from(
+        document.querySelectorAll("[tabindex]")
+      );
+      const selectedTabIndexElements = Array.from(
+        document.querySelectorAll(".selectedTabIndex")
+      );
+
       // Determine which elements to use for swiping based on the selected style
-      const elementsToSwipe = selectedStyle ? selectedTabIndexElements : focusableElements;
-  
+      const elementsToSwipe = selectedStyle
+        ? selectedTabIndexElements
+        : focusableElements;
+
       if (!focusedElementRef.current) {
         // If no element is focused, focus the first element
         const firstElement = elementsToSwipe[0] as HTMLElement;
@@ -86,11 +102,12 @@ export default function AiArtMirror() {
         }
         return; // Exit early if we focused an element
       }
-  
+
       const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
-  
+
       if (direction === "left") {
-        const previousIndex = (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
+        const previousIndex =
+          (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
         const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
         if (previousElement) {
           previousElement.focus();
@@ -105,32 +122,32 @@ export default function AiArtMirror() {
         }
       }
     };
-  
+
     socket.on("handle-click", () => {
       console.log("Received button click from phone!");
       if (focusedElementRef.current) {
         focusedElementRef.current.click();
       }
     });
-  
+
     socket.on("handle-swipe", (direction) => {
       console.log(`Received swipe ${direction} from phone!`);
       handleSwipe(direction);
     });
-  
+
     const handleFocus = (event: FocusEvent) => {
       if (event.target instanceof HTMLElement) {
         focusedElementRef.current = event.target;
       }
     };
-  
+
     const handleBlur = () => {
       focusedElementRef.current = null;
     };
-  
+
     document.addEventListener("focusin", handleFocus);
     document.addEventListener("focusout", handleBlur);
-  
+
     return () => {
       socket.off("handle-click");
       socket.off("handle-swipe");
@@ -138,8 +155,7 @@ export default function AiArtMirror() {
       document.removeEventListener("focusout", handleBlur);
     };
   }, [selectedStyle]);
-  
-  
+
   useEffect(() => {
     const startVideo = () => {
       navigator.mediaDevices
@@ -221,12 +237,24 @@ export default function AiArtMirror() {
         }
       };
 
-      recognition.start();
+      if (isRecognizing) {
+        recognition.start();
+      } else {
+        recognition.stop();
+      }
+
+      // Cleanup
+      return () => {
+        recognition.stop();
+      };
     } else {
       console.error("Speech Recognition not supported in this browser.");
     }
-  }, [showCapturePhotoButtons, showPreview, imageData]);
+  }, [showCapturePhotoButtons, showPreview, imageData, isRecognizing]);
 
+  useEffect(() => {
+    console.log("Recognizing:", isRecognizing);
+  }, [isRecognizing]);
   useEffect(() => {
     if (transcription) {
       const timer = setTimeout(() => {
@@ -414,6 +442,12 @@ export default function AiArtMirror() {
     }
   }, [skibidi]);
 
+  useEffect(() => {
+      setWiggleClass("wiggle");
+      const timer = setTimeout(() => setWiggleClass(""), 400);
+      return () => clearTimeout(timer);
+  }, [isRecognizing]);
+
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
       <div className="absolute z-10 w-full mt-20"></div>
@@ -497,6 +531,17 @@ export default function AiArtMirror() {
           alt=""
         />
       )}
+      <div className="absolute top-0 m-2">
+        {isRecognizing ? (
+          <div className={wiggleClass}>
+            <IoIosMic size={30} />
+          </div>
+        ) : (
+          <div className={wiggleClass}>
+            <IoIosMicOff size={30} color="red"/>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

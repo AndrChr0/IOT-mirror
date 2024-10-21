@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Remote Control</title>
     <script src="/socket.io/socket.io.js"></script>
+    
     <style>
       .swipe-area {
+        margin-top: 20px;
         width: 300px; 
-        height: 300px;
-        background-color: rgb(32, 32, 32);
-        outline: 1px solid white;
-        border-radius: 10px;
+        height: 350px;
+        background-color: rgb(38, 38, 38);
+        /* outline: 1px solid white; */
+        border-radius: 30px;
       }
 
       body {
@@ -30,23 +32,57 @@
         color: white;
         width: 300px;
         display: flex;
+        gap: 20px;
       }
 
-      .camera{
+      .button{
         width: 80px;
         height: 80px;
-        background-color: rgb(59 130 246);
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 10px;
+        border-radius: 100%;
+        background-color: rgb(38, 38, 38);
+        font-family: Arial, Helvetica, sans-serif;
+        padding: 2px;
       }
+
+      .camera{
+        border: 2px solid rgb(38, 38, 38);
+      }
+
+      .mic{
+        border: 2px solid rgb(38, 38, 38);
+      }
+
+      img{
+        object-fit: contain;
+        filter: invert(1);
+        width: 50%;
+        height: 50%;
+      }
+
+      .slash{
+        width: 100px;
+        height: 2px;
+        background-color: red;
+        position: absolute;
+        transform: rotate(45deg);
+        z-index: 1000;
+      }
+
+      .border{
+        outline: 1px solid white;
+      }
+
+
     </style>
   </head>
   <body>
     <div class="swipe-area" tabindex="1"></div>
     <div class="camera-container">
-        <div id="toggle-camera" class="camera">Cam</div>
+        <div id="toggle-camera" class="button camera"><img src="https://i.pinimg.com/originals/36/d9/44/36d944e4369dcf8b6ac4f722a2dd3449.png" alt=""></div>
+        <div id="toggle-recognizing" class="button mic"><div id="slash" class="slash"></div><img src="https://static-00.iconduck.com/assets.00/mic-icon-1433x2048-yncr751o.png" alt=""></div>
     </div>
 
     <script>
@@ -56,7 +92,30 @@
       document.querySelector("#toggle-camera").addEventListener("click", () => {
         console.log("Toggle camera"); 
         socket.emit("toggle-camera"); 
+
+        const camera = document.querySelector("#toggle-camera");
+        if(camera.classList.contains("border")){
+          camera.classList.remove("border");
+        }else{
+            camera.classList.add("border");
+            }
+
+            
+
       });
+
+        document.querySelector("#toggle-recognizing").addEventListener("click", () => {
+            console.log("Toggle recognizing"); 
+            socket.emit("toggle-recognizing"); 
+
+            const slash = document.querySelector("#slash");
+            if(slash.style.display === "none"){
+                slash.style.display = "block";
+            }else{
+                slash.style.display = "none";
+            }
+            
+        });
 
       const handleSwipe = (direction) => {
         console.log(`Swipe ${direction}`);

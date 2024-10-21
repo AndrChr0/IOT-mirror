@@ -73,6 +73,11 @@ io.on('connection', (socket) => {
     io.emit('handle-click');
   });
 
+  socket.on('toggle-recognizing', () => {
+    console.log('Toggle recognizing');
+    io.emit('toggle-recognizing');
+  });
+
 });
 
 server.listen(3000, () => {
