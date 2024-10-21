@@ -21,6 +21,8 @@ export default function AiArtMirror() {
   const [selectedStyle, setSelectedStyle] = useState<Style | null>(null);
   const [voiceOptions, setVoiceOptions] = useState(false);
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
+  const [transcription, setTranscription] = useState<string | null>(null);
+  const [skibidi, setSkibidi] = useState(false);
 
   console.log("recievedImg", recievedImg);
 
@@ -54,6 +56,7 @@ export default function AiArtMirror() {
           .trim()
           .toLowerCase();
         console.log("Voice input: ", transcript);
+        setTranscription(transcript);
 
         if (transcript.includes("open blue camera")) {
           setShowCapturePhotoButtons(true);
@@ -97,6 +100,11 @@ export default function AiArtMirror() {
             handleGoBack();
           }
         }
+
+        if (transcript.includes("skibidi")) {
+          setSkibidi(true);
+          console.log("state of skib:", skibidi);
+        }
       };
 
       recognition.start();
@@ -104,6 +112,16 @@ export default function AiArtMirror() {
       console.error("Speech Recognition not supported in this browser.");
     }
   }, [showCapturePhotoButtons, showPreview, imageData]);
+
+  useEffect(() => {
+    if (transcription) {
+      const timer = setTimeout(() => {
+        setTranscription(null);
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [transcription]);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
@@ -251,31 +269,61 @@ export default function AiArtMirror() {
     setSelectedStyle(null);
   };
 
+  const elevatorAudio = useRef(new Audio("/assets/elevator.mp3"));
+  useEffect(() => {
+    if (isProcessing) {
+      const playAudio = async () => {
+        try {
+          await elevatorAudio.current.play();
+        } catch (error) {
+          console.error("Failed to play audio:", error);
+        }
+      };
+
+      playAudio();
+    } else {
+      if (elevatorAudio.current) {
+        elevatorAudio.current.pause();
+        elevatorAudio.current.currentTime = 0;
+      }
+    }
+  }, [isProcessing]);
+
+  useEffect(() => {
+    if (skibidi) {
+      const timer = setTimeout(() => {
+        setSkibidi(false);
+      }, 2500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [skibidi]);
+
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-      <div className='absolute z-10 w-full mt-20'></div>
+      <div className="absolute z-10 w-full mt-20"></div>
 
       <video
         ref={videoRef}
-        className='object-cover w-full h-full inverted-video'
+        className="object-cover w-full h-full inverted-video"
         autoPlay
         muted
         onPlay={handleVideoOnPlay}
       />
-      <canvas ref={canvasRef} className='hidden' />
+      <canvas ref={canvasRef} className="hidden" />
       {countdown !== null && (
-        <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
+        <div className="absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2">
           {countdown}
         </div>
       )}
 
       <div
-        id='scrnsht_btn-container'
-        className='absolute bottom-0 left-0 flex p-4'
+        id="scrnsht_btn-container"
+        className="absolute bottom-0 left-0 flex p-4"
       >
         <button
-          id='scrnsht_btn'
-          className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'
+          id="scrnsht_btn"
+          className="rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150"
           onClick={openCapturePhotoButtons}
         >
           <FaCamera />
@@ -302,8 +350,8 @@ export default function AiArtMirror() {
             title={`Do you want to transform this image into "${
               selectedStyle ? selectedStyle.name : ""
             }" style?`}
-            confirmText='Yes'
-            declineText='No'
+            confirmText="Yes"
+            declineText="No"
             imgSrc={imageData}
             openModule={showPreview}
             cancelMoodScreenshot={handleCancelScreenshot}
@@ -319,6 +367,21 @@ export default function AiArtMirror() {
         />
       )}
       {isProcessing && <Processing />}
+      {transcription && (
+        <div className="absolute bottom-0 right-0 w-full mb-4 transcription-wrapper">
+          <div className="h-auto text-white bg-black bg-opacity-50 transcription-container">
+            "{transcription}"
+          </div>
+        </div>
+      )}
+
+      {skibidi && (
+        <img
+          className="absolute z-[999999] top-0"
+          src="https://assets-prd.ignimgs.com/2024/07/25/skibidi-toilet-button-1721912547107.jpg"
+          alt=""
+        />
+      )}
     </div>
   );
 }
