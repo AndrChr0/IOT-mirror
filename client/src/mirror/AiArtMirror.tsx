@@ -572,9 +572,9 @@ export default function AiArtMirror() {
           </div>
         )}
       </div>
-      <div onClick={()=>enlargeQrCode()} className="z-[10000000] absolute top-0 right-0 mr-5 mt-2 w-[20px] h-[20px]"><MdOutlineSettingsRemote size={30}/></div>
+      {/* <div onClick={()=>enlargeQrCode()} className="z-[10000000] absolute top-0 right-0 mr-5 mt-2 w-[20px] h-[20px]"><MdOutlineSettingsRemote size={30}/></div> */}
       {showQrCode && (
-        <div className="absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center qr-code">
+        <div className="absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center qr-code z-[999999999]">
           <img
             src="/public/images/qr-remote.png"
             alt="QR code"

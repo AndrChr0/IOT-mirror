@@ -80,11 +80,11 @@ const SelectStyle = ({
 
         <div className="flex items-center justify-between w-full px-[24px]">
             <h1 className="text-2xl">{selectedStyle ? selectedStyle.name : 'Choose a style'}</h1>
-            <div className="select-styles_close-btn">
+            {/* <div className="select-styles_close-btn">
             <div tabIndex={1} className="selectedTabIndex closey" onClick={onCloseModal}>
               <IoClose size={25} />
             </div>
-          </div>
+          </div> */}
             </div>
           
           <div className="relative w-full h-full test">
