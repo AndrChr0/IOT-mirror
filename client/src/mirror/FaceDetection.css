@@ -54,3 +54,14 @@
 .wiggle {
   animation: wiggle 0.4s ease-in-out;
 }
+
+
+.countdown{
+  color: rgb(255, 255, 255);
+  text-shadow: 
+  0 0 10px rgba(97, 173, 255, 0.5),
+  0 0 20px rgba(97, 144, 255, 0.5),
+  0 0 30px rgba(97, 150, 255, 0.5),
+  0 0 40px rgba(97, 176, 255, 0.5);
+
+}
