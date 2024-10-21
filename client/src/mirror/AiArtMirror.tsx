@@ -578,7 +578,7 @@ export default function AiArtMirror() {
           <img
             src="/public/images/qr-remote.png"
             alt="QR code"
-            className="w-[220px] h-[220px]"
+            className="w-[220px] h-[220px] qr-code-img"
           />
         </div>
       )}

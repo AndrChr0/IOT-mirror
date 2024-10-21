@@ -81,3 +81,17 @@
 .qr-code{
   background-color: rgba(0, 0, 0, 0.8);
 }
+
+.qr-code-img {
+  animation: grow-shrink 0.7s infinite alternate; /* Adjust the duration as needed */
+}
+
+@keyframes grow-shrink {
+  0% {
+      transform: scale(1); /* Original size */
+  }
+  100% {
+      transform: scale(1.1); /* Grows to 110% of original size */
+  }
+}
+
