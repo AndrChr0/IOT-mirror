@@ -6,6 +6,9 @@ import AiImagePreview from "./AiImagePreview";
 import Processing from "./Processing";
 import SelectStyle from "./SelectStyle";
 import { Style, styles } from "./styles";
+import io from "socket.io-client";
+
+const socket = io("http://192.168.2.142:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -23,9 +26,120 @@ export default function AiArtMirror() {
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
   const [transcription, setTranscription] = useState<string | null>(null);
   const [skibidi, setSkibidi] = useState(false);
+  const focusedElementRef = useRef<HTMLElement | null>(null); 
 
   console.log("recievedImg", recievedImg);
 
+  useEffect(() => {
+    socket.on("style-changed", (style) => {
+      console.log(`Received style change:`, style);
+      setSelectedStyle(style);
+    });
+
+    socket.on("toggle-camera", () => {
+      setShowCapturePhotoButtons((prev) => !prev);
+    });
+
+    socket.on("handle-go-back", () => {
+      handleGoBack();
+    });
+
+    socket.on("handle-capture-photo", () => {
+      startCountdown();
+    });
+
+    socket.on("handle-click", () => {
+      console.log("Received button click from phone!");
+    });
+
+    socket.on("handle-swipe", (direction) => {
+      console.log(`Received swipe ${direction} from phone!`);
+    });
+
+    socket.on("handle-click", () => {
+      console.log("Simulate click on desktop");
+    });
+
+    return () => {
+      socket.off("style-changed");
+      socket.off("toggle-camera");
+      socket.off("handle-go-back");
+      socket.off("handle-click");
+      socket.off("handle-swipe");
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleSwipe = (direction: string) => {
+      const focusableElements = Array.from(document.querySelectorAll("[tabindex]")); 
+      const selectedTabIndexElements = Array.from(document.querySelectorAll(".selectedTabIndex")); 
+  
+      // Determine which elements to use for swiping based on the selected style
+      const elementsToSwipe = selectedStyle ? selectedTabIndexElements : focusableElements;
+  
+      if (!focusedElementRef.current) {
+        // If no element is focused, focus the first element
+        const firstElement = elementsToSwipe[0] as HTMLElement;
+        if (firstElement) {
+          firstElement.focus();
+          focusedElementRef.current = firstElement; // Update ref after focusing
+        }
+        return; // Exit early if we focused an element
+      }
+  
+      const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
+  
+      if (direction === "left") {
+        const previousIndex = (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
+        const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
+        if (previousElement) {
+          previousElement.focus();
+          focusedElementRef.current = previousElement; // Update ref
+        }
+      } else if (direction === "right") {
+        const nextIndex = (currentIndex + 1) % elementsToSwipe.length;
+        const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
+        if (nextElement) {
+          nextElement.focus();
+          focusedElementRef.current = nextElement; // Update ref
+        }
+      }
+    };
+  
+    socket.on("handle-click", () => {
+      console.log("Received button click from phone!");
+      if (focusedElementRef.current) {
+        focusedElementRef.current.click();
+      }
+    });
+  
+    socket.on("handle-swipe", (direction) => {
+      console.log(`Received swipe ${direction} from phone!`);
+      handleSwipe(direction);
+    });
+  
+    const handleFocus = (event: FocusEvent) => {
+      if (event.target instanceof HTMLElement) {
+        focusedElementRef.current = event.target;
+      }
+    };
+  
+    const handleBlur = () => {
+      focusedElementRef.current = null;
+    };
+  
+    document.addEventListener("focusin", handleFocus);
+    document.addEventListener("focusout", handleBlur);
+  
+    return () => {
+      socket.off("handle-click");
+      socket.off("handle-swipe");
+      document.removeEventListener("focusin", handleFocus);
+      document.removeEventListener("focusout", handleBlur);
+    };
+  }, [selectedStyle]);
+  
+  
   useEffect(() => {
     const startVideo = () => {
       navigator.mediaDevices
@@ -257,6 +371,7 @@ export default function AiArtMirror() {
 
   const handleStyleSelect = (style: Style) => {
     setSelectedStyle(style);
+    console.log("here", selectedStyle);
     setStyleDropdownOpen(false);
     console.log("Selected style via voice:", style.name);
   };

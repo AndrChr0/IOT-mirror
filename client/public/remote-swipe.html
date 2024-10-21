@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Remote Control</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+      .swipe-area {
+        width: 300px; 
+        height: 300px;
+        background-color: rgb(32, 32, 32);
+        outline: 1px solid white;
+        border-radius: 10px;
+      }
+
+      body {
+        overflow: hidden;
+        display: flex;
+        gap: 20px;
+        flex-direction: column;
+        width: 100dvw;
+        height: 100dvh;
+        justify-content: flex-start;
+        align-items: center; 
+        background-color: black;
+      }
+
+      .camera-container{
+        color: white;
+        width: 300px;
+        display: flex;
+      }
+
+      .camera{
+        width: 80px;
+        height: 80px;
+        background-color: rgb(59 130 246);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="swipe-area" tabindex="1"></div>
+    <div class="camera-container">
+        <div id="toggle-camera" class="camera">Cam</div>
+    </div>
+
+    <script>
+      const socket = io("http://192.168.2.142:3000"); 
+      let startX, startY;
+
+      document.querySelector("#toggle-camera").addEventListener("click", () => {
+        console.log("Toggle camera"); 
+        socket.emit("toggle-camera"); 
+      });
+
+      const handleSwipe = (direction) => {
+        console.log(`Swipe ${direction}`);
+        socket.emit("handle-swipe", direction); 
+      };
+
+      const handleClick = () => {
+        console.log("Click detected"); 
+        socket.emit("handle-click"); 
+      };
+
+      document.querySelector(".swipe-area").addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      });
+
+      document.querySelector(".swipe-area").addEventListener("touchend", (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const endY = e.changedTouches[0].clientY;
+
+        const diffX = endX - startX;
+        const diffY = endY - startY;
+
+        // Adjust sensitivity for both horizontal and vertical swipes
+        const sensitivity = 50;
+
+        if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > sensitivity) {
+          // Horizontal swipe
+          if (diffX > 0) {
+            handleSwipe("right");
+          } else {
+            handleSwipe("left");
+          }
+        } else if (Math.abs(diffY) > sensitivity) {
+          // Vertical swipe
+          if (diffY > 0) {
+            handleSwipe("down");
+          } else {
+            handleSwipe("up");
+          }
+        } else {
+          // If no swipe detected, treat it as a click
+          handleClick();
+        }
+      });
+    </script>
+  </body>
+</html>

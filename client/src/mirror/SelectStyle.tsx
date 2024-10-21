@@ -81,7 +81,7 @@ const SelectStyle = ({
         <div className="flex items-center justify-between w-full px-[24px]">
             <h1 className="text-2xl">{selectedStyle ? selectedStyle.name : 'Choose a style'}</h1>
             <div className="select-styles_close-btn">
-            <span onClick={onCloseModal}>
+            <span tabIndex={1} className="selectedTabIndex" onClick={onCloseModal}>
               <IoClose size={25} />
             </span>
           </div>
@@ -106,15 +106,17 @@ const SelectStyle = ({
 
                   <div className="selectedStyle-buttons">
                     <button
+                    tabIndex={1}
                       onClick={onGoBack}
-                      className="w-[20%] p-2 mt-4 text-blue-500 transition duration-200 border border-blue-500 rounded hover:bg-blue-500 hover:text-white flex items-center justify-center gap-[9px]"
+                      className="selectedTabIndex w-[20%] p-2 mt-4 text-blue-500 transition duration-200 border border-blue-500 rounded hover:bg-blue-500 hover:text-white flex items-center justify-center gap-[9px]"
                     >
                       <FaArrowLeftLong /> Go Back
                     </button>
 
                     <button
+                    tabIndex={1}
                       onClick={onCapturePhoto}
-                      className="w-full p-2 mt-4 text-white transition duration-200 bg-blue-500 rounded hover:bg-blue-700"
+                      className="w-full p-2 mt-4 text-white transition duration-200 bg-blue-500 rounded selectedTabIndex hover:bg-blue-700"
                     >
                       Capture Photo
                     </button>
@@ -123,41 +125,13 @@ const SelectStyle = ({
               </>
             )}
 
-            {/* <div className="custom-dropdown" ref={dropdownRef}>
-              <button
-                className="w-full p-2 border rounded"
-                onClick={() => setDropdownOpen((prev) => !prev)}
-              >
-                <div className="flex items-center justify-between w-full">
-                  <span>
-                    {selectedStyle ? selectedStyle.name : "Select an Art Style"}
-                  </span>
-                  <span>
-                    <RiArrowDropDownLine size={22} />
-                  </span>
-                </div>
-              </button>
-              {dropdownOpen && (
-                <ul className="w-full p-2 mt-2 border rounded styleDropdown dropdown-menu">
-                  {styles.map((style) => (
-                    <li
-                      key={style.id}
-                      className="p-1 cursor-pointer dropdown-item hover:bg-blue-500 hover:text-white"
-                      onClick={() => handleSelectStyle(style)}
-                    >
-                      {style.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div> */}
-
             <div className="card-container">
               {styles.map((style) => (
                 <div
                   key={style.id}
                   className="p-1 cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white"
                   onClick={() => handleSelectStyle(style)}
+                  tabIndex={1}
                 >
                   {style.name}{" "}
                   <div className="card-img-container">
@@ -167,15 +141,6 @@ const SelectStyle = ({
               ))}
             </div>
           </div>
-
-          {/* <div className="relative w-full ">
-            <button
-              onClick={onCapturePhoto}
-              className="w-full p-2 mt-4 text-white transition duration-200 bg-blue-500 rounded hover:bg-blue-700"
-            >
-              Capture Photo
-            </button>
-          </div> */}
         </div>
       </div>
     </>

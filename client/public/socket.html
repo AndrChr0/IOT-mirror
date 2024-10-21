@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Mirror Remote</title>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Smart Mirror Remote</h1>
+  <button id="vangogh-btn">Select Van Gogh</button>
+  <button id="cubism-btn">Select Cubism</button>
+  <!-- Add more buttons for other styles -->
+
+  <script>
+    const socket = io('http://10.110.50.145:3000'); // Replace with your server address
+
+
+    document.getElementById('vangogh-btn').addEventListener('click', () => {
+      socket.emit('select-style', 'vangogh'); // Emit Van Gogh style
+    });
+
+    document.getElementById('cubism-btn').addEventListener('click', () => {
+      socket.emit('select-style', 'cubism'); // Emit Cubism style
+    });
+
+    // Add more event listeners for other buttons
+  </script>
+</body>
+</html>

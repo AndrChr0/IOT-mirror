@@ -42,15 +42,16 @@ export default function ImageModule({
         <DialogFooter className='flex p-0 bg-white md:items-center sm:justify-end'>
           <Button
             type='submit'
-            className='text-white bg-blue-500 rounded hover:bg-blue-600'
+            className='text-white bg-blue-500 rounded hover:bg-blue-600 selectedTabIndex'
             onClick={() => confirmMoodScreenshot()}
           >
             {confirmText}
           </Button>
           <Button
+          tabIndex={1}
             type='button'
             variant='secondary'
-            className='rounded'
+            className='rounded selectedTabIndex'
             onClick={() => cancelMoodScreenshot()}
           >
             {declineText}
