@@ -317,6 +317,8 @@ export default function AiArtMirror() {
         const img = canvas.toDataURL("image/png");
         setImageData(img);
         setShowPreview(true);
+        const shutterSound = new Audio("/assets/shutter.mp3");
+        shutterSound.play();
       }
     }
   };
