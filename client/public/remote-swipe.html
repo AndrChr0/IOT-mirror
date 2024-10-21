@@ -2,11 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Remote Control</title>
     <script src="/socket.io/socket.io.js"></script>
     
     <style>
+      html, body {margin: 0; height: 100%; overflow: hidden}
       body {
         overflow: hidden;
         display: flex;
@@ -117,6 +118,13 @@
             }
             
         });
+
+       socket.on("connect", () => {
+        socket.emit("scanned-qr-code");
+      });
+
+    
+
 
       const handleSwipe = (direction) => {
         console.log(`Swipe ${direction}`);

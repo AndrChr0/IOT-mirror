@@ -9,6 +9,7 @@ import { Style, styles } from "./styles";
 import io from "socket.io-client";
 import { IoIosMic } from "react-icons/io";
 import { IoIosMicOff } from "react-icons/io";
+import { MdOutlineSettingsRemote } from "react-icons/md";
 
 const socket = io("http://192.168.2.142:3000");
 
@@ -31,6 +32,7 @@ export default function AiArtMirror() {
   const focusedElementRef = useRef<HTMLElement | null>(null);
   const [isRecognizing, setIsRecognizing] = useState(false);
   const [wiggleClass, setWiggleClass] = useState("");
+  const [showQrCode, setShowQrCode] = useState(true);
 
   console.log("recievedImg", recievedImg);
 
@@ -42,6 +44,8 @@ export default function AiArtMirror() {
 
     socket.on("toggle-camera", () => {
       setShowCapturePhotoButtons((prev) => !prev);
+      const clickSound = new Audio("/assets/click.wav");
+      clickSound.play();
     });
 
     socket.on("handle-go-back", () => {
@@ -67,6 +71,18 @@ export default function AiArtMirror() {
     socket.on("toggle-recognizing", () => {
       setIsRecognizing((prev) => !prev);
       console.log("Recognizing:", isRecognizing);
+      const clickSound = new Audio("/assets/click.wav");
+      clickSound.play();
+    });
+
+    socket.on("scanned-qr-code", () => {
+      setShowQrCode(false);
+      const connectedSound = new Audio("/assets/rizz.mp3");
+      connectedSound.play();
+    });
+
+    socket.on("handle-remote-refresh", () => {
+      setShowQrCode(false);
     });
 
     return () => {
@@ -76,6 +92,7 @@ export default function AiArtMirror() {
       socket.off("handle-click");
       socket.off("handle-swipe");
       socket.off("toggle-recognizing");
+      socket.off("toggle-qr-code");
     };
   }, []);
 
@@ -126,13 +143,18 @@ export default function AiArtMirror() {
     socket.on("handle-click", () => {
       console.log("Received button click from phone!");
       if (focusedElementRef.current) {
+        const clickSound = new Audio("/assets/click.wav");
         focusedElementRef.current.click();
+        clickSound.play();
       }
     });
 
     socket.on("handle-swipe", (direction) => {
       console.log(`Received swipe ${direction} from phone!`);
       handleSwipe(direction);
+      const menuSound = new Audio("/assets/menu.wav");
+      menuSound.play();
+
     });
 
     const handleFocus = (event: FocusEvent) => {
@@ -448,6 +470,12 @@ export default function AiArtMirror() {
       return () => clearTimeout(timer);
   }, [isRecognizing]);
 
+
+  const enlargeQrCode = () => {
+    setShowQrCode((prev) => !prev);
+  }
+
+
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
       <div className="absolute z-10 w-full mt-20"></div>
@@ -542,6 +570,16 @@ export default function AiArtMirror() {
           </div>
         )}
       </div>
+      <div onClick={()=>enlargeQrCode()} className="z-[10000000] absolute top-0 right-0 mr-5 mt-2 w-[20px] h-[20px]"><MdOutlineSettingsRemote size={30}/></div>
+      {showQrCode && (
+        <div className="absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center qr-code">
+          <img
+            src="/public/images/qr-remote.png"
+            alt="QR code"
+            className="w-[220px] h-[220px]"
+          />
+        </div>
+      )}
     </div>
   );
 }

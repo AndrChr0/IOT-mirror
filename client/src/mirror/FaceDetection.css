@@ -77,3 +77,7 @@
 .closey{
   border-radius: 5px;
 }
+
+.qr-code{
+  background-color: rgba(0, 0, 0, 0.8);
+}

@@ -37,7 +37,6 @@ app.get('/remote-swipe', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/remote-swipe.html'));
 });
 
-
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
   
@@ -78,6 +77,15 @@ io.on('connection', (socket) => {
     io.emit('toggle-recognizing');
   });
 
+  socket.on('scanned-qr-code', () => {
+    console.log('Toggle QR code');
+    io.emit('scanned-qr-code');
+  });
+
+  socket.on('handle-remote-refresh', () => {
+    console.log('Refresh remote');
+    io.emit('handle-remote-refresh');
+  });
 });
 
 server.listen(3000, () => {
