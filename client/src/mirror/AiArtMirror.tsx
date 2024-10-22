@@ -601,7 +601,7 @@ export default function AiArtMirror() {
               selectedStyle ? selectedStyle.name : ""
             }" style?`}
             confirmText="Yes"
-            declineText="No"
+            declineText="Try again"
             imgSrc={imageData}
             openModule={showPreview}
             cancelMoodScreenshot={handleCancelScreenshot}
