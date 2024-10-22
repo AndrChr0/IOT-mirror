@@ -38,6 +38,10 @@ app.get('/remote-swipe', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/public/remote-swipe.html'));
 });
 
+app.get('/remote-classic', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/public/remote-classic.html'));
+});
+
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
   
@@ -66,6 +70,11 @@ io.on('connection', (socket) => {
   socket.on('handle-swipe', (direction) => {
     console.log(`Swipe ${direction}`); 
     io.emit('handle-swipe', direction);
+  });
+
+  socket.on("handle-direction", (direction) => {
+    console.log(`Direction ${direction}`);
+    io.emit("handle-direction", direction);
   });
 
   socket.on('handle-click', () => {

@@ -17,30 +17,32 @@
         overflow: hidden;
       }
       body {
-        overflow: hidden;
         display: flex;
-        gap: 20px;
         flex-direction: column;
-        width: 100dvw;
-        height: 100dvh;
-        justify-content: flex-start;
+        justify-content: space-around;
         align-items: center;
         background-color: black;
       }
-      .swipe-area {
-        margin-top: 60px;
-        width: 300px;
-        height: 350px;
-        background-color: rgb(38, 38, 38);
-        /* outline: 1px solid white; */
-        border-radius: 30px;
+
+      .remote {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
       }
 
-      .camera-container {
-        color: white;
-        width: 300px;
+      .button-container {
         display: flex;
-        gap: 20px;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        /* transform: rotate(270deg); */
+      }
+
+      .row {
+        display: flex;
+        gap: 10px;
       }
 
       .button {
@@ -49,18 +51,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 100%;
+        border-radius: 50%;
         background-color: rgb(38, 38, 38);
         font-family: Arial, Helvetica, sans-serif;
-        padding: 2px;
+        color: white;
+        cursor: pointer;
+        font-size: 24px;
       }
 
-      .camera {
-        border: 2px solid rgb(38, 38, 38);
+      .button:active {
+        background-color: rgb(75, 131, 234);
       }
 
-      .mic {
-        border: 2px solid rgb(38, 38, 38);
+      .camera-container {
+        color: white;
+        display: flex;
+        gap: 20px;
       }
 
       img {
@@ -70,26 +76,11 @@
         height: 50%;
       }
 
-      .slash {
-        width: 100px;
-        height: 2px;
-        background-color: red;
-        position: absolute;
-        transform: rotate(45deg);
-        z-index: 1000;
-      }
-
-      .border {
-        outline: 1px solid white;
-      }
-
       .confirmation {
         position: absolute;
         width: 100dvw;
         height: 100dvh;
-
         background-color: rgba(0, 0, 0, 0.9);
-
         display: flex;
         justify-content: center;
         align-items: center;
@@ -146,7 +137,9 @@
         display: flex;
         justify-content: flex-end;
         align-items: center;
+        top: 0;
       }
+
       .power-off-button {
         width: 50px;
         height: 50px;
@@ -176,7 +169,7 @@
         text-align: center;
       }
 
-      .power-off-confirmation-buttons{
+      .power-off-confirmation-buttons {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -191,6 +184,7 @@
         border-radius: 10px;
         cursor: pointer;
       }
+
       .power-off-confirmation-buttons button#yes {
         background-color: rgb(234, 75, 75);
         color: white;
@@ -201,19 +195,32 @@
         color: rgb(75, 131, 234);
         border: 2px solid rgb(75, 131, 234);
       }
+
+      .slash {
+        width: 100px;
+        height: 2px;
+        background-color: red;
+        position: absolute;
+        transform: rotate(45deg);
+        z-index: 1000;
+      }
+
+      .border {
+        outline: 1px solid white;
+      }
     </style>
   </head>
   <body>
     <div class="confirmation">
       <div class="wrappy">
-        <span>Connect to the SmArt Mirror? </span>
-
+        <span>Connect to the SmArt Mirror?</span>
         <div class="confirmation-buttons">
           <button id="yes">Connect</button>
           <button id="no">Cancel</button>
         </div>
       </div>
     </div>
+
     <div class="power-off">
       <div class="power-off-button">
         <img
@@ -222,10 +229,11 @@
         />
       </div>
     </div>
+
     <div class="power-off-confirmation">
       <div class="power-off-confirmation-buttons">
         <div class="wrappy">
-          <span>Power off the SmArt Mirror? </span>
+          <span>Power off the SmArt Mirror?</span>
           <div class="power-off-confirmation-buttons">
             <button id="yes">Power off</button>
             <button id="no">Cancel</button>
@@ -233,7 +241,23 @@
         </div>
       </div>
     </div>
-    <div class="swipe-area" tabindex="1"></div>
+
+    <div class="remote">
+      <div class="button-container">
+        <div class="row">
+          <div class="button" id="button-up">↑</div>
+        </div>
+        <div class="row">
+          <div class="button" id="button-left">←</div>
+          <div class="button" id="button-click">⬤</div>
+          <div class="button" id="button-right">→</div>
+        </div>
+        <div class="row">
+          <div class="button" id="button-down">↓</div>
+        </div>
+      </div>
+    </div>
+
     <div class="camera-container">
       <div id="toggle-camera" class="button camera">
         <img
@@ -255,12 +279,10 @@
       const confirmationButtons = document.querySelectorAll(
         ".confirmation-buttons button"
       );
-
       const powerOffButton = document.querySelector(".power-off-button");
 
       // const socket = io("http://192.168.2.142:3000");
       const socket = io("http://10.110.50.145:3000");
-      let startX, startY;
 
       confirmationButtons.forEach((button) => {
         button.addEventListener("click", () => {
@@ -282,7 +304,6 @@
         const powerOffConfirmationButtons = document.querySelectorAll(
           ".power-off-confirmation-buttons button"
         );
-
         powerOffConfirmationButtons.forEach((button) => {
           button.addEventListener("click", () => {
             if (button.id === "yes") {
@@ -295,7 +316,7 @@
       });
 
       socket.on("disconnect", () => {
-        io.emit("handle-remote-refresh");
+        socket.emit("handle-remote-refresh");
       });
 
       document.querySelector("#toggle-camera").addEventListener("click", () => {
@@ -324,9 +345,9 @@
           }
         });
 
-      const handleSwipe = (direction) => {
-        console.log(`Swipe ${direction}`);
-        socket.emit("handle-swipe", direction);
+      const handleDirection = (direction) => {
+        console.log(`Direction: ${direction}`);
+        socket.emit("handle-direction", direction);
       };
 
       const handleClick = () => {
@@ -335,46 +356,20 @@
       };
 
       document
-        .querySelector(".swipe-area")
-        .addEventListener("touchstart", (e) => {
-          startX = e.touches[0].clientX;
-          startY = e.touches[0].clientY;
-        });
-
+        .querySelector("#button-up")
+        .addEventListener("click", () => handleDirection("up"));
       document
-        .querySelector(".swipe-area")
-        .addEventListener("touchend", (e) => {
-          const endX = e.changedTouches[0].clientX;
-          const endY = e.changedTouches[0].clientY;
+        .querySelector("#button-down")
+        .addEventListener("click", () => handleDirection("down"));
+      document
+        .querySelector("#button-left")
+        .addEventListener("click", () => handleDirection("left"));
+      document
+        .querySelector("#button-right")
+        .addEventListener("click", () => handleDirection("right"));
 
-          const diffX = endX - startX;
-          const diffY = endY - startY;
-
-          // Adjust sensitivity for both horizontal and vertical swipes
-          const sensitivity = 50;
-
-          if (
-            Math.abs(diffX) > Math.abs(diffY) &&
-            Math.abs(diffX) > sensitivity
-          ) {
-            // Horizontal swipe
-            if (diffX > 0) {
-              handleSwipe("right");
-            } else {
-              handleSwipe("left");
-            }
-          } else if (Math.abs(diffY) > sensitivity) {
-            // Vertical swipe
-            if (diffY > 0) {
-              handleSwipe("down");
-            } else {
-              handleSwipe("up");
-            }
-          } else {
-            // If no swipe detected, treat it as a click
-            handleClick();
-          }
-        });
+      const buttonClick = document.querySelector("#button-click");
+      buttonClick.addEventListener("click", handleClick);
     </script>
   </body>
 </html>

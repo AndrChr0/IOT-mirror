@@ -11,7 +11,8 @@ import { IoIosMic } from "react-icons/io";
 import { IoIosMicOff } from "react-icons/io";
 import { MdOutlineSettingsRemote } from "react-icons/md";
 
-const socket = io("http://192.168.2.142:3000");
+// const socket = io("http://192.168.2.142:3000");
+const socket = io("http://10.110.50.145:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -63,6 +64,9 @@ export default function AiArtMirror() {
     socket.on("handle-swipe", (direction) => {
       console.log(`Received swipe ${direction} from phone!`);
     });
+    // socket.on("handle-direction", (direction) => {
+    //   console.log(`Received direction ${direction} from phone!`);
+    // });
 
     socket.on("handle-click", () => {
       console.log("Simulate click on desktop");
@@ -97,49 +101,107 @@ export default function AiArtMirror() {
   }, []);
 
   useEffect(() => {
+    const focusFirstElement = () => {
+      setTimeout(() => {
+        const focusableElements = Array.from(
+          document.querySelectorAll("[tabindex]")
+        );
+    
+        const elementsToFocus = selectedStyle
+          ? Array.from(document.querySelectorAll(".selectedTabIndex"))
+          : focusableElements;
+    
+        if (elementsToFocus.length > 0) {
+          const firstElement = elementsToFocus[0] as HTMLElement;
+          firstElement.focus();
+          focusedElementRef.current = firstElement;
+        }
+      }, 0); // Delay for the DOM to update
+    };
+    focusFirstElement();
+  }, [selectedStyle, showCapturePhotoButtons]);
+
+  useEffect(() => {
+    // const handleSwipe = (direction: string) => {
+    //   const focusableElements = Array.from(
+    //     document.querySelectorAll("[tabindex]")
+    //   );
+    //   const selectedTabIndexElements = Array.from(
+    //     document.querySelectorAll(".selectedTabIndex")
+    //   );
+
+    //   // Determine which elements to use for swiping based on the selected style
+    //   const elementsToSwipe = selectedStyle
+    //     ? selectedTabIndexElements
+    //     : focusableElements;
+
+    //   if (!focusedElementRef.current) {
+    //     // If no element is focused, focus the first element
+    //     const firstElement = elementsToSwipe[0] as HTMLElement;
+    //     if (firstElement) {
+    //       firstElement.focus();
+    //       focusedElementRef.current = firstElement; // Update ref after focusing
+    //     }
+    //     return; // Exit early if we focused an element
+    //   }
+
+    //   const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
+
+    //   if (direction === "left" || direction === "up") {
+    //     const previousIndex =
+    //       (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
+    //     const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
+    //     if (previousElement) {
+    //       previousElement.focus();
+    //       focusedElementRef.current = previousElement; // Update ref
+    //     }
+    //   } else if (direction === "right" || direction === "down") {
+    //     const nextIndex = (currentIndex + 1) % elementsToSwipe.length;
+    //     const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
+    //     if (nextElement) {
+    //       nextElement.focus();
+    //       focusedElementRef.current = nextElement; // Update ref
+    //     }
+    //   }  
+    // };
     const handleSwipe = (direction: string) => {
-      const focusableElements = Array.from(
-        document.querySelectorAll("[tabindex]")
-      );
-      const selectedTabIndexElements = Array.from(
-        document.querySelectorAll(".selectedTabIndex")
-      );
-
-      // Determine which elements to use for swiping based on the selected style
-      const elementsToSwipe = selectedStyle
-        ? selectedTabIndexElements
-        : focusableElements;
-
+      const focusableElements = Array.from(document.querySelectorAll("[tabindex]"));
+      const selectedTabIndexElements = Array.from(document.querySelectorAll(".selectedTabIndex"));
+      const elementsToSwipe = selectedStyle ? selectedTabIndexElements : focusableElements;
+    
+      console.log(`Swiping direction: ${direction}`);
+      console.log(`Current focused element:`, focusedElementRef.current);
+      console.log(`Focusable elements:`, elementsToSwipe);
+    
       if (!focusedElementRef.current) {
-        // If no element is focused, focus the first element
         const firstElement = elementsToSwipe[0] as HTMLElement;
         if (firstElement) {
           firstElement.focus();
-          focusedElementRef.current = firstElement; // Update ref after focusing
+          focusedElementRef.current = firstElement;
         }
-        return; // Exit early if we focused an element
+        return;
       }
-
+    
       const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
-
+      console.log(`Current index: ${currentIndex}`);
+    
       if (direction === "left" || direction === "up") {
-        const previousIndex =
-          (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
+        const previousIndex = (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
         const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
-        if (previousElement) {
+        if (previousElement && previousElement !== focusedElementRef.current) {
           previousElement.focus();
           focusedElementRef.current = previousElement; // Update ref
         }
       } else if (direction === "right" || direction === "down") {
         const nextIndex = (currentIndex + 1) % elementsToSwipe.length;
         const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
-        if (nextElement) {
+        if (nextElement && nextElement !== focusedElementRef.current) {
           nextElement.focus();
           focusedElementRef.current = nextElement; // Update ref
         }
-      }
+      }  
     };
-
+    
     socket.on("handle-click", () => {
       console.log("Received button click from phone!");
       if (focusedElementRef.current) {
@@ -154,7 +216,13 @@ export default function AiArtMirror() {
       handleSwipe(direction);
       const menuSound = new Audio("/assets/menu.wav");
       menuSound.play();
+    });
 
+    socket.on("handle-direction", (direction) => {
+      console.log(`Received direction ${direction} from phone!`);
+      handleSwipe(direction);
+      const menuSound = new Audio("/assets/menu.wav");
+      menuSound.play();
     });
 
     const handleFocus = (event: FocusEvent) => {
@@ -173,6 +241,7 @@ export default function AiArtMirror() {
     return () => {
       socket.off("handle-click");
       socket.off("handle-swipe");
+      socket.off("handle-direction");
       document.removeEventListener("focusin", handleFocus);
       document.removeEventListener("focusout", handleBlur);
     };
@@ -192,6 +261,7 @@ export default function AiArtMirror() {
 
     startVideo();
   }, []);
+  
 
   useEffect(() => {
     const SpeechRecognition = (window.SpeechRecognition ||
@@ -277,6 +347,7 @@ export default function AiArtMirror() {
   useEffect(() => {
     console.log("Recognizing:", isRecognizing);
   }, [isRecognizing]);
+
   useEffect(() => {
     if (transcription) {
       const timer = setTimeout(() => {
@@ -288,7 +359,7 @@ export default function AiArtMirror() {
   }, [transcription]);
 
   const handleVideoOnPlay = () => {
-    if (videoRef.current && canvasRef.current) {
+    if (videoRef.current && canvasRef.current ) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
 
@@ -576,7 +647,8 @@ export default function AiArtMirror() {
       {showQrCode && (
         <div className="absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center qr-code z-[999999999]">
           <img
-            src="/public/images/qr-remote.png"
+            // src="/public/images/qr-remote.png"
+            src="/public/images/qr-remote-nt6.png"
             alt="QR code"
             className="w-[220px] h-[220px] qr-code-img"
           />
