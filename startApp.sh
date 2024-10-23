@@ -6,7 +6,7 @@ npm i
 npm run dev &
 
 #Websocket
-npm run socketDev &
+node socket &
 
 #Client
 cd ../client
