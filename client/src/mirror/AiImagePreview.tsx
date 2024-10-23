@@ -42,20 +42,22 @@ export default function AiImagePreview({
   };
 
   return (
-    <div className='p-4 bg-white absolute top-0'>
+    <div className='absolute top-0 p-4 bg-white'>
       <div className='h-fit w-96 '>
         {image && <img src={image} alt='image' />}
       </div>
       <div className='flex gap-3'>
         <h3>Send to gallery?</h3>
         <button
-          className='bg-green-700 text-white p-2'
+        tabIndex={1}
+          className='p-2 text-white bg-green-700'
           onClick={handleSubmitArt}
         >
           Yes
         </button>
         <button
-          className='bg-red-600 text-white p-2'
+        tabIndex={1}
+          className='p-2 text-white bg-red-600'
           onClick={() => {
             handleImageData(null);
           }}

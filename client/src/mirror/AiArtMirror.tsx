@@ -9,10 +9,8 @@ import { Style, styles } from "./styles";
 import io from "socket.io-client";
 import { IoIosMic } from "react-icons/io";
 import { IoIosMicOff } from "react-icons/io";
-import { MdOutlineSettingsRemote } from "react-icons/md";
 
-// const socket = io("http://192.168.2.142:3000");
-const socket = io("http://10.110.50.145:3000");
+const socket = io("http://192.168.2.142:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -33,7 +31,7 @@ export default function AiArtMirror() {
   const focusedElementRef = useRef<HTMLElement | null>(null);
   const [isRecognizing, setIsRecognizing] = useState(false);
   const [wiggleClass, setWiggleClass] = useState("");
-  const [showQrCode, setShowQrCode] = useState(true);
+  // const [showQrCode, setShowQrCode] = useState(true);
 
   console.log("recievedImg", recievedImg);
 
@@ -64,9 +62,6 @@ export default function AiArtMirror() {
     socket.on("handle-swipe", (direction) => {
       console.log(`Received swipe ${direction} from phone!`);
     });
-    // socket.on("handle-direction", (direction) => {
-    //   console.log(`Received direction ${direction} from phone!`);
-    // });
 
     socket.on("handle-click", () => {
       console.log("Simulate click on desktop");
@@ -79,15 +74,13 @@ export default function AiArtMirror() {
       clickSound.play();
     });
 
-    socket.on("scanned-qr-code", () => {
-      setShowQrCode(false);
-      const connectedSound = new Audio("/assets/rizz.mp3");
-      connectedSound.play();
-    });
+    // socket.on("scanned-qr-code", () => {
+    //   setShowQrCode(false);
+    // });
 
-    socket.on("handle-remote-refresh", () => {
-      setShowQrCode(true);
-    });
+    // socket.on("handle-remote-refresh", () => {
+    //   setShowQrCode(true);
+    // });
 
     return () => {
       socket.off("style-changed");
@@ -106,11 +99,11 @@ export default function AiArtMirror() {
         const focusableElements = Array.from(
           document.querySelectorAll("[tabindex]")
         );
-    
+
         const elementsToFocus = selectedStyle
           ? Array.from(document.querySelectorAll(".selectedTabIndex"))
           : focusableElements;
-    
+
         if (elementsToFocus.length > 0) {
           const firstElement = elementsToFocus[0] as HTMLElement;
           firstElement.focus();
@@ -122,57 +115,17 @@ export default function AiArtMirror() {
   }, [selectedStyle, showCapturePhotoButtons]);
 
   useEffect(() => {
-    // const handleSwipe = (direction: string) => {
-    //   const focusableElements = Array.from(
-    //     document.querySelectorAll("[tabindex]")
-    //   );
-    //   const selectedTabIndexElements = Array.from(
-    //     document.querySelectorAll(".selectedTabIndex")
-    //   );
-
-    //   // Determine which elements to use for swiping based on the selected style
-    //   const elementsToSwipe = selectedStyle
-    //     ? selectedTabIndexElements
-    //     : focusableElements;
-
-    //   if (!focusedElementRef.current) {
-    //     // If no element is focused, focus the first element
-    //     const firstElement = elementsToSwipe[0] as HTMLElement;
-    //     if (firstElement) {
-    //       firstElement.focus();
-    //       focusedElementRef.current = firstElement; // Update ref after focusing
-    //     }
-    //     return; // Exit early if we focused an element
-    //   }
-
-    //   const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
-
-    //   if (direction === "left" || direction === "up") {
-    //     const previousIndex =
-    //       (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
-    //     const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
-    //     if (previousElement) {
-    //       previousElement.focus();
-    //       focusedElementRef.current = previousElement; // Update ref
-    //     }
-    //   } else if (direction === "right" || direction === "down") {
-    //     const nextIndex = (currentIndex + 1) % elementsToSwipe.length;
-    //     const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
-    //     if (nextElement) {
-    //       nextElement.focus();
-    //       focusedElementRef.current = nextElement; // Update ref
-    //     }
-    //   }  
-    // };
     const handleSwipe = (direction: string) => {
-      const focusableElements = Array.from(document.querySelectorAll("[tabindex]"));
-      const selectedTabIndexElements = Array.from(document.querySelectorAll(".selectedTabIndex"));
-      const elementsToSwipe = selectedStyle ? selectedTabIndexElements : focusableElements;
-    
-      console.log(`Swiping direction: ${direction}`);
-      console.log(`Current focused element:`, focusedElementRef.current);
-      console.log(`Focusable elements:`, elementsToSwipe);
-    
+      const focusableElements = Array.from(
+        document.querySelectorAll("[tabindex]")
+      );
+      const selectedTabIndexElements = Array.from(
+        document.querySelectorAll(".selectedTabIndex")
+      );
+      const elementsToSwipe = selectedStyle
+        ? selectedTabIndexElements
+        : focusableElements;
+
       if (!focusedElementRef.current) {
         const firstElement = elementsToSwipe[0] as HTMLElement;
         if (firstElement) {
@@ -181,12 +134,13 @@ export default function AiArtMirror() {
         }
         return;
       }
-    
+
       const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
       console.log(`Current index: ${currentIndex}`);
-    
+
       if (direction === "left" || direction === "up") {
-        const previousIndex = (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
+        const previousIndex =
+          (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
         const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
         if (previousElement && previousElement !== focusedElementRef.current) {
           previousElement.focus();
@@ -199,9 +153,9 @@ export default function AiArtMirror() {
           nextElement.focus();
           focusedElementRef.current = nextElement; // Update ref
         }
-      }  
+      }
     };
-    
+
     socket.on("handle-click", () => {
       console.log("Received button click from phone!");
       if (focusedElementRef.current) {
@@ -261,7 +215,6 @@ export default function AiArtMirror() {
 
     startVideo();
   }, []);
-  
 
   useEffect(() => {
     const SpeechRecognition = (window.SpeechRecognition ||
@@ -359,7 +312,7 @@ export default function AiArtMirror() {
   }, [transcription]);
 
   const handleVideoOnPlay = () => {
-    if (videoRef.current && canvasRef.current ) {
+    if (videoRef.current && canvasRef.current) {
       const video = videoRef.current;
       const canvas = canvasRef.current;
 
@@ -538,16 +491,10 @@ export default function AiArtMirror() {
   }, [skibidi]);
 
   useEffect(() => {
-      setWiggleClass("wiggle");
-      const timer = setTimeout(() => setWiggleClass(""), 400);
-      return () => clearTimeout(timer);
+    setWiggleClass("wiggle");
+    const timer = setTimeout(() => setWiggleClass(""), 400);
+    return () => clearTimeout(timer);
   }, [isRecognizing]);
-
-
-  const enlargeQrCode = () => {
-    setShowQrCode((prev) => !prev);
-  }
-
 
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
@@ -639,21 +586,21 @@ export default function AiArtMirror() {
           </div>
         ) : (
           <div className={wiggleClass}>
-            <IoIosMicOff size={30} color="red"/>
+            <IoIosMicOff size={30} color="red" />
           </div>
         )}
       </div>
-      {/* <div onClick={()=>enlargeQrCode()} className="z-[10000000] absolute top-0 right-0 mr-5 mt-2 w-[20px] h-[20px]"><MdOutlineSettingsRemote size={30}/></div> */}
-      {showQrCode && (
+      {/* {showQrCode && (
         <div className="absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center qr-code z-[999999999]">
           <img
-            // src="/public/images/qr-remote.png"
-            src="/public/images/qr-remote-nt6.png"
+            // src="/public/images/qr-code-ntnu.png"
+            src="/public/images/qr-remote.png"
+            // src="/public/images/qr-remote-nt6.png"
             alt="QR code"
             className="w-[220px] h-[220px] qr-code-img"
           />
         </div>
-      )}
+      )} */}
     </div>
   );
 }
