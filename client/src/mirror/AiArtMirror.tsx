@@ -10,7 +10,7 @@ import io from "socket.io-client";
 import { IoIosMic } from "react-icons/io";
 import { IoIosMicOff } from "react-icons/io";
 
-const socket = io("http://192.168.2.142:3000");
+const socket = io("http://[ip-address]:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -27,11 +27,9 @@ export default function AiArtMirror() {
   const [voiceOptions, setVoiceOptions] = useState(false);
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
   const [transcription, setTranscription] = useState<string | null>(null);
-  const [skibidi, setSkibidi] = useState(false);
   const focusedElementRef = useRef<HTMLElement | null>(null);
   const [isRecognizing, setIsRecognizing] = useState(false);
   const [wiggleClass, setWiggleClass] = useState("");
-  // const [showQrCode, setShowQrCode] = useState(true);
 
   console.log("recievedImg", recievedImg);
 
@@ -55,18 +53,6 @@ export default function AiArtMirror() {
       startCountdown();
     });
 
-    socket.on("handle-click", () => {
-      console.log("Received button click from phone!");
-    });
-
-    socket.on("handle-swipe", (direction) => {
-      console.log(`Received swipe ${direction} from phone!`);
-    });
-
-    socket.on("handle-click", () => {
-      console.log("Simulate click on desktop");
-    });
-
     socket.on("toggle-recognizing", () => {
       setIsRecognizing((prev) => !prev);
       console.log("Recognizing:", isRecognizing);
@@ -74,22 +60,12 @@ export default function AiArtMirror() {
       clickSound.play();
     });
 
-    // socket.on("scanned-qr-code", () => {
-    //   setShowQrCode(false);
-    // });
-
-    // socket.on("handle-remote-refresh", () => {
-    //   setShowQrCode(true);
-    // });
-
     return () => {
       socket.off("style-changed");
       socket.off("toggle-camera");
       socket.off("handle-go-back");
       socket.off("handle-click");
-      socket.off("handle-swipe");
       socket.off("toggle-recognizing");
-      socket.off("toggle-qr-code");
     };
   }, []);
 
@@ -165,13 +141,6 @@ export default function AiArtMirror() {
       }
     });
 
-    socket.on("handle-swipe", (direction) => {
-      console.log(`Received swipe ${direction} from phone!`);
-      handleSwipe(direction);
-      const menuSound = new Audio("/assets/menu.wav");
-      menuSound.play();
-    });
-
     socket.on("handle-direction", (direction) => {
       console.log(`Received direction ${direction} from phone!`);
       handleSwipe(direction);
@@ -194,7 +163,6 @@ export default function AiArtMirror() {
 
     return () => {
       socket.off("handle-click");
-      socket.off("handle-swipe");
       socket.off("handle-direction");
       document.removeEventListener("focusin", handleFocus);
       document.removeEventListener("focusout", handleBlur);
@@ -275,11 +243,6 @@ export default function AiArtMirror() {
             handleGoBack();
           }
         }
-
-        if (transcript.includes("skibidi")) {
-          setSkibidi(true);
-          console.log("state of skib:", skibidi);
-        }
       };
 
       if (isRecognizing) {
@@ -296,10 +259,6 @@ export default function AiArtMirror() {
       console.error("Speech Recognition not supported in this browser.");
     }
   }, [showCapturePhotoButtons, showPreview, imageData, isRecognizing]);
-
-  useEffect(() => {
-    console.log("Recognizing:", isRecognizing);
-  }, [isRecognizing]);
 
   useEffect(() => {
     if (transcription) {
@@ -347,23 +306,8 @@ export default function AiArtMirror() {
     }
   };
 
-  const disableScreenshotButton = () => {
-    const button = document.querySelector("#scrnsht_btn");
-    if (button) {
-      button.setAttribute("disabled", "true");
-    }
-  };
-
-  const enableScreenshotButton = () => {
-    const button = document.querySelector("#scrnsht_btn");
-    if (button) {
-      button.removeAttribute("disabled");
-    }
-  };
-
   const startCountdown = () => {
     setCountdown(3);
-    disableScreenshotButton();
     setShowCapturePhotoButtons(false);
     const interval = setInterval(() => {
       setCountdown((prevCountdown) => {
@@ -374,7 +318,6 @@ export default function AiArtMirror() {
           setCountdown(null);
           triggerBlitzEffect();
           takeScreenshot();
-          enableScreenshotButton();
           return null;
         }
       });
@@ -481,16 +424,6 @@ export default function AiArtMirror() {
   }, [isProcessing]);
 
   useEffect(() => {
-    if (skibidi) {
-      const timer = setTimeout(() => {
-        setSkibidi(false);
-      }, 2500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [skibidi]);
-
-  useEffect(() => {
     setWiggleClass("wiggle");
     const timer = setTimeout(() => setWiggleClass(""), 400);
     return () => clearTimeout(timer);
@@ -498,29 +431,29 @@ export default function AiArtMirror() {
 
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-      <div className="absolute z-10 w-full mt-20"></div>
+      <div className='absolute z-10 w-full mt-20'></div>
 
       <video
         ref={videoRef}
-        className="object-cover w-full h-full inverted-video"
+        className='object-cover w-full h-full inverted-video'
         autoPlay
         muted
         onPlay={handleVideoOnPlay}
       />
-      <canvas ref={canvasRef} className="hidden" />
+      <canvas ref={canvasRef} className='hidden' />
       {countdown !== null && (
-        <div className="absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2">
-          <span className="countdown">{countdown}</span>
+        <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
+          <span className='countdown'>{countdown}</span>
         </div>
       )}
 
       <div
-        id="scrnsht_btn-container"
-        className="absolute bottom-0 left-0 flex p-4"
+        id='scrnsht_btn-container'
+        className='absolute bottom-0 left-0 flex p-4'
       >
         <button
-          id="scrnsht_btn"
-          className="rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150"
+          id='scrnsht_btn'
+          className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'
           onClick={openCapturePhotoButtons}
         >
           <FaCamera />
@@ -547,8 +480,8 @@ export default function AiArtMirror() {
             title={`Do you want to transform this image into "${
               selectedStyle ? selectedStyle.name : ""
             }" style?`}
-            confirmText="Yes"
-            declineText="Try again"
+            confirmText='Yes'
+            declineText='Try again'
             imgSrc={imageData}
             openModule={showPreview}
             cancelMoodScreenshot={handleCancelScreenshot}
@@ -565,42 +498,24 @@ export default function AiArtMirror() {
       )}
       {isProcessing && <Processing />}
       {transcription && (
-        <div className="absolute bottom-0 right-0 w-full mb-4 transcription-wrapper">
-          <div className="h-auto text-white bg-black bg-opacity-50 transcription-container">
+        <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
+          <div className='h-auto text-white bg-black bg-opacity-50 transcription-container'>
             "{transcription}"
           </div>
         </div>
       )}
 
-      {skibidi && (
-        <img
-          className="absolute z-[999999] top-0"
-          src="https://assets-prd.ignimgs.com/2024/07/25/skibidi-toilet-button-1721912547107.jpg"
-          alt=""
-        />
-      )}
-      <div className="absolute top-0 m-2">
+      <div className='absolute top-0 m-2'>
         {isRecognizing ? (
           <div className={wiggleClass}>
             <IoIosMic size={30} />
           </div>
         ) : (
           <div className={wiggleClass}>
-            <IoIosMicOff size={30} color="red" />
+            <IoIosMicOff size={30} color='red' />
           </div>
         )}
       </div>
-      {/* {showQrCode && (
-        <div className="absolute top-0 left-0 w-[100vw] h-[100vh] flex justify-center items-center qr-code z-[999999999]">
-          <img
-            // src="/public/images/qr-code-ntnu.png"
-            src="/public/images/qr-remote.png"
-            // src="/public/images/qr-remote-nt6.png"
-            alt="QR code"
-            className="w-[220px] h-[220px] qr-code-img"
-          />
-        </div>
-      )} */}
     </div>
   );
 }
