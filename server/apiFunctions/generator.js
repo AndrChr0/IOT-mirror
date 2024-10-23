@@ -31,8 +31,6 @@ export default async function main(base64code, stylePrompt) {
       max_tokens: 500,
     });
 
-    console.log(response.choices[0].message.content);
-
     const imageDescription = response.choices[0].message.content;
 
     const imgURL = await generateImage(imageDescription, stylePrompt); // Generate an image from the description
@@ -57,7 +55,6 @@ async function generateImage(description, stylePrompt) {
       size: "1024x1024",
     });
     const image_url = response.data[0].url;
-    // console.log(image_url);
     return image_url;
   } catch (error) {
     if (error.response) {

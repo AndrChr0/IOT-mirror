@@ -1,11 +1,10 @@
 import express from "express";
 const router = express.Router();
 
-import main from "../apiFunc/generator.js";
+import main from "../apiFunctions/generator.js";
 
 router.post("/upload-base64", async function (req, res) {
   const { imageData, selectedStyle } = req.body;
-  console.log(req.body);
 
   if (!imageData) {
     return res.status(400).json({ message: "No image data provided" });

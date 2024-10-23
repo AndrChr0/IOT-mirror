@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import "./FaceDetection.css";
+import "./AiArtMirror.css";
 import { FaCamera } from "react-icons/fa";
 import ImageModal from "@/ImageModal";
 import AiImagePreview from "./AiImagePreview";
 import Processing from "./Processing";
 import SelectStyle from "./SelectStyle";
 import { Style, styles } from "./styles";
+import io from "socket.io-client";
+import { IoIosMic } from "react-icons/io";
+import { IoIosMicOff } from "react-icons/io";
+
+const socket = io("http://[ip-address]:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -22,9 +27,147 @@ export default function AiArtMirror() {
   const [voiceOptions, setVoiceOptions] = useState(false);
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
   const [transcription, setTranscription] = useState<string | null>(null);
-  const [skibidi, setSkibidi] = useState(false);
+  const focusedElementRef = useRef<HTMLElement | null>(null);
+  const [isRecognizing, setIsRecognizing] = useState(false);
+  const [wiggleClass, setWiggleClass] = useState("");
 
   console.log("recievedImg", recievedImg);
+
+  useEffect(() => {
+    socket.on("style-changed", (style) => {
+      console.log(`Received style change:`, style);
+      setSelectedStyle(style);
+    });
+
+    socket.on("toggle-camera", () => {
+      setShowCapturePhotoButtons((prev) => !prev);
+      const clickSound = new Audio("/assets/click.wav");
+      clickSound.play();
+    });
+
+    socket.on("handle-go-back", () => {
+      handleGoBack();
+    });
+
+    socket.on("handle-capture-photo", () => {
+      startCountdown();
+    });
+
+    socket.on("toggle-recognizing", () => {
+      setIsRecognizing((prev) => !prev);
+      console.log("Recognizing:", isRecognizing);
+      const clickSound = new Audio("/assets/click.wav");
+      clickSound.play();
+    });
+
+    return () => {
+      socket.off("style-changed");
+      socket.off("toggle-camera");
+      socket.off("handle-go-back");
+      socket.off("handle-click");
+      socket.off("toggle-recognizing");
+    };
+  }, []);
+
+  useEffect(() => {
+    const focusFirstElement = () => {
+      setTimeout(() => {
+        const focusableElements = Array.from(
+          document.querySelectorAll("[tabindex]")
+        );
+
+        const elementsToFocus = selectedStyle
+          ? Array.from(document.querySelectorAll(".selectedTabIndex"))
+          : focusableElements;
+
+        if (elementsToFocus.length > 0) {
+          const firstElement = elementsToFocus[0] as HTMLElement;
+          firstElement.focus();
+          focusedElementRef.current = firstElement;
+        }
+      }, 0); // Delay for the DOM to update
+    };
+    focusFirstElement();
+  }, [selectedStyle, showCapturePhotoButtons]);
+
+  useEffect(() => {
+    const handleSwipe = (direction: string) => {
+      const focusableElements = Array.from(
+        document.querySelectorAll("[tabindex]")
+      );
+      const selectedTabIndexElements = Array.from(
+        document.querySelectorAll(".selectedTabIndex")
+      );
+      const elementsToSwipe = selectedStyle
+        ? selectedTabIndexElements
+        : focusableElements;
+
+      if (!focusedElementRef.current) {
+        const firstElement = elementsToSwipe[0] as HTMLElement;
+        if (firstElement) {
+          firstElement.focus();
+          focusedElementRef.current = firstElement;
+        }
+        return;
+      }
+
+      const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
+      console.log(`Current index: ${currentIndex}`);
+
+      if (direction === "left" || direction === "up") {
+        const previousIndex =
+          (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
+        const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
+        if (previousElement && previousElement !== focusedElementRef.current) {
+          previousElement.focus();
+          focusedElementRef.current = previousElement; // Update ref
+        }
+      } else if (direction === "right" || direction === "down") {
+        const nextIndex = (currentIndex + 1) % elementsToSwipe.length;
+        const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
+        if (nextElement && nextElement !== focusedElementRef.current) {
+          nextElement.focus();
+          focusedElementRef.current = nextElement; // Update ref
+        }
+      }
+    };
+
+    socket.on("handle-click", () => {
+      console.log("Received button click from phone!");
+      if (focusedElementRef.current) {
+        const clickSound = new Audio("/assets/click.wav");
+        focusedElementRef.current.click();
+        clickSound.play();
+      }
+    });
+
+    socket.on("handle-direction", (direction) => {
+      console.log(`Received direction ${direction} from phone!`);
+      handleSwipe(direction);
+      const menuSound = new Audio("/assets/menu.wav");
+      menuSound.play();
+    });
+
+    const handleFocus = (event: FocusEvent) => {
+      if (event.target instanceof HTMLElement) {
+        focusedElementRef.current = event.target;
+      }
+    };
+
+    const handleBlur = () => {
+      focusedElementRef.current = null;
+    };
+
+    document.addEventListener("focusin", handleFocus);
+    document.addEventListener("focusout", handleBlur);
+
+    return () => {
+      socket.off("handle-click");
+      socket.off("handle-direction");
+      document.removeEventListener("focusin", handleFocus);
+      document.removeEventListener("focusout", handleBlur);
+    };
+  }, [selectedStyle]);
 
   useEffect(() => {
     const startVideo = () => {
@@ -100,18 +243,22 @@ export default function AiArtMirror() {
             handleGoBack();
           }
         }
-
-        if (transcript.includes("skibidi")) {
-          setSkibidi(true);
-          console.log("state of skib:", skibidi);
-        }
       };
 
-      recognition.start();
+      if (isRecognizing) {
+        recognition.start();
+      } else {
+        recognition.stop();
+      }
+
+      // Cleanup
+      return () => {
+        recognition.stop();
+      };
     } else {
       console.error("Speech Recognition not supported in this browser.");
     }
-  }, [showCapturePhotoButtons, showPreview, imageData]);
+  }, [showCapturePhotoButtons, showPreview, imageData, isRecognizing]);
 
   useEffect(() => {
     if (transcription) {
@@ -153,27 +300,14 @@ export default function AiArtMirror() {
         const img = canvas.toDataURL("image/png");
         setImageData(img);
         setShowPreview(true);
+        const shutterSound = new Audio("/assets/shutter.mp3");
+        shutterSound.play();
       }
-    }
-  };
-
-  const disableScreenshotButton = () => {
-    const button = document.querySelector("#scrnsht_btn");
-    if (button) {
-      button.setAttribute("disabled", "true");
-    }
-  };
-
-  const enableScreenshotButton = () => {
-    const button = document.querySelector("#scrnsht_btn");
-    if (button) {
-      button.removeAttribute("disabled");
     }
   };
 
   const startCountdown = () => {
     setCountdown(3);
-    disableScreenshotButton();
     setShowCapturePhotoButtons(false);
     const interval = setInterval(() => {
       setCountdown((prevCountdown) => {
@@ -184,7 +318,6 @@ export default function AiArtMirror() {
           setCountdown(null);
           triggerBlitzEffect();
           takeScreenshot();
-          enableScreenshotButton();
           return null;
         }
       });
@@ -257,6 +390,7 @@ export default function AiArtMirror() {
 
   const handleStyleSelect = (style: Style) => {
     setSelectedStyle(style);
+    console.log("here", selectedStyle);
     setStyleDropdownOpen(false);
     console.log("Selected style via voice:", style.name);
   };
@@ -290,40 +424,36 @@ export default function AiArtMirror() {
   }, [isProcessing]);
 
   useEffect(() => {
-    if (skibidi) {
-      const timer = setTimeout(() => {
-        setSkibidi(false);
-      }, 2500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [skibidi]);
+    setWiggleClass("wiggle");
+    const timer = setTimeout(() => setWiggleClass(""), 400);
+    return () => clearTimeout(timer);
+  }, [isRecognizing]);
 
   return (
     <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-      <div className="absolute z-10 w-full mt-20"></div>
+      <div className='absolute z-10 w-full mt-20'></div>
 
       <video
         ref={videoRef}
-        className="object-cover w-full h-full inverted-video"
+        className='object-cover w-full h-full inverted-video'
         autoPlay
         muted
         onPlay={handleVideoOnPlay}
       />
-      <canvas ref={canvasRef} className="hidden" />
+      <canvas ref={canvasRef} className='hidden' />
       {countdown !== null && (
-        <div className="absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2">
-          {countdown}
+        <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
+          <span className='countdown'>{countdown}</span>
         </div>
       )}
 
       <div
-        id="scrnsht_btn-container"
-        className="absolute bottom-0 left-0 flex p-4"
+        id='scrnsht_btn-container'
+        className='absolute bottom-0 left-0 flex p-4'
       >
         <button
-          id="scrnsht_btn"
-          className="rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150"
+          id='scrnsht_btn'
+          className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'
           onClick={openCapturePhotoButtons}
         >
           <FaCamera />
@@ -350,8 +480,8 @@ export default function AiArtMirror() {
             title={`Do you want to transform this image into "${
               selectedStyle ? selectedStyle.name : ""
             }" style?`}
-            confirmText="Yes"
-            declineText="No"
+            confirmText='Yes'
+            declineText='Try again'
             imgSrc={imageData}
             openModule={showPreview}
             cancelMoodScreenshot={handleCancelScreenshot}
@@ -368,20 +498,24 @@ export default function AiArtMirror() {
       )}
       {isProcessing && <Processing />}
       {transcription && (
-        <div className="absolute bottom-0 right-0 w-full mb-4 transcription-wrapper">
-          <div className="h-auto text-white bg-black bg-opacity-50 transcription-container">
+        <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
+          <div className='h-auto text-white bg-black bg-opacity-50 transcription-container'>
             "{transcription}"
           </div>
         </div>
       )}
 
-      {skibidi && (
-        <img
-          className="absolute z-[999999] top-0"
-          src="https://assets-prd.ignimgs.com/2024/07/25/skibidi-toilet-button-1721912547107.jpg"
-          alt=""
-        />
-      )}
+      <div className='absolute top-0 m-2'>
+        {isRecognizing ? (
+          <div className={wiggleClass}>
+            <IoIosMic size={30} />
+          </div>
+        ) : (
+          <div className={wiggleClass}>
+            <IoIosMicOff size={30} color='red' />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

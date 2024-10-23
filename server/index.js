@@ -2,8 +2,6 @@ import dotenv from "dotenv";
 import express from "express";
 import { connectDB } from "./utils/connectDB.js";
 import mirrorRoutes from "./routes/mirrorRoutes.js";
-// import carouselRoutes from "./routes/carouselRoutes.js";
-// import mirrorRoutes from "./routes/mirrorRoutes.js";
 import base64Routes from "./routes/base64Routes.js";
 import cors from "cors";
 

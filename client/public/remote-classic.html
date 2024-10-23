@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Remote Control</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="remote-script.js" defer></script>
+    <link rel="stylesheet" href="remote.css" />
+  </head>
+  <body>
+    <div class="confirmation">
+      <div class="wrappy">
+        <span>Connect to the SmArt Mirror?</span>
+        <div class="confirmation-buttons">
+          <button id="yes">Connect</button>
+          <button id="no">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="power-off">
+      <div class="power-off-button">
+        <img
+          src="https://static.thenounproject.com/png/1841400-200.png"
+          alt=""
+        />
+      </div>
+    </div>
+
+    <div class="power-off-confirmation">
+      <div class="power-off-confirmation-buttons">
+        <div class="wrappy">
+          <span>Power off the SmArt Mirror?</span>
+          <div class="power-off-confirmation-buttons">
+            <button id="yes">Power off</button>
+            <button id="no">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="remote">
+      <div class="button-container">
+        <div class="row">
+          <div class="button" id="button-up">↑</div>
+        </div>
+        <div class="row">
+          <div class="button" id="button-left">←</div>
+          <div class="button" id="button-click">⬤</div>
+          <div class="button" id="button-right">→</div>
+        </div>
+        <div class="row">
+          <div class="button" id="button-down">↓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="camera-container">
+      <div id="toggle-camera" class="button camera">
+        <img
+          src="https://i.pinimg.com/originals/36/d9/44/36d944e4369dcf8b6ac4f722a2dd3449.png"
+          alt=""
+        />
+      </div>
+      <div id="toggle-recognizing" class="button mic">
+        <div id="slash" class="slash"></div>
+        <img
+          src="https://static-00.iconduck.com/assets.00/mic-icon-1433x2048-yncr751o.png"
+          alt=""
+        />
+      </div>
+    </div>
+  </body>
+</html>

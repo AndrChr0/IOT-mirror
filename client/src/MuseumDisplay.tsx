@@ -46,7 +46,7 @@ export default function MuseumDisplay() {
             <div key={art._id}>
               <h3>{art.art_style}</h3>
               <p>
-                Generated on:{" "}
+                Generated on:
                 {new Date(art.generation_date).toLocaleDateString()}
               </p>
               <img src={art.url} alt={art.art_style} />
