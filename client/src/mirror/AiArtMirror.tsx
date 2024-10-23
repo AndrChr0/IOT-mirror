@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import "./FaceDetection.css";
+import "./AiArtMirror.css";
 import { FaCamera } from "react-icons/fa";
 import ImageModal from "@/ImageModal";
 import AiImagePreview from "./AiImagePreview";

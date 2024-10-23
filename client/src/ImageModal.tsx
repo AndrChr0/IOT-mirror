@@ -48,7 +48,7 @@ export default function ImageModule({
             {confirmText}
           </Button>
           <Button
-          tabIndex={1}
+            tabIndex={1}
             type='button'
             variant='secondary'
             className='rounded selectedTabIndex'

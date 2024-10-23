@@ -25,9 +25,6 @@ export default function ImageModule({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {/* <DialogTrigger asChild>
-        <Button variant='outline'>Open Mood Screenshot</Button>
-      </DialogTrigger> */}
       <DialogContent className='sm:max-w-[425px] p-0 overflow-hidden'>
         <div className='relative'>
           <img src={imgSrc} alt='Mood screenshot' className='w-full h-auto' />
