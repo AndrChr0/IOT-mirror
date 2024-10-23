@@ -88,7 +88,7 @@ export default function AiArtMirror() {
       }, 0); // Delay for the DOM to update
     };
     focusFirstElement();
-  }, [selectedStyle, showCapturePhotoButtons]);
+  }, [selectedStyle, showCapturePhotoButtons, recievedImg]);
 
   useEffect(() => {
     const handleSwipe = (direction: string) => {

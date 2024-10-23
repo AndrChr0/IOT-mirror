@@ -50,14 +50,14 @@ export default function AiImagePreview({
         <h3>Send to gallery?</h3>
         <button
         tabIndex={1}
-          className='p-2 text-white bg-green-700'
+          className='p-2 text-white bg-green-700 selectedTabIndex'
           onClick={handleSubmitArt}
         >
           Yes
         </button>
         <button
         tabIndex={1}
-          className='p-2 text-white bg-red-600'
+          className='p-2 text-white bg-red-600 selectedTabIndex'
           onClick={() => {
             handleImageData(null);
           }}
