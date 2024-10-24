@@ -74,36 +74,58 @@ const SelectStyle = ({
 
   return (
     <>
-      <div className='artists'>
-        <div className='artists-content'>
+      <div className='artists w-[50vw] scrollable-element m-0'>
+        <div className='artists-content w-[100%] h-full flex gap-5 flex-wrap justify-center pt-4 pb-4 m-0'>
           <div className='flex items-center justify-between w-full px-[24px]'>
             <h1 className='text-2xl'>
-              {selectedStyle ? selectedStyle.name : "Choose a style"}
+              {selectedStyle ? selectedStyle.name : ""}
             </h1>
           </div>
 
           <div className='relative w-full h-full test'>
+          <div className='card-container'>
+              {styles.map((style) => (
+                <div
+                  key={style.id}
+                  className='w-[45%] h-[25%] p-1 overflow-hidden cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white scaled-img-container'
+                  onClick={() => handleSelectStyle(style)}
+                  tabIndex={1}
+                >
+                  {style.name}{" "}
+                  <div className='card-img-container'>
+                    <img className="scaled-img" src={style.img[0]} alt='' />
+                  </div>
+                </div>
+              ))}
+            </div>
             {selectedStyle && (
               <>
                 <div className='selectedStyle'>
                   <div className='selectedStyle-content'>
-                    {selectedStyle.img && (
-                      <img
-                        className='mt-2 w-[300px] h-auto'
-                        src={selectedStyle.img}
-                        alt={selectedStyle.name}
-                      />
-                    )}
+                  {selectedStyle.img && (
+                    <div className='selectedStyle-images'>
+                      <div className="carousel-slide h-[250px] ">
+                        
+                        {selectedStyle.img.map((src, index) => (
+                          <img key={index} className='mr-2 scaled-img' src={src} alt="" />
+                        ))}
+                        <img className='scaled-img' src={selectedStyle.img[0]} alt="" />
+                      </div>
+                    </div>
+                  )}
                     {selectedStyle.description && (
+                      <>
                       <p className='mt-2 '>{selectedStyle.description}</p>
+                      <p className='mt-2 mb-[200px] '>Famous fellas: {selectedStyle.famous_artists}</p>
+                      </>
                     )}
                   </div>
 
-                  <div className='selectedStyle-buttons'>
+                    <div className='fixed bottom-4 selectedStyle-buttons z-[1] '>
                     <button
                       tabIndex={1}
                       onClick={onGoBack}
-                      className='selectedTabIndex w-[20%] p-2 mt-4 text-blue-500 transition duration-200 border border-blue-500 rounded hover:bg-blue-500 hover:text-white flex items-center justify-center gap-[9px]'
+                      className='selectedTabIndex w-[30%] p-2  text-blue-500 bg-white transition duration-200 border border-blue-500 rounded hover:bg-blue-500 hover:text-white flex items-center justify-center gap-[9px]'
                     >
                       <FaArrowLeftLong /> Go Back
                     </button>
@@ -111,30 +133,16 @@ const SelectStyle = ({
                     <button
                       tabIndex={1}
                       onClick={onCapturePhoto}
-                      className='w-full p-2 mt-4 text-white transition duration-200 bg-blue-500 rounded selectedTabIndex hover:bg-blue-700'
+                      className='w-full p-2 text-white transition duration-200 bg-blue-500 rounded selectedTabIndex hover:bg-blue-700'
                     >
                       Capture Photo
                     </button>
-                  </div>
+                    </div>
                 </div>
               </>
             )}
 
-            <div className='card-container'>
-              {styles.map((style) => (
-                <div
-                  key={style.id}
-                  className='p-1 cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white'
-                  onClick={() => handleSelectStyle(style)}
-                  tabIndex={1}
-                >
-                  {style.name}{" "}
-                  <div className='card-img-container'>
-                    <img src={style.img} alt='' />
-                  </div>
-                </div>
-              ))}
-            </div>
+           
           </div>
         </div>
       </div>
