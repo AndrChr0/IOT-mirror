@@ -553,7 +553,7 @@ export default function AiArtMirror() {
           </div>
         )}
 
-        <div className="absolute top-0 m-2">
+        {/* <div className="absolute top-0 m-2">
           {isRecognizing ? (
             <div className={wiggleClass}>
               <IoIosMic size={30} />
@@ -563,7 +563,7 @@ export default function AiArtMirror() {
               <IoIosMicOff size={30} color="red" />
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );
