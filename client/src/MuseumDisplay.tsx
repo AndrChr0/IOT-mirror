@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import GalleryMainCanvas from "./GalleryMainCanvas";
 
 interface AiArt {
   generation_date: string;
@@ -8,54 +9,74 @@ interface AiArt {
 }
 
 export default function MuseumDisplay() {
-  const [aiArtList, setAiArtList] = useState<AiArt[]>([]); // Fetched data
-  const [loading, setLoading] = useState<boolean>(true); // State to handle loading
+  const [aiArtList, setAiArtList] = useState<AiArt[]>([]);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const prevDataLengthRef = useRef<number>(0);
 
-  useEffect(() => {
-    // Function to fetch all AI art data from the backend
-    const fetchAiArt = async () => {
-      try {
-        const response = await fetch("http://localhost:5353/mirror", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        setAiArtList(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching AI art:", error);
-        setLoading(false);
+  // Function to fetch AI art data
+  const fetchAiArt = async () => {
+    try {
+      const response = await fetch("http://localhost:5353/mirror", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+
+      setAiArtList(data);
+
+      if (data.length > prevDataLengthRef.current) {
+        // New entry added; show it first
+        setCurrentIndex(data.length - 1);
       }
-    };
 
+      prevDataLengthRef.current = data.length;
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching AI art:", error);
+      setLoading(false);
+    }
+  };
+
+  // Fetch data on component mount and set up interval
+  useEffect(() => {
     fetchAiArt();
+    const fetchInterval = setInterval(fetchAiArt, 15000); // Fetch every 15 seconds
+    return () => clearInterval(fetchInterval);
+  }, []);
+
+  // Update currentIndex every 15 seconds to show next image
+  useEffect(() => {
+    const displayInterval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        aiArtList.length ? (prevIndex + 1) % aiArtList.length : 0
+      );
+    }, 15000);
+    return () => clearInterval(displayInterval);
   }, [aiArtList]);
 
   if (loading) {
     return <p>Loading AI art...</p>;
   }
 
+  const currentArt = aiArtList[currentIndex];
+
   return (
     <div>
-      <h1>AI Art Museum</h1>
-      <div>
-        {aiArtList.length > 0 ? (
-          aiArtList.map((art) => (
-            <div key={art._id}>
-              <h3>{art.art_style}</h3>
-              <p>
-                Generated on:
-                {new Date(art.generation_date).toLocaleDateString()}
-              </p>
-              <img src={art.url} alt={art.art_style} />
-            </div>
-          ))
-        ) : (
-          <p>No AI art available</p>
-        )}
-      </div>
+      {currentArt ? (
+        <GalleryMainCanvas
+          key={currentArt._id}
+          generatedArt={currentArt.url}
+          generatedArtStyle={currentArt.art_style}
+          dateGenerated={new Date(
+            currentArt.generation_date
+          ).toLocaleDateString()}
+        />
+      ) : (
+        <p>No AI art available</p>
+      )}
     </div>
   );
 }
