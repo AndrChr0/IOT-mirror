@@ -10,7 +10,7 @@ import io from "socket.io-client";
 import { IoIosMic } from "react-icons/io";
 import { IoIosMicOff } from "react-icons/io";
 
-const socket = io("http://192.168.2.142:3000");
+const socket = io("http://192.168.2.144:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -495,7 +495,7 @@ export default function AiArtMirror() {
           </div>
         )}
 
-        <div
+        {/* <div
           id="scrnsht_btn-container"
           className="absolute bottom-0 left-0 flex p-4"
         >
@@ -506,7 +506,7 @@ export default function AiArtMirror() {
           >
             <FaCamera />
           </button>
-        </div>
+        </div> */}
         {/* {showCapturePhotoButtons && (
           <>
             <SelectStyle
