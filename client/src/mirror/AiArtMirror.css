@@ -1,3 +1,9 @@
+body {
+  overflow: hidden; 
+  margin: 0;
+  height: 100vh;
+}
+
 @keyframes blitz {
     0% {
       background-color: white;

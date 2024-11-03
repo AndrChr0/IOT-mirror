@@ -10,7 +10,7 @@ import io from "socket.io-client";
 import { IoIosMic } from "react-icons/io";
 import { IoIosMicOff } from "react-icons/io";
 
-const socket = io("http://[ip-address]:3000");
+const socket = io("http://192.168.2.144:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -430,91 +430,140 @@ export default function AiArtMirror() {
   }, [isRecognizing]);
 
   return (
-    <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-      <div className='absolute z-10 w-full mt-20'></div>
-
-      <video
-        ref={videoRef}
-        className='object-cover w-full h-full inverted-video'
-        autoPlay
-        muted
-        onPlay={handleVideoOnPlay}
+    <div className="flex justify-between">
+      {/* <div className="w-[50vw] scrollable-element m-0">
+        <div className="w-[100%] flex gap-5 flex-wrap justify-center pt-4 pb-4 m-0">
+          <div tabIndex={1} className="w-[45%] h-[200px] bg-blue-500 rounded relative flex flex-col">
+            <img className="flex-1 object-cover w-full h-full" src="https://magazine.artland.com/wp-content/uploads/2022/07/van-gogh-starry-night-min.jpg" alt="" />
+            <div className="w-full h-[50px] bg-gray-500 flex justify-center items-center text-white rounded">Post impressionism</div>
+          </div>
+          <div tabIndex={1} className="w-[45%] h-[200px] bg-blue-500 rounded relative flex flex-col">
+            <img className="flex-1 object-cover w-full h-full" src="https://cdn.britannica.com/41/3341-050-825E2B57/The-Creation-of-Adam-ceiling-fresco-Sistine.jpg" alt="" />
+            <div className="w-full h-[50px] bg-gray-500 flex justify-center items-center text-white rounded">Renaissance</div>
+          </div>
+          <div tabIndex={1} className="testy-container w-[45%] h-[200px] bg-green-500 rounded relative overflow-hidden">
+            <img className="flex-1 object-cover w-full h-full testy" src="https://magazine.artland.com/wp-content/uploads/2022/07/van-gogh-starry-night-min.jpg" alt="" />
+            <div className="w-[100%] h-[50px] absolute bottom-0 bg-black bg-opacity-50 backdrop-blur flex justify-center items-center text-white rounded">Text</div>
+          </div>
+          <div tabIndex={1} className="testy-container w-[45%] h-[200px] bg-yellow-500 rounded relative overflow-hidden">
+            <img className="flex-1 object-cover w-full h-full rounded-tl rounded-tr testy" src="https://cdn.britannica.com/41/3341-050-825E2B57/The-Creation-of-Adam-ceiling-fresco-Sistine.jpg" alt="" />
+            <div className="w-[100%] h-[50px] absolute bottom-0 rounded-tl rounded-tr bg-black bg-opacity-50 backdrop-blur flex justify-center items-center text-white rounded">Text</div>
+          </div>
+          <div tabIndex={1} className="w-[45%] h-[200px] bg-orange-500 rounded relative">
+            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
+          </div>
+          <div tabIndex={1} className="w-[45%] h-[200px] bg-blue-500 rounded relative">
+            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
+          </div>
+          <div tabIndex={1} className="w-[45%] h-[200px] bg-red-500 rounded relative">
+            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
+          </div>
+          <div tabIndex={1} className="w-[45%] h-[200px] bg-green-500 rounded relative">
+            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
+          </div>
+          <div tabIndex={1} className="w-[45%] h-[200px] bg-yellow-500 rounded relative">
+            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
+          </div>
+          <div tabIndex={1} className="w-[45%] h-[200px] bg-orange-500 rounded relative">
+            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
+          </div>
+        </div>
+      </div> */}
+      <SelectStyle
+        onCapturePhoto={startCountdown}
+        onCloseModal={() => setShowCapturePhotoButtons(false)}
+        onStyleSelect={handleStyleSelect}
+        voiceOptions={voiceOptions}
+        onResetVoiceOptions={() => setVoiceOptions(false)}
+        selectedStyleDrop={selectedStyle}
+        styleDropdownOpen={styleDropdownOpen}
+        onGoBack={handleGoBack}
       />
-      <canvas ref={canvasRef} className='hidden' />
-      {countdown !== null && (
-        <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
-          <span className='countdown'>{countdown}</span>
-        </div>
-      )}
-
-      <div
-        id='scrnsht_btn-container'
-        className='absolute bottom-0 left-0 flex p-4'
-      >
-        <button
-          id='scrnsht_btn'
-          className='rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150'
-          onClick={openCapturePhotoButtons}
-        >
-          <FaCamera />
-        </button>
-      </div>
-      {showCapturePhotoButtons && (
-        <>
-          <SelectStyle
-            onCapturePhoto={startCountdown}
-            onCloseModal={() => setShowCapturePhotoButtons(false)}
-            onStyleSelect={handleStyleSelect}
-            voiceOptions={voiceOptions}
-            onResetVoiceOptions={() => setVoiceOptions(false)}
-            selectedStyleDrop={selectedStyle}
-            styleDropdownOpen={styleDropdownOpen}
-            onGoBack={handleGoBack}
-          />
-        </>
-      )}
-
-      {showPreview && imageData && (
-        <>
-          <ImageModal
-            title={`Do you want to transform this image into "${
-              selectedStyle ? selectedStyle.name : ""
-            }" style?`}
-            confirmText='Yes'
-            declineText='Try again'
-            imgSrc={imageData}
-            openModule={showPreview}
-            cancelMoodScreenshot={handleCancelScreenshot}
-            confirmMoodScreenshot={handleConfirmScreenshot}
-          />
-        </>
-      )}
-      {recievedImg && (
-        <AiImagePreview
-          artStyle={selectedStyle ? selectedStyle.description : ""}
-          image={recievedImg}
-          handleImageData={handleRecievedImg}
+      <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
+        <div className="absolute z-10 w-full mt-20"></div>
+        <video
+          ref={videoRef}
+          className="object-cover w-full h-full inverted-video"
+          autoPlay
+          muted
+          onPlay={handleVideoOnPlay}
         />
-      )}
-      {isProcessing && <Processing />}
-      {transcription && (
-        <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
-          <div className='h-auto text-white bg-black bg-opacity-50 transcription-container'>
-            "{transcription}"
-          </div>
-        </div>
-      )}
-
-      <div className='absolute top-0 m-2'>
-        {isRecognizing ? (
-          <div className={wiggleClass}>
-            <IoIosMic size={30} />
-          </div>
-        ) : (
-          <div className={wiggleClass}>
-            <IoIosMicOff size={30} color='red' />
+        <canvas ref={canvasRef} className="hidden" />
+        {countdown !== null && (
+          <div className="absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2">
+            <span className="countdown">{countdown}</span>
           </div>
         )}
+
+        {/* <div
+          id="scrnsht_btn-container"
+          className="absolute bottom-0 left-0 flex p-4"
+        >
+          <button
+            id="scrnsht_btn"
+            className="rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150"
+            onClick={openCapturePhotoButtons}
+          >
+            <FaCamera />
+          </button>
+        </div> */}
+        {/* {showCapturePhotoButtons && (
+          <>
+            <SelectStyle
+              onCapturePhoto={startCountdown}
+              onCloseModal={() => setShowCapturePhotoButtons(false)}
+              onStyleSelect={handleStyleSelect}
+              voiceOptions={voiceOptions}
+              onResetVoiceOptions={() => setVoiceOptions(false)}
+              selectedStyleDrop={selectedStyle}
+              styleDropdownOpen={styleDropdownOpen}
+              onGoBack={handleGoBack}
+            />
+          </>
+        )} */}
+
+        {showPreview && imageData && (
+          <>
+            <ImageModal
+              title={`Do you want to transform this image into "${
+                selectedStyle ? selectedStyle.name : ""
+              }" style?`}
+              confirmText="Yes"
+              declineText="Try again"
+              imgSrc={imageData}
+              openModule={showPreview}
+              cancelMoodScreenshot={handleCancelScreenshot}
+              confirmMoodScreenshot={handleConfirmScreenshot}
+            />
+          </>
+        )}
+        {recievedImg && (
+          <AiImagePreview
+            artStyle={selectedStyle ? selectedStyle.description : ""}
+            image={recievedImg}
+            handleImageData={handleRecievedImg}
+          />
+        )}
+        {isProcessing && <Processing />}
+        {transcription && (
+          <div className="absolute bottom-0 right-0 w-full mb-4 transcription-wrapper">
+            <div className="h-auto text-white bg-black bg-opacity-50 transcription-container">
+              "{transcription}"
+            </div>
+          </div>
+        )}
+
+        <div className="absolute top-0 m-2">
+          {isRecognizing ? (
+            <div className={wiggleClass}>
+              <IoIosMic size={30} />
+            </div>
+          ) : (
+            <div className={wiggleClass}>
+              <IoIosMicOff size={30} color="red" />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
