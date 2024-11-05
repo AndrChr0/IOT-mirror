@@ -1,5 +1,11 @@
 import OpenAI from "openai/index.js";
 import dotenv from "dotenv";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+import { downloadImageStream } from "../fetch-script.js";
+
 dotenv.config();
 
 const openai = new OpenAI({
@@ -54,7 +60,27 @@ async function generateImage(description, stylePrompt) {
       n: 1,
       size: "1024x1024",
     });
+
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+
     const image_url = response.data[0].url;
+
+    // Usage
+    const dateTtile = Date.now();
+
+    const saveDirectory = path.join(__dirname, "images");
+    const savePath = path.join(saveDirectory, dateTtile + ".png");
+
+    // Ensure the directory exists
+    if (!fs.existsSync(saveDirectory)) {
+      fs.mkdirSync(saveDirectory);
+    }
+
+    downloadImageStream(image_url, savePath)
+      .then(() => console.log("Image saved successfully using stream"))
+      .catch((err) => console.error("Error downloading image:", err));
+
     return image_url;
   } catch (error) {
     if (error.response) {
