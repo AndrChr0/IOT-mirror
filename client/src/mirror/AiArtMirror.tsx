@@ -292,7 +292,7 @@ export default function AiArtMirror() {
 
           // Extract the AI image URL from the response
           const { aiPreview, aiImg } = responseData;
-          setRecievedImg(aiPreview); // Set absolute image URL
+          setRecievedImg(aiPreview); // Set the received AI image
           setRelativeImg(aiImg);
           console.log("AI image URL:", aiPreview);
           setIsProcessing(false);
@@ -358,7 +358,6 @@ export default function AiArtMirror() {
   return (
     <>
       {isProcessing && <Processing />}
-
       <div className='flex justify-between'>
         <SelectStyle
           onCapturePhoto={startCountdown}
@@ -401,14 +400,8 @@ export default function AiArtMirror() {
               />
             </>
           )}
-          {recievedImg && (
-            <AiImagePreview
-              artStyle={selectedStyle ? selectedStyle.description : ""}
-              absoluteImage={recievedImg}
-              handleImageData={handleRecievedImg}
-              relativeImg={relativeImg || ""}
-            />
-          )}
+
+          {isProcessing && <Processing />}
           {transcription && (
             <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
               <div className='h-auto text-white bg-black bg-opacity-50 transcription-container'>
@@ -418,6 +411,16 @@ export default function AiArtMirror() {
           )}
         </div>
       </div>
+      {recievedImg && (
+        <AiImagePreview
+          openModule
+          title='Send to gallery?'
+          artStyle={selectedStyle ? selectedStyle.description : ""}
+          absoluteImage={recievedImg}
+          handleImageData={handleRecievedImg}
+          relativeImg={relativeImg || ""}
+        />
+      )}
     </>
   );
 }
