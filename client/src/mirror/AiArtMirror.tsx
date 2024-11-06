@@ -292,7 +292,7 @@ export default function AiArtMirror() {
 
           // Extract the AI image URL from the response
           const { aiPreview, aiImg } = responseData;
-          setRecievedImg(aiPreview); // Set the received AI image
+          setRecievedImg(aiPreview); // Set absolute image URL
           setRelativeImg(aiImg);
           console.log("AI image URL:", aiPreview);
           setIsProcessing(false);
