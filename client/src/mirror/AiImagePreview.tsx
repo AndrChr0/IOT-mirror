@@ -1,17 +1,17 @@
 interface AiImagePreviewProps {
-  image: string;
+  absoluteImage: string;
   artStyle: string;
   handleImageData: (img: string | null) => void;
   relativeImg: string;
 }
 
 export default function AiImagePreview({
-  image,
+  absoluteImage,
   handleImageData,
   artStyle,
   relativeImg,
 }: AiImagePreviewProps) {
-  console.log("preview Image url:", image);
+  console.log("preview Image url:", absoluteImage);
 
   const handleSubmitArt = async () => {
     // The data object to be sent in the POST request
@@ -48,7 +48,7 @@ export default function AiImagePreview({
   return (
     <div className='absolute top-0 p-4 bg-white'>
       <div className='h-fit w-96 '>
-        {image && <img src={image} alt='image' />}
+        {absoluteImage && <img src={absoluteImage} alt='image' />}
       </div>
       <div className='flex gap-3'>
         <h3>Send to gallery?</h3>
