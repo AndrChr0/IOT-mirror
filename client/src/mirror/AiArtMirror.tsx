@@ -1,14 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import "./AiArtMirror.css";
-import { FaCamera } from "react-icons/fa";
 import ImageModal from "@/ImageModal";
 import AiImagePreview from "./AiImagePreview";
 import Processing from "./Processing";
 import SelectStyle from "./SelectStyle";
-import { Style, styles } from "./styles";
+import { Style } from "./styles";
 import io from "socket.io-client";
-import { IoIosMic } from "react-icons/io";
-import { IoIosMicOff } from "react-icons/io";
 
 const socket = io("http://192.168.2.144:3000");
 
@@ -29,7 +26,6 @@ export default function AiArtMirror() {
   const [transcription, setTranscription] = useState<string | null>(null);
   const focusedElementRef = useRef<HTMLElement | null>(null);
   const [isRecognizing, setIsRecognizing] = useState(false);
-  const [wiggleClass, setWiggleClass] = useState("");
 
   console.log("recievedImg", recievedImg);
 
@@ -200,56 +196,7 @@ export default function AiArtMirror() {
           .toLowerCase();
         console.log("Voice input: ", transcript);
         setTranscription(transcript);
-
-        if (transcript.includes("open blue camera")) {
-          setShowCapturePhotoButtons(true);
-        } else if (transcript.includes("close blue camera")) {
-          setShowCapturePhotoButtons(false);
-        }
-
-        if (
-          showCapturePhotoButtons === true &&
-          transcript.includes("capture photo")
-        ) {
-          startCountdown();
-          console.log("Capturing photo..");
-        }
-
-        if (showPreview && imageData) {
-          if (transcript.includes("yes")) {
-            handleConfirmScreenshot();
-            console.log("Downloading..");
-          } else if (transcript.includes("no")) {
-            handleCancelScreenshot();
-            console.log("Cancelling..");
-          }
-        }
-
-        if (showCapturePhotoButtons) {
-          if (transcript.includes("options")) {
-            handleVoiceOptions();
-            setStyleDropdownOpen(true);
-          }
-          const matchedStyle = styles.find((style) =>
-            transcript.includes(style.name.toLowerCase())
-          );
-          if (matchedStyle) {
-            handleStyleSelect(matchedStyle);
-            setStyleDropdownOpen(false);
-            console.log(styleDropdownOpen);
-          }
-
-          if (transcript.includes("go back")) {
-            handleGoBack();
-          }
-        }
       };
-
-      if (isRecognizing) {
-        recognition.start();
-      } else {
-        recognition.stop();
-      }
 
       // Cleanup
       return () => {
@@ -258,17 +205,7 @@ export default function AiArtMirror() {
     } else {
       console.error("Speech Recognition not supported in this browser.");
     }
-  }, [showCapturePhotoButtons, showPreview, imageData, isRecognizing]);
-
-  useEffect(() => {
-    if (transcription) {
-      const timer = setTimeout(() => {
-        setTranscription(null);
-      }, 2500);
-
-      return () => clearTimeout(timer);
-    }
-  }, [transcription]);
+  }, [isRecognizing]);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
@@ -380,10 +317,6 @@ export default function AiArtMirror() {
     setShowCapturePhotoButtons(true);
   };
 
-  const openCapturePhotoButtons = () => {
-    setShowCapturePhotoButtons((prev) => !prev);
-  };
-
   const handleRecievedImg = (img: string | null) => {
     setRecievedImg(img);
   };
@@ -393,10 +326,6 @@ export default function AiArtMirror() {
     console.log("here", selectedStyle);
     setStyleDropdownOpen(false);
     console.log("Selected style via voice:", style.name);
-  };
-
-  const handleVoiceOptions = () => {
-    setVoiceOptions(true);
   };
 
   const handleGoBack = () => {
@@ -423,52 +352,8 @@ export default function AiArtMirror() {
     }
   }, [isProcessing]);
 
-  useEffect(() => {
-    setWiggleClass("wiggle");
-    const timer = setTimeout(() => setWiggleClass(""), 400);
-    return () => clearTimeout(timer);
-  }, [isRecognizing]);
-
   return (
-    <div className="flex justify-between">
-      {/* <div className="w-[50vw] scrollable-element m-0">
-        <div className="w-[100%] flex gap-5 flex-wrap justify-center pt-4 pb-4 m-0">
-          <div tabIndex={1} className="w-[45%] h-[200px] bg-blue-500 rounded relative flex flex-col">
-            <img className="flex-1 object-cover w-full h-full" src="https://magazine.artland.com/wp-content/uploads/2022/07/van-gogh-starry-night-min.jpg" alt="" />
-            <div className="w-full h-[50px] bg-gray-500 flex justify-center items-center text-white rounded">Post impressionism</div>
-          </div>
-          <div tabIndex={1} className="w-[45%] h-[200px] bg-blue-500 rounded relative flex flex-col">
-            <img className="flex-1 object-cover w-full h-full" src="https://cdn.britannica.com/41/3341-050-825E2B57/The-Creation-of-Adam-ceiling-fresco-Sistine.jpg" alt="" />
-            <div className="w-full h-[50px] bg-gray-500 flex justify-center items-center text-white rounded">Renaissance</div>
-          </div>
-          <div tabIndex={1} className="testy-container w-[45%] h-[200px] bg-green-500 rounded relative overflow-hidden">
-            <img className="flex-1 object-cover w-full h-full testy" src="https://magazine.artland.com/wp-content/uploads/2022/07/van-gogh-starry-night-min.jpg" alt="" />
-            <div className="w-[100%] h-[50px] absolute bottom-0 bg-black bg-opacity-50 backdrop-blur flex justify-center items-center text-white rounded">Text</div>
-          </div>
-          <div tabIndex={1} className="testy-container w-[45%] h-[200px] bg-yellow-500 rounded relative overflow-hidden">
-            <img className="flex-1 object-cover w-full h-full rounded-tl rounded-tr testy" src="https://cdn.britannica.com/41/3341-050-825E2B57/The-Creation-of-Adam-ceiling-fresco-Sistine.jpg" alt="" />
-            <div className="w-[100%] h-[50px] absolute bottom-0 rounded-tl rounded-tr bg-black bg-opacity-50 backdrop-blur flex justify-center items-center text-white rounded">Text</div>
-          </div>
-          <div tabIndex={1} className="w-[45%] h-[200px] bg-orange-500 rounded relative">
-            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
-          </div>
-          <div tabIndex={1} className="w-[45%] h-[200px] bg-blue-500 rounded relative">
-            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
-          </div>
-          <div tabIndex={1} className="w-[45%] h-[200px] bg-red-500 rounded relative">
-            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
-          </div>
-          <div tabIndex={1} className="w-[45%] h-[200px] bg-green-500 rounded relative">
-            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
-          </div>
-          <div tabIndex={1} className="w-[45%] h-[200px] bg-yellow-500 rounded relative">
-            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
-          </div>
-          <div tabIndex={1} className="w-[45%] h-[200px] bg-orange-500 rounded relative">
-            <div className="w-[100%] h-[50px] absolute bottom-0 bg-gray-500 flex justify-center items-center text-white rounded">Text</div>
-          </div>
-        </div>
-      </div> */}
+    <div className='flex justify-between'>
       <SelectStyle
         onCapturePhoto={startCountdown}
         onCloseModal={() => setShowCapturePhotoButtons(false)}
@@ -480,47 +365,20 @@ export default function AiArtMirror() {
         onGoBack={handleGoBack}
       />
       <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-        <div className="absolute z-10 w-full mt-20"></div>
+        <div className='absolute z-10 w-full mt-20'></div>
         <video
           ref={videoRef}
-          className="object-cover w-full h-full inverted-video"
+          className='object-cover w-full h-full inverted-video'
           autoPlay
           muted
           onPlay={handleVideoOnPlay}
         />
-        <canvas ref={canvasRef} className="hidden" />
+        <canvas ref={canvasRef} className='hidden' />
         {countdown !== null && (
-          <div className="absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2">
-            <span className="countdown">{countdown}</span>
+          <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
+            <span className='countdown'>{countdown}</span>
           </div>
         )}
-
-        {/* <div
-          id="scrnsht_btn-container"
-          className="absolute bottom-0 left-0 flex p-4"
-        >
-          <button
-            id="scrnsht_btn"
-            className="rounded p-3 text-white bg-blue-500 hover:scale-[1.1] transform transition duration-150"
-            onClick={openCapturePhotoButtons}
-          >
-            <FaCamera />
-          </button>
-        </div> */}
-        {/* {showCapturePhotoButtons && (
-          <>
-            <SelectStyle
-              onCapturePhoto={startCountdown}
-              onCloseModal={() => setShowCapturePhotoButtons(false)}
-              onStyleSelect={handleStyleSelect}
-              voiceOptions={voiceOptions}
-              onResetVoiceOptions={() => setVoiceOptions(false)}
-              selectedStyleDrop={selectedStyle}
-              styleDropdownOpen={styleDropdownOpen}
-              onGoBack={handleGoBack}
-            />
-          </>
-        )} */}
 
         {showPreview && imageData && (
           <>
@@ -528,8 +386,8 @@ export default function AiArtMirror() {
               title={`Do you want to transform this image into "${
                 selectedStyle ? selectedStyle.name : ""
               }" style?`}
-              confirmText="Yes"
-              declineText="Try again"
+              confirmText='Yes'
+              declineText='Try again'
               imgSrc={imageData}
               openModule={showPreview}
               cancelMoodScreenshot={handleCancelScreenshot}
@@ -546,24 +404,12 @@ export default function AiArtMirror() {
         )}
         {isProcessing && <Processing />}
         {transcription && (
-          <div className="absolute bottom-0 right-0 w-full mb-4 transcription-wrapper">
-            <div className="h-auto text-white bg-black bg-opacity-50 transcription-container">
+          <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
+            <div className='h-auto text-white bg-black bg-opacity-50 transcription-container'>
               "{transcription}"
             </div>
           </div>
         )}
-
-        {/* <div className="absolute top-0 m-2">
-          {isRecognizing ? (
-            <div className={wiggleClass}>
-              <IoIosMic size={30} />
-            </div>
-          ) : (
-            <div className={wiggleClass}>
-              <IoIosMicOff size={30} color="red" />
-            </div>
-          )}
-        </div> */}
       </div>
     </div>
   );
