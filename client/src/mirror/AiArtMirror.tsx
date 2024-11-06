@@ -356,66 +356,70 @@ export default function AiArtMirror() {
   }, [isProcessing]);
 
   return (
-    <div className='flex justify-between'>
-      <SelectStyle
-        onCapturePhoto={startCountdown}
-        onCloseModal={() => setShowCapturePhotoButtons(false)}
-        onStyleSelect={handleStyleSelect}
-        voiceOptions={voiceOptions}
-        onResetVoiceOptions={() => setVoiceOptions(false)}
-        selectedStyleDrop={selectedStyle}
-        styleDropdownOpen={styleDropdownOpen}
-        onGoBack={handleGoBack}
-      />
-      <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
-        <div className='absolute z-10 w-full mt-20'></div>
-        <video
-          ref={videoRef}
-          className='object-cover w-full h-full inverted-video'
-          autoPlay
-          muted
-          onPlay={handleVideoOnPlay}
+    <>
+      <div className='flex justify-between'>
+        <SelectStyle
+          onCapturePhoto={startCountdown}
+          onCloseModal={() => setShowCapturePhotoButtons(false)}
+          onStyleSelect={handleStyleSelect}
+          voiceOptions={voiceOptions}
+          onResetVoiceOptions={() => setVoiceOptions(false)}
+          selectedStyleDrop={selectedStyle}
+          styleDropdownOpen={styleDropdownOpen}
+          onGoBack={handleGoBack}
         />
-        <canvas ref={canvasRef} className='hidden' />
-        {countdown !== null && (
-          <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
-            <span className='countdown'>{countdown}</span>
-          </div>
-        )}
-
-        {showPreview && imageData && (
-          <>
-            <ImageModal
-              title={`Do you want to transform this image into "${
-                selectedStyle ? selectedStyle.name : ""
-              }" style?`}
-              confirmText='Yes'
-              declineText='Try again'
-              imgSrc={imageData}
-              openModule={showPreview}
-              cancelMoodScreenshot={handleCancelScreenshot}
-              confirmMoodScreenshot={handleConfirmScreenshot}
-            />
-          </>
-        )}
-       
-        {isProcessing && <Processing />}
-        {transcription && (
-          <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
-            <div className='h-auto text-white bg-black bg-opacity-50 transcription-container'>
-              "{transcription}"
+        <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
+          <div className='absolute z-10 w-full mt-20'></div>
+          <video
+            ref={videoRef}
+            className='object-cover w-full h-full inverted-video'
+            autoPlay
+            muted
+            onPlay={handleVideoOnPlay}
+          />
+          <canvas ref={canvasRef} className='hidden' />
+          {countdown !== null && (
+            <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
+              <span className='countdown'>{countdown}</span>
             </div>
-          </div>
-        )}
+          )}
+
+          {showPreview && imageData && (
+            <>
+              <ImageModal
+                title={`Do you want to transform this image into "${
+                  selectedStyle ? selectedStyle.name : ""
+                }" style?`}
+                confirmText='Yes'
+                declineText='Try again'
+                imgSrc={imageData}
+                openModule={showPreview}
+                cancelMoodScreenshot={handleCancelScreenshot}
+                confirmMoodScreenshot={handleConfirmScreenshot}
+              />
+            </>
+          )}
+
+          {isProcessing && <Processing />}
+          {transcription && (
+            <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
+              <div className='h-auto text-white bg-black bg-opacity-50 transcription-container'>
+                "{transcription}"
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       {recievedImg && (
-          <AiImagePreview
-            artStyle={selectedStyle ? selectedStyle.description : ""}
-            absoluteImage={recievedImg}
-            handleImageData={handleRecievedImg}
-            relativeImg={relativeImg || ""}
-          />
-        )}
-    </div>
+        <AiImagePreview
+          openModule
+          title='Send to gallery?'
+          artStyle={selectedStyle ? selectedStyle.description : ""}
+          absoluteImage={recievedImg}
+          handleImageData={handleRecievedImg}
+          relativeImg={relativeImg || ""}
+        />
+      )}
+    </>
   );
 }
