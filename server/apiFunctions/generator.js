@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-
 import { downloadImageStream } from "../fetch-script.js";
 
 dotenv.config();
@@ -63,12 +62,8 @@ async function generateImage(description, stylePrompt) {
 
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
-
     const image_url = response.data[0].url;
-
-    // Usage
     const dateTtile = Date.now();
-
     const saveDirectory = path.join(__dirname, "images");
     const savePath = path.join(saveDirectory, dateTtile + ".png");
 
