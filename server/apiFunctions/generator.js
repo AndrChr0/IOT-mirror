@@ -66,6 +66,12 @@ async function generateImage(description, stylePrompt) {
     const dateTtile = Date.now();
     const saveDirectory = path.join(__dirname, "images");
     const savePath = path.join(saveDirectory, dateTtile + ".png");
+    const URLtoSend = `http://localhost:5353/images/${dateTtile}.png`;
+
+    const aiOBJ = {
+      absoluteURL: image_url,
+      relativeURL: URLtoSend,
+    };
 
     // Ensure the directory exists
     if (!fs.existsSync(saveDirectory)) {
@@ -76,7 +82,7 @@ async function generateImage(description, stylePrompt) {
       .then(() => console.log("Image saved successfully using stream"))
       .catch((err) => console.error("Error downloading image:", err));
 
-    return image_url;
+    return aiOBJ;
   } catch (error) {
     if (error.response) {
       console.log("Status:", error.response.status);

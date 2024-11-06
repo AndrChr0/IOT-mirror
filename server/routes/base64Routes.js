@@ -9,9 +9,15 @@ router.post("/upload-base64", async function (req, res) {
   if (!imageData) {
     return res.status(400).json({ message: "No image data provided" });
   } else {
-    const generatedImage = await main(imageData, selectedStyle);
+    const { absoluteURL, relativeURL } = await main(imageData, selectedStyle);
 
-    res.status(200).json({ message: "Image uploaded", aiImg: generatedImage });
+    res
+      .status(200)
+      .json({
+        message: "Image uploaded",
+        aiImg: relativeURL,
+        aiPreview: absoluteURL,
+      });
   }
 });
 

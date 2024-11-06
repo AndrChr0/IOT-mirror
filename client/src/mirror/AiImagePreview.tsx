@@ -2,18 +2,22 @@ interface AiImagePreviewProps {
   image: string;
   artStyle: string;
   handleImageData: (img: string | null) => void;
+  relativeImg: string;
 }
 
 export default function AiImagePreview({
   image,
   handleImageData,
   artStyle,
+  relativeImg,
 }: AiImagePreviewProps) {
+  console.log("preview Image url:", image);
+
   const handleSubmitArt = async () => {
     // The data object to be sent in the POST request
     const newArtData = {
       generation_date: new Date().toDateString(),
-      url: image,
+      url: relativeImg,
       art_style: artStyle,
     };
 
@@ -49,14 +53,14 @@ export default function AiImagePreview({
       <div className='flex gap-3'>
         <h3>Send to gallery?</h3>
         <button
-        tabIndex={1}
+          tabIndex={1}
           className='p-2 text-white bg-green-700 selectedTabIndex'
           onClick={handleSubmitArt}
         >
           Yes
         </button>
         <button
-        tabIndex={1}
+          tabIndex={1}
           className='p-2 text-white bg-red-600 selectedTabIndex'
           onClick={() => {
             handleImageData(null);

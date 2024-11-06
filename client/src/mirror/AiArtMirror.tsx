@@ -12,6 +12,7 @@ const socket = io("http://192.168.2.144:3000");
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const focusedElementRef = useRef<HTMLElement | null>(null);
 
   const [countdown, setCountdown] = useState<number | null>(null);
   const [blitz, setBlitz] = useState(false);
@@ -19,12 +20,12 @@ export default function AiArtMirror() {
   const [showPreview, setShowPreview] = useState(false);
   const [showCapturePhotoButtons, setShowCapturePhotoButtons] = useState(false);
   const [recievedImg, setRecievedImg] = useState<string | null>(null);
+  const [relativeImg, setRelativeImg] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedStyle, setSelectedStyle] = useState<Style | null>(null);
   const [voiceOptions, setVoiceOptions] = useState(false);
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
   const [transcription, setTranscription] = useState<string | null>(null);
-  const focusedElementRef = useRef<HTMLElement | null>(null);
   const [isRecognizing, setIsRecognizing] = useState(false);
 
   console.log("recievedImg", recievedImg);
@@ -290,8 +291,10 @@ export default function AiArtMirror() {
           console.log("Response data:", responseData);
 
           // Extract the AI image URL from the response
-          const { aiImg } = responseData;
-          setRecievedImg(aiImg); // Set the received AI image
+          const { aiPreview, aiImg } = responseData;
+          setRecievedImg(aiPreview); // Set the received AI image
+          setRelativeImg(aiImg);
+          console.log("AI image URL:", aiPreview);
           setIsProcessing(false);
         } else {
           console.error("Error uploading image");
@@ -400,6 +403,7 @@ export default function AiArtMirror() {
             artStyle={selectedStyle ? selectedStyle.description : ""}
             image={recievedImg}
             handleImageData={handleRecievedImg}
+            relativeImg={relativeImg || ""}
           />
         )}
         {isProcessing && <Processing />}

@@ -83,7 +83,7 @@ const SelectStyle = ({
           </div>
 
           <div className='relative w-full h-full test'>
-          <div className='card-container'>
+            <div className='card-container'>
               {styles.map((style) => (
                 <div
                   key={style.id}
@@ -93,7 +93,7 @@ const SelectStyle = ({
                 >
                   {style.name}{" "}
                   <div className='card-img-container'>
-                    <img className="scaled-img" src={style.img[0]} alt='' />
+                    <img className='scaled-img' src={style.img[0]} alt='' />
                   </div>
                 </div>
               ))}
@@ -102,26 +102,36 @@ const SelectStyle = ({
               <>
                 <div className='selectedStyle'>
                   <div className='selectedStyle-content'>
-                  {selectedStyle.img && (
-                    <div className='selectedStyle-images'>
-                      <div className="carousel-slide h-[250px] ">
-                        
-                        {selectedStyle.img.map((src, index) => (
-                          <img key={index} className='mr-2 scaled-img' src={src} alt="" />
-                        ))}
-                        <img className='scaled-img' src={selectedStyle.img[0]} alt="" />
+                    {selectedStyle.img && (
+                      <div className='selectedStyle-images'>
+                        <div className='carousel-slide h-[250px] '>
+                          {selectedStyle.img.map((src, index) => (
+                            <img
+                              key={index}
+                              className='mr-2 scaled-img'
+                              src={src}
+                              alt=''
+                            />
+                          ))}
+                          <img
+                            className='scaled-img'
+                            src={selectedStyle.img[0]}
+                            alt=''
+                          />
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                     {selectedStyle.description && (
                       <>
-                      <p className='mt-2 '>{selectedStyle.description}</p>
-                      <p className='mt-2 mb-[200px] '>Famous fellas: {selectedStyle.famous_artists}</p>
+                        <p className='mt-2 '>{selectedStyle.description}</p>
+                        <p className='mt-2 mb-[200px] '>
+                          Famous fellas: {selectedStyle.famous_artists}
+                        </p>
                       </>
                     )}
                   </div>
 
-                    <div className='fixed bottom-4 selectedStyle-buttons z-[1] '>
+                  <div className='fixed bottom-4 selectedStyle-buttons z-[1] '>
                     <button
                       tabIndex={1}
                       onClick={onGoBack}
@@ -137,12 +147,10 @@ const SelectStyle = ({
                     >
                       Capture Photo
                     </button>
-                    </div>
+                  </div>
                 </div>
               </>
             )}
-
-           
           </div>
         </div>
       </div>
