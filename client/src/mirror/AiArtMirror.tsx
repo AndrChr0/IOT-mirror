@@ -357,6 +357,7 @@ export default function AiArtMirror() {
 
   return (
     <>
+      {isProcessing && <Processing />}
       <div className='flex justify-between'>
         <SelectStyle
           onCapturePhoto={startCountdown}

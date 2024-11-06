@@ -4,6 +4,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { downloadImageStream } from "../fetch-script.js";
+import { exit } from "process";
 
 dotenv.config();
 
@@ -43,11 +44,12 @@ export default async function main(base64code, stylePrompt) {
     return imgURL;
   } catch (error) {
     if (error.response) {
-      console.log("Status:", error.response.status);
-      console.log("Data:", error.response.data);
+      console.log("generateImage-Status:", error.response.status);
+      console.log("generateImage-Data:", error.response.data);
     } else {
-      console.log("Error:", error.message);
+      console.log("generateImage-Error:", error.message);
     }
+    exit(1);
   }
 }
 
@@ -85,10 +87,10 @@ async function generateImage(description, stylePrompt) {
     return aiOBJ;
   } catch (error) {
     if (error.response) {
-      console.log("Status:", error.response.status);
-      console.log("Data:", error.response.data);
+      console.log("generateImage-error-Status:", error.response.status);
+      console.log("generateImage-error-Data:", error.response.data);
     } else {
-      console.log("Error:", error.message);
+      console.log("generateImage-Error:", error.message);
     }
   }
 }
