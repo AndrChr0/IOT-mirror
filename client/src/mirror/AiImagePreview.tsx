@@ -46,29 +46,32 @@ export default function AiImagePreview({
   };
 
   return (
-    <div className='absolute top-0 p-4 bg-white'>
-      <div className='h-fit w-96 '>
-        {absoluteImage && <img src={absoluteImage} alt='image' />}
-      </div>
-      <div className='flex gap-3'>
-        <h3>Send to gallery?</h3>
-        <button
-          tabIndex={1}
-          className='p-2 text-white bg-green-700 selectedTabIndex'
-          onClick={handleSubmitArt}
-        >
-          Yes
-        </button>
-        <button
-          tabIndex={1}
-          className='p-2 text-white bg-red-600 selectedTabIndex'
-          onClick={() => {
-            handleImageData(null);
-          }}
-        >
-          No
-        </button>
+    <div className="absolute top-0 w-full h-full outline outline-1 outline-red-500 flex items-center justify-center bg-black bg-opacity-70">
+      <div className='p-4 bg-white w-[25%] flex flex-col items-center gap-2 justify-center'>
+        <div className='h-fit w-full '>
+          {absoluteImage && <img className="w-full" src={absoluteImage} alt='image' />}
+        </div>
+        <div className='flex gap-3'>
+          <h3>Send to gallery?</h3>
+          <button
+            tabIndex={1}
+            className='p-2 text-white bg-green-700 selectedTabIndex'
+            onClick={handleSubmitArt}
+          >
+            Yes
+          </button>
+          <button
+            tabIndex={1}
+            className='p-2 text-white bg-red-600 selectedTabIndex'
+            onClick={() => {
+              handleImageData(null);
+            }}
+          >
+            No
+          </button>
+        </div>
       </div>
     </div>
+    
   );
 }

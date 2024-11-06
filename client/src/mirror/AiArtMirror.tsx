@@ -398,14 +398,7 @@ export default function AiArtMirror() {
             />
           </>
         )}
-        {recievedImg && (
-          <AiImagePreview
-            artStyle={selectedStyle ? selectedStyle.description : ""}
-            absoluteImage={recievedImg}
-            handleImageData={handleRecievedImg}
-            relativeImg={relativeImg || ""}
-          />
-        )}
+       
         {isProcessing && <Processing />}
         {transcription && (
           <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
@@ -415,6 +408,14 @@ export default function AiArtMirror() {
           </div>
         )}
       </div>
+      {recievedImg && (
+          <AiImagePreview
+            artStyle={selectedStyle ? selectedStyle.description : ""}
+            absoluteImage={recievedImg}
+            handleImageData={handleRecievedImg}
+            relativeImg={relativeImg || ""}
+          />
+        )}
     </div>
   );
 }
