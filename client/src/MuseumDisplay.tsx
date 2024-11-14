@@ -53,7 +53,7 @@ export default function MuseumDisplay() {
       setCurrentIndex((prevIndex) =>
         aiArtList.length ? (prevIndex + 1) % aiArtList.length : 0
       );
-    }, 15000);
+    }, 12000);
     return () => clearInterval(displayInterval);
   }, [aiArtList]);
 
