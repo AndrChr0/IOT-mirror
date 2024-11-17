@@ -7,7 +7,7 @@ import SelectStyle from "./SelectStyle";
 import { Style } from "./styles";
 import io from "socket.io-client";
 
-const socket = io("http://192.168.2.144:3000");
+const socket = io("http://10.22.216.152:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -26,7 +26,6 @@ export default function AiArtMirror() {
   const [voiceOptions, setVoiceOptions] = useState(false);
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
   const [transcription, setTranscription] = useState<string | null>(null);
-  const [isRecognizing, setIsRecognizing] = useState(false);
 
   console.log("recievedImg", recievedImg);
 
@@ -36,25 +35,12 @@ export default function AiArtMirror() {
       setSelectedStyle(style);
     });
 
-    socket.on("toggle-camera", () => {
-      setShowCapturePhotoButtons((prev) => !prev);
-      const clickSound = new Audio("/assets/click.wav");
-      clickSound.play();
-    });
-
     socket.on("handle-go-back", () => {
       handleGoBack();
     });
 
     socket.on("handle-capture-photo", () => {
       startCountdown();
-    });
-
-    socket.on("toggle-recognizing", () => {
-      setIsRecognizing((prev) => !prev);
-      console.log("Recognizing:", isRecognizing);
-      const clickSound = new Audio("/assets/click.wav");
-      clickSound.play();
     });
 
     return () => {
@@ -72,8 +58,8 @@ export default function AiArtMirror() {
         const focusableElements = Array.from(
           document.querySelectorAll("[tabindex]")
         );
-
-        const elementsToFocus = selectedStyle
+   
+         const elementsToFocus = selectedStyle
           ? Array.from(document.querySelectorAll(".selectedTabIndex"))
           : focusableElements;
 
@@ -95,10 +81,10 @@ export default function AiArtMirror() {
       const selectedTabIndexElements = Array.from(
         document.querySelectorAll(".selectedTabIndex")
       );
-      const elementsToSwipe = selectedStyle
+        const elementsToSwipe = selectedStyle
         ? selectedTabIndexElements
         : focusableElements;
-
+     
       if (!focusedElementRef.current) {
         const firstElement = elementsToSwipe[0] as HTMLElement;
         if (firstElement) {
@@ -111,7 +97,7 @@ export default function AiArtMirror() {
       const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
       console.log(`Current index: ${currentIndex}`);
 
-      if (direction === "left" || direction === "up") {
+      if (direction === "left") {
         const previousIndex =
           (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
         const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
@@ -119,8 +105,22 @@ export default function AiArtMirror() {
           previousElement.focus();
           focusedElementRef.current = previousElement; // Update ref
         }
-      } else if (direction === "right" || direction === "down") {
+      } else if (direction === "right") {
         const nextIndex = (currentIndex + 1) % elementsToSwipe.length;
+        const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
+        if (nextElement && nextElement !== focusedElementRef.current) {
+          nextElement.focus();
+          focusedElementRef.current = nextElement; // Update ref
+        }
+      } else if (direction === "down") {
+        const nextIndex = (currentIndex + 2) % elementsToSwipe.length;
+        const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
+        if (nextElement && nextElement !== focusedElementRef.current) {
+          nextElement.focus();
+          focusedElementRef.current = nextElement; // Update ref
+        }
+      } else if (direction === "up") {
+        const nextIndex = (currentIndex - 2) % elementsToSwipe.length;
         const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
         if (nextElement && nextElement !== focusedElementRef.current) {
           nextElement.focus();
@@ -181,6 +181,8 @@ export default function AiArtMirror() {
     startVideo();
   }, []);
 
+  
+
   useEffect(() => {
     const SpeechRecognition = (window.SpeechRecognition ||
       window.webkitSpeechRecognition) as typeof window.SpeechRecognition;
@@ -206,7 +208,7 @@ export default function AiArtMirror() {
     } else {
       console.error("Speech Recognition not supported in this browser.");
     }
-  }, [isRecognizing]);
+  }, []);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
@@ -371,13 +373,23 @@ export default function AiArtMirror() {
         />
         <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
-          <video
+          {/* {showPreview && imageData ? <img className="object-cover w-full h-full" src={imageData || undefined} /> :  <video
             ref={videoRef}
             className='object-cover w-full h-full inverted-video'
             autoPlay
             muted
             onPlay={handleVideoOnPlay}
           />
+
+            } */}
+            <video
+            ref={videoRef}
+            className='object-cover w-full h-full inverted-video'
+            autoPlay
+            muted
+            onPlay={handleVideoOnPlay}
+          />
+         
           <canvas ref={canvasRef} className='hidden' />
           {countdown !== null && (
             <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>

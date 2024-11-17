@@ -4,7 +4,7 @@ const confirmationButtons = document.querySelectorAll(
 );
 const powerOffButton = document.querySelector(".power-off-button");
 
-const socket = io("http://192.168.2.144:3000");
+const socket = io("http://10.22.216.152:3000");
 
 confirmationButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -35,30 +35,6 @@ powerOffButton.addEventListener("click", () => {
       }
     });
   });
-});
-
-document.querySelector("#toggle-camera").addEventListener("click", () => {
-  console.log("Toggle camera");
-  socket.emit("toggle-camera");
-
-  const camera = document.querySelector("#toggle-camera");
-  if (camera.classList.contains("border")) {
-    camera.classList.remove("border");
-  } else {
-    camera.classList.add("border");
-  }
-});
-
-document.querySelector("#toggle-recognizing").addEventListener("click", () => {
-  console.log("Toggle recognizing");
-  socket.emit("toggle-recognizing");
-
-  const slash = document.querySelector("#slash");
-  if (slash.style.display === "none") {
-    slash.style.display = "block";
-  } else {
-    slash.style.display = "none";
-  }
 });
 
 const handleDirection = (direction) => {
