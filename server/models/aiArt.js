@@ -13,6 +13,10 @@ const aiArtSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  art_title: {
+    type: String,
+    required: true,
+  },
 });
 
 export default mongoose.model("aiArt", aiArtSchema);
