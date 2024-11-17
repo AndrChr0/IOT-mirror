@@ -27,8 +27,10 @@ export default function AiArtMirror() {
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
   const [transcription, setTranscription] = useState<string | null>(null);
   const [isRecognizing, setIsRecognizing] = useState(false);
+  const [imageTitle, setImageTitle] = useState<string | null>(null);
 
   console.log("recievedImg", recievedImg);
+  console.log(imageTitle)
 
   useEffect(() => {
     socket.on("style-changed", (style) => {
@@ -291,9 +293,10 @@ export default function AiArtMirror() {
           console.log("Response data:", responseData);
 
           // Extract the AI image URL from the response
-          const { aiPreview, aiImg } = responseData;
+          const { aiPreview, aiImg, aiImageTitle } = responseData;
           setRecievedImg(aiPreview); // Set the received AI image
           setRelativeImg(aiImg);
+          setImageTitle(aiImageTitle);
           console.log("AI image URL:", aiPreview);
           setIsProcessing(false);
         } else {
@@ -415,7 +418,7 @@ export default function AiArtMirror() {
         <AiImagePreview
           openModule
           title='Send to gallery?'
-          artStyle={selectedStyle ? selectedStyle.description : ""}
+          artStyle={imageTitle || ""}
           absoluteImage={recievedImg}
           handleImageData={handleRecievedImg}
           relativeImg={relativeImg || ""}

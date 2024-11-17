@@ -13,6 +13,7 @@ export default function MuseumDisplay() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const prevDataLengthRef = useRef<number>(0);
+  console.log('museum display', aiArtList)
 
   // Function to fetch AI art data
   const fetchAiArt = async () => {
