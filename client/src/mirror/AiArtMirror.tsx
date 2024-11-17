@@ -28,9 +28,8 @@ export default function AiArtMirror() {
   const [transcription, setTranscription] = useState<string | null>(null);
   const [imageTitle, setImageTitle] = useState<string | null>(null);
 
-
   console.log("recievedImg", recievedImg);
-  console.log(imageTitle)
+  console.log(imageTitle);
 
   useEffect(() => {
     socket.on("style-changed", (style) => {
@@ -61,8 +60,8 @@ export default function AiArtMirror() {
         const focusableElements = Array.from(
           document.querySelectorAll("[tabindex]")
         );
-   
-         const elementsToFocus = selectedStyle
+
+        const elementsToFocus = selectedStyle
           ? Array.from(document.querySelectorAll(".selectedTabIndex"))
           : focusableElements;
 
@@ -84,10 +83,10 @@ export default function AiArtMirror() {
       const selectedTabIndexElements = Array.from(
         document.querySelectorAll(".selectedTabIndex")
       );
-        const elementsToSwipe = selectedStyle
+      const elementsToSwipe = selectedStyle
         ? selectedTabIndexElements
         : focusableElements;
-     
+
       if (!focusedElementRef.current) {
         const firstElement = elementsToSwipe[0] as HTMLElement;
         if (firstElement) {
@@ -183,8 +182,6 @@ export default function AiArtMirror() {
 
     startVideo();
   }, []);
-
-  
 
   useEffect(() => {
     const SpeechRecognition = (window.SpeechRecognition ||
@@ -386,14 +383,14 @@ export default function AiArtMirror() {
           />
 
             } */}
-            <video
+          <video
             ref={videoRef}
             className='object-cover w-full h-full inverted-video'
             autoPlay
             muted
             onPlay={handleVideoOnPlay}
           />
-         
+
           <canvas ref={canvasRef} className='hidden' />
           {countdown !== null && (
             <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
@@ -431,7 +428,8 @@ export default function AiArtMirror() {
         <AiImagePreview
           openModule
           title='Send to gallery?'
-          artStyle={imageTitle || ""}
+          artStyle={selectedStyle ? selectedStyle.name : ""}
+          artTitle={imageTitle || ""}
           absoluteImage={recievedImg}
           handleImageData={handleRecievedImg}
           relativeImg={relativeImg || ""}

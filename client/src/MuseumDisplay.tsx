@@ -13,7 +13,7 @@ export default function MuseumDisplay() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const prevDataLengthRef = useRef<number>(0);
-  console.log('museum display', aiArtList)
+  console.log("museum display", aiArtList);
 
   // Function to fetch AI art data
   const fetchAiArt = async () => {
@@ -71,9 +71,11 @@ export default function MuseumDisplay() {
           key={currentArt._id}
           generatedArt={currentArt.url}
           generatedArtStyle={currentArt.art_style}
-          dateGenerated={new Date(
-            currentArt.generation_date
-          ).toLocaleDateString()}
+          dateGenerated={new Date(currentArt.generation_date)
+            .toISOString()
+            .slice(0, 16)
+            .replace("T", " ")
+            .replace(/-/g, "/")}
         />
       ) : (
         <p>No AI art available</p>

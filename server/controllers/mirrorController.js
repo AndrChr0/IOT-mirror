@@ -2,7 +2,7 @@ import aiArt from "../models/aiArt.js";
 
 // Controller to create a new AI art entry
 export const createAiArt = async (req, res) => {
-  const { generation_date, url, art_style } = req.body;
+  const { generation_date, url, art_style, art_title } = req.body;
 
   try {
     // Create a new AI art document using the data from the request body
@@ -10,6 +10,7 @@ export const createAiArt = async (req, res) => {
       generation_date,
       url,
       art_style,
+      art_title,
     });
 
     // Save the new document to the database
