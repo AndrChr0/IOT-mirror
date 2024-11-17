@@ -31,7 +31,7 @@ export default function AiImagePreview({
 
   const handleSubmitArt = async () => {
     // The data object to be sent in the POST request
-    // data format = dd.mm.yyyy hr:min
+
     console.log(new Date().toDateString());
 
     const newArtData = {
