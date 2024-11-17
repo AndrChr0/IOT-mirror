@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import GalleryMainCanvas from "./GalleryMainCanvas";
+import { useImage } from "./context/ImageContext";
 
 interface AiArt {
   generation_date: string;
@@ -9,11 +10,13 @@ interface AiArt {
 }
 
 export default function MuseumDisplay() {
+  const { imageState, DBImages, contextIndex } = useImage();
   const [aiArtList, setAiArtList] = useState<AiArt[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const prevDataLengthRef = useRef<number>(0);
-  console.log("museum display", aiArtList);
+  console.log(`imageState = ${imageState}\nDBImages = ${DBImages}\ncurrentIndex = ${contextIndex}`);
+  // console.log("museum display", aiArtList);
 
   // Function to fetch AI art data
   const fetchAiArt = async () => {
