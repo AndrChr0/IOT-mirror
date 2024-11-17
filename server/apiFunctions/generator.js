@@ -70,9 +70,12 @@ async function generateImage(description, stylePrompt) {
     const savePath = path.join(saveDirectory, dateTtile + ".png");
     const URLtoSend = `http://localhost:5353/images/${dateTtile}.png`;
 
+    const imageTitle = await generateImageTitle(image_url);
+
     const aiOBJ = {
       absoluteURL: image_url,
       relativeURL: URLtoSend,
+      title: imageTitle,
     };
 
     // Ensure the directory exists
@@ -93,4 +96,43 @@ async function generateImage(description, stylePrompt) {
       console.log("generateImage-Error:", error.message);
     }
   }
+}
+
+async function generateImageTitle(img) {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "Generate a title that is descriptive of the image contents phrased as if you are british royalty. The title should be less than 7 words and must end the phrase 'in Gjøvik'.",
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: img,
+                detail: "high",
+              },
+            },
+          ],
+        },
+      ],
+      max_tokens: 100,
+    });
+
+    const imageTitle = response.choices[0].message.content;
+
+    return imageTitle;
+  } catch (error) {
+    if (error.response) {
+      console.log("generateImageTitle-Status:", error.response.status);
+      console.log("generateImageTitle-Data:", error.response.data);
+    } else {
+      console.log("generateImageTitle-Error:", error.message);
+    }
+  }
+  
 }
