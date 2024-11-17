@@ -22,7 +22,7 @@ export default async function main(base64code, stylePrompt) {
           content: [
             {
               type: "text",
-              text: "describe the person and their suroundings in the image",
+              text: "Describe the person or people and their suroundings in the image.",
             },
             {
               type: "image_url",
@@ -57,7 +57,7 @@ async function generateImage(description, stylePrompt) {
   try {
     const response = await openai.images.generate({
       model: "dall-e-3",
-      prompt: `Genarate an image with the following description: ${description} And style it like this: ${stylePrompt}`,
+      prompt: `Generate an image with the following description: ${description}. The focus should be on accurately reflecting the art style described as: ${stylePrompt}, while incorporating the key elements of the scene. Prioritize the art style in terms of color, composition, and technique.`,
       n: 1,
       size: "1024x1024",
     });
@@ -108,7 +108,7 @@ async function generateImageTitle(img) {
           content: [
             {
               type: "text",
-              text: "Generate a title that is descriptive of the image contents phrased as if you are british royalty. The title should be less than 7 words and must end the phrase 'in Gjøvik'.",
+              text: "Based in the image, generate a creative and artistic title that reflects its mood, theme, or story. The title should be concise, evocative, and appropriate for an art gallery",
             },
             {
               type: "image_url",
@@ -134,5 +134,4 @@ async function generateImageTitle(img) {
       console.log("generateImageTitle-Error:", error.message);
     }
   }
-  
 }
