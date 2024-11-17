@@ -74,79 +74,105 @@ const SelectStyle = ({
 
   return (
     <>
-      <div className='artists w-[50vw] scrollable-element m-0'>
-        <div className='artists-content w-[100%] h-full flex gap-5 flex-wrap justify-center pt-4 pb-4 m-0'>
-          <div className='flex items-center justify-between w-full px-[24px]'>
-            <h1 className='text-2xl'>
-              {selectedStyle ? selectedStyle.name : ""}
-            </h1>
-          </div>
-
+      <div className='m-0 pb-[40px] pt-[40px]'>
+        <div className='artists-content w-[100%] h-full flex flex-wrap justify-center m-0'>
           <div className='relative w-full h-full test'>
-            <div className='card-container'>
+            {!selectedStyle && (
+              <>
+              <div className='card-container h-full pl-[120px] pr-[120px]'>
+              <div className="flex flex-col items-center gap-[80px] pt-[60px] pb-[74px]">
+                <span className="albert-sans-regular">see yourself as famous paintings</span>
+                <span className="albert-sans-regular text-5xl text-center flex flex-col gap-[20px]"><span>SELECT</span> <span>ART STYLE</span></span>
+              </div>
+              <div className="w-full justify-around gap-[40px] grid grid-cols-2 grid-rows-3">
               {styles.map((style) => (
                 <div
                   key={style.id}
-                  className='w-[45%] h-[25%] p-1 overflow-hidden cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white scaled-img-container'
+                  className='w-[240px] p-1 overflow-hidden cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white aboreto-regular'
                   onClick={() => handleSelectStyle(style)}
                   tabIndex={1}
                 >
-                  {style.name}{" "}
+                
                   <div className='card-img-container'>
                     <img className='scaled-img' src={style.img[0]} alt='' />
                   </div>
+                  <span className="pl-[10px]">{style.name}{" "}</span>
                 </div>
               ))}
+
+              </div>
+            
             </div>
+              
+              </>
+            )}
+            
             {selectedStyle && (
               <>
-                <div className='selectedStyle'>
+                <div className='selectedStyle pt-[100px] pl-[120px] pr-[120px] w-full'>
                   <div className='selectedStyle-content'>
                     {selectedStyle.img && (
                       <div className='selectedStyle-images'>
-                        <div className='carousel-slide h-[250px] '>
-                          {selectedStyle.img.map((src, index) => (
-                            <img
-                              key={index}
-                              className='mr-2 scaled-img'
-                              src={src}
-                              alt=''
-                            />
-                          ))}
+                        <div className='carousel-slide h-[192px] '>
                           <img
-                            className='scaled-img'
+                            className=''
                             src={selectedStyle.img[0]}
                             alt=''
                           />
                         </div>
                       </div>
                     )}
+                    <h2 className='aboreto-big text-center my-[29px]'>{selectedStyle.name}</h2>
                     {selectedStyle.description && (
                       <>
-                        <p className='mt-2 '>{selectedStyle.description}</p>
-                        <p className='mt-2 mb-[200px] '>
-                          Famous fellas: {selectedStyle.famous_artists}
-                        </p>
+                        <p className='text-[18px]'>{selectedStyle.description}</p>
                       </>
                     )}
                   </div>
 
-                  <div className='fixed bottom-4 selectedStyle-buttons z-[1] '>
+                  <div className="w-full">
+                    <h3 className="text-[24px] text-center mb-[16px]">Characteristics</h3>
+                    <div className="flex justify-center gap-[50px]">
+
+                    {selectedStyle.characteristics && (
+                      <>
+                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_paint.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[0]}</h4><p className="text-[14px] text-center">{selectedStyle.characteristics[1]}</p></div>
+                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_fibonacci.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[2]}</h4><p className="text-[14px] text-center">{selectedStyle.characteristics[3]}</p></div>
+                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_smileys.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[4]}</h4><p className="text-[14px] text-center">{selectedStyle.characteristics[5]}</p></div>                      
+                      </>         
+                      )}
+                    
+                    </div>
+                  </div>
+
+                  <div className='selectedStyle-buttons'>
                     <button
                       tabIndex={1}
                       onClick={onGoBack}
-                      className='selectedTabIndex w-[30%] p-2  text-blue-500 bg-white transition duration-200 border border-blue-500 rounded hover:bg-blue-500 hover:text-white flex items-center justify-center gap-[9px]'
+                      className='selectedTabIndex w-full flex items-center justify-around rounded'
                     >
-                      <FaArrowLeftLong /> Go Back
+                      <img src="assets/icons/arrow_left.png" alt="" /> <span className="aboreto-regular text-[20px] text-[#7A0B0B] underline">GO BACK</span>
                     </button>
 
                     <button
                       tabIndex={1}
                       onClick={onCapturePhoto}
-                      className='w-full p-2 text-white transition duration-200 bg-blue-500 rounded selectedTabIndex hover:bg-blue-700'
+                      className='selectedTabIndex rounded w-full flex items-center justify-between bg-[#3B6246] border-1 border-solid border-[#0F281C] text-[#F0E8D9] text-[20px] px-[12px] py-[8px]'
                     >
-                      Capture Photo
+                      TAKE PICTURE
+                      <img src="assets/icons/camera.png" alt="" />
                     </button>
+                  </div>
+                  <div>
+                    <div>
+                      other peoples ai art
+                    </div>
+                    <div className="flex gap-[17.5px]">
+                      <div className="w-[90px] h-[90px] bg-black"></div>
+                      <div className="w-[90px] h-[90px] bg-black"></div>
+                      <div className="w-[90px] h-[90px] bg-black"></div>
+                      <div className="w-[90px] h-[90px] bg-black"></div>
+                    </div>
                   </div>
                 </div>
               </>
