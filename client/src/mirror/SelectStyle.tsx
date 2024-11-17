@@ -157,7 +157,8 @@ const SelectStyle = ({
                     <button
                       tabIndex={1}
                       onClick={onCapturePhoto}
-                      className='selectedTabIndex rounded w-full flex items-center justify-between bg-[#3B6246] border-1 border-solid border-[#0F281C] text-[#F0E8D9] text-[20px] px-[12px] py-[8px]'
+                      className='selectedTabIndex rounded w-full flex items-center justify-between bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] text-[20px] px-[12px] py-[8px]'
+
                     >
                       TAKE PICTURE
                       <img src="assets/icons/camera.png" alt="" />
