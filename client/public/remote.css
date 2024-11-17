@@ -4,12 +4,24 @@ body {
   height: 100%;
   overflow: hidden;
 }
+
+/* *{
+  outline: 1px solid red;
+} */
 body {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  
+  background-color: black;
+}
+
+.controls-container{
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  background-color: black;
+  width: 300px;
+
+
 }
 
 .remote {

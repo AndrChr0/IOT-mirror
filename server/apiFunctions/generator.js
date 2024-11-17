@@ -22,7 +22,7 @@ export default async function main(base64code, stylePrompt) {
           content: [
             {
               type: "text",
-              text: "describe the person and their suroundings in the image",
+              text: "Describe the person or people and their suroundings in the image.",
             },
             {
               type: "image_url",
@@ -57,7 +57,7 @@ async function generateImage(description, stylePrompt) {
   try {
     const response = await openai.images.generate({
       model: "dall-e-3",
-      prompt: `Genarate an image with the following description: ${description} And style it like this: ${stylePrompt}`,
+      prompt: `Generate an image with the following description: ${description}. The focus should be on accurately reflecting the art style described as: ${stylePrompt}, while incorporating the key elements of the scene. Prioritize the art style in terms of color, composition, and technique.`,
       n: 1,
       size: "1024x1024",
     });
@@ -70,9 +70,12 @@ async function generateImage(description, stylePrompt) {
     const savePath = path.join(saveDirectory, dateTtile + ".png");
     const URLtoSend = `http://localhost:5353/images/${dateTtile}.png`;
 
+    const imageTitle = await generateImageTitle(image_url);
+
     const aiOBJ = {
       absoluteURL: image_url,
       relativeURL: URLtoSend,
+      title: imageTitle,
     };
 
     // Ensure the directory exists
@@ -91,6 +94,44 @@ async function generateImage(description, stylePrompt) {
       console.log("generateImage-error-Data:", error.response.data);
     } else {
       console.log("generateImage-Error:", error.message);
+    }
+  }
+}
+
+async function generateImageTitle(img) {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: "Based in the image, generate a creative and artistic title that reflects its mood, theme, or story. The title should be concise, evocative, and appropriate for an art gallery",
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: img,
+                detail: "high",
+              },
+            },
+          ],
+        },
+      ],
+      max_tokens: 100,
+    });
+
+    const imageTitle = response.choices[0].message.content;
+
+    return imageTitle;
+  } catch (error) {
+    if (error.response) {
+      console.log("generateImageTitle-Status:", error.response.status);
+      console.log("generateImageTitle-Data:", error.response.data);
+    } else {
+      console.log("generateImageTitle-Error:", error.message);
     }
   }
 }

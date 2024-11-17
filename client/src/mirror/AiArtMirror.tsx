@@ -7,7 +7,7 @@ import SelectStyle from "./SelectStyle";
 import { Style } from "./styles";
 import io from "socket.io-client";
 
-const socket = io("http://192.168.2.144:3000");
+const socket = io("http://10.22.216.152:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -26,20 +26,15 @@ export default function AiArtMirror() {
   const [voiceOptions, setVoiceOptions] = useState(false);
   const [styleDropdownOpen, setStyleDropdownOpen] = useState(false);
   const [transcription, setTranscription] = useState<string | null>(null);
-  const [isRecognizing, setIsRecognizing] = useState(false);
+  const [imageTitle, setImageTitle] = useState<string | null>(null);
 
   console.log("recievedImg", recievedImg);
+  console.log(imageTitle);
 
   useEffect(() => {
     socket.on("style-changed", (style) => {
       console.log(`Received style change:`, style);
       setSelectedStyle(style);
-    });
-
-    socket.on("toggle-camera", () => {
-      setShowCapturePhotoButtons((prev) => !prev);
-      const clickSound = new Audio("/assets/click.wav");
-      clickSound.play();
     });
 
     socket.on("handle-go-back", () => {
@@ -48,13 +43,6 @@ export default function AiArtMirror() {
 
     socket.on("handle-capture-photo", () => {
       startCountdown();
-    });
-
-    socket.on("toggle-recognizing", () => {
-      setIsRecognizing((prev) => !prev);
-      console.log("Recognizing:", isRecognizing);
-      const clickSound = new Audio("/assets/click.wav");
-      clickSound.play();
     });
 
     return () => {
@@ -111,7 +99,7 @@ export default function AiArtMirror() {
       const currentIndex = elementsToSwipe.indexOf(focusedElementRef.current);
       console.log(`Current index: ${currentIndex}`);
 
-      if (direction === "left" || direction === "up") {
+      if (direction === "left") {
         const previousIndex =
           (currentIndex - 1 + elementsToSwipe.length) % elementsToSwipe.length;
         const previousElement = elementsToSwipe[previousIndex] as HTMLElement;
@@ -119,8 +107,22 @@ export default function AiArtMirror() {
           previousElement.focus();
           focusedElementRef.current = previousElement; // Update ref
         }
-      } else if (direction === "right" || direction === "down") {
+      } else if (direction === "right") {
         const nextIndex = (currentIndex + 1) % elementsToSwipe.length;
+        const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
+        if (nextElement && nextElement !== focusedElementRef.current) {
+          nextElement.focus();
+          focusedElementRef.current = nextElement; // Update ref
+        }
+      } else if (direction === "down") {
+        const nextIndex = (currentIndex + 2) % elementsToSwipe.length;
+        const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
+        if (nextElement && nextElement !== focusedElementRef.current) {
+          nextElement.focus();
+          focusedElementRef.current = nextElement; // Update ref
+        }
+      } else if (direction === "up") {
+        const nextIndex = (currentIndex - 2) % elementsToSwipe.length;
         const nextElement = elementsToSwipe[nextIndex] as HTMLElement;
         if (nextElement && nextElement !== focusedElementRef.current) {
           nextElement.focus();
@@ -206,7 +208,7 @@ export default function AiArtMirror() {
     } else {
       console.error("Speech Recognition not supported in this browser.");
     }
-  }, [isRecognizing]);
+  }, []);
 
   const handleVideoOnPlay = () => {
     if (videoRef.current && canvasRef.current) {
@@ -291,9 +293,10 @@ export default function AiArtMirror() {
           console.log("Response data:", responseData);
 
           // Extract the AI image URL from the response
-          const { aiPreview, aiImg } = responseData;
+          const { aiPreview, aiImg, aiImageTitle } = responseData;
           setRecievedImg(aiPreview); // Set the received AI image
           setRelativeImg(aiImg);
+          setImageTitle(aiImageTitle);
           console.log("AI image URL:", aiPreview);
           setIsProcessing(false);
         } else {
@@ -358,7 +361,10 @@ export default function AiArtMirror() {
   return (
     <>
       {isProcessing && <Processing />}
-      <div className='flex justify-between'>
+      <div className="grid h-screen bg-[#F0E8D9]"
+  style={{ gridTemplateColumns: '40% 60%' }}>
+      <div className="logo absolute w-[60px] border-t-[1.5px] border-b-[1.5px] border-black mt-[26px] ml-[36px]">* smArt</div>
+
         <SelectStyle
           onCapturePhoto={startCountdown}
           onCloseModal={() => setShowCapturePhotoButtons(false)}
@@ -369,15 +375,25 @@ export default function AiArtMirror() {
           styleDropdownOpen={styleDropdownOpen}
           onGoBack={handleGoBack}
         />
-        <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
+        <div className={`relative h-full ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
-          <video
+          {/* {showPreview && imageData ? <img className="object-cover w-full h-full" src={imageData || undefined} /> :  <video
             ref={videoRef}
             className='object-cover w-full h-full inverted-video'
             autoPlay
             muted
             onPlay={handleVideoOnPlay}
           />
+
+            } */}
+          <video
+            ref={videoRef}
+            className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
+            autoPlay
+            muted
+            onPlay={handleVideoOnPlay}
+          />
+
           <canvas ref={canvasRef} className='hidden' />
           {countdown !== null && (
             <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
@@ -415,7 +431,8 @@ export default function AiArtMirror() {
         <AiImagePreview
           openModule
           title='Send to gallery?'
-          artStyle={selectedStyle ? selectedStyle.description : ""}
+          artStyle={selectedStyle ? selectedStyle.name : ""}
+          artTitle={imageTitle || ""}
           absoluteImage={recievedImg}
           handleImageData={handleRecievedImg}
           relativeImg={relativeImg || ""}
