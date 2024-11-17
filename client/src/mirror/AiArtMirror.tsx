@@ -361,7 +361,10 @@ export default function AiArtMirror() {
   return (
     <>
       {isProcessing && <Processing />}
-      <div className='flex justify-between'>
+      <div className="grid h-screen bg-[#F0E8D9]"
+  style={{ gridTemplateColumns: '40% 60%' }}>
+      <div className="logo absolute w-[60px] border-t-[1.5px] border-b-[1.5px] border-black mt-[26px] ml-[36px]">* smArt</div>
+
         <SelectStyle
           onCapturePhoto={startCountdown}
           onCloseModal={() => setShowCapturePhotoButtons(false)}
@@ -372,7 +375,7 @@ export default function AiArtMirror() {
           styleDropdownOpen={styleDropdownOpen}
           onGoBack={handleGoBack}
         />
-        <div className={`relative h-screen ${blitz ? "blitz-effect" : ""}`}>
+        <div className={`relative h-full ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
           {/* {showPreview && imageData ? <img className="object-cover w-full h-full" src={imageData || undefined} /> :  <video
             ref={videoRef}
@@ -385,7 +388,7 @@ export default function AiArtMirror() {
             } */}
           <video
             ref={videoRef}
-            className='object-cover w-full h-full inverted-video'
+            className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
             autoPlay
             muted
             onPlay={handleVideoOnPlay}
