@@ -27,15 +27,11 @@ export default function AiImagePreview({
 }: AiImagePreviewProps) {
   const [open, setOpen] = useState(openModule);
 
-  console.log("preview Image url:", absoluteImage);
 
   const handleSubmitArt = async () => {
     // The data object to be sent in the POST request
-
-    console.log(new Date().toDateString());
-
     const newArtData = {
-      generation_date: new Date().toDateString(),
+      generation_date: new Date(),
       url: relativeImg,
       art_style: artStyle,
       art_title: artTitle,

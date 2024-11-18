@@ -9,7 +9,7 @@ export default function GalleryMainCanvas({
   dateGenerated,
 }: GalleryMainCanvasProps) {
   return (
-    <div className='bg-neutral-200 h-screen'>
+    <div className='bg-neutral-200 h-screen w-screen fixed'>
       <div className='flex items-center justify-between w-[98%] mx-auto my-0 pt-3'>
         <img
           src='./smart-gallery-logo.png'

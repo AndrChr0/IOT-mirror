@@ -36,7 +36,7 @@ export default function Processing() {
   }, [messages]);
 
   return (
-    <div className='absolute h-dvh w-screen bg-black bg-opacity-90 flex flex-col items-center justify-center z-30 backdrop-blur-[4px]'>
+    <div className='fixed h-dvh w-screen bg-black bg-opacity-90 flex flex-col items-center justify-center z-30 backdrop-blur-[4px]'>
       <span className='text-white text-3xl max-w-[55ch] text-center'>
         {currentMessage}
       </span>
