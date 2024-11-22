@@ -7,6 +7,7 @@ interface AiArt {
   url: string;
   art_style: string;
   _id: string;
+  art_title: string;
 }
 
 export default function MuseumDisplay() {
@@ -15,7 +16,9 @@ export default function MuseumDisplay() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const prevDataLengthRef = useRef<number>(0);
-  console.log(`imageState = ${imageState}\nDBImages = ${DBImages}\ncurrentIndex = ${contextIndex}`);
+  console.log(
+    `imageState = ${imageState}\nDBImages = ${DBImages}\ncurrentIndex = ${contextIndex}`
+  );
   // console.log("museum display", aiArtList);
 
   // Function to fetch AI art data
@@ -72,6 +75,7 @@ export default function MuseumDisplay() {
       {currentArt ? (
         <GalleryMainCanvas
           key={currentArt._id}
+          artTitle={currentArt.art_title}
           generatedArt={currentArt.url}
           generatedArtStyle={currentArt.art_style}
           dateGenerated={new Date(currentArt.generation_date)

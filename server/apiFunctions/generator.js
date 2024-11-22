@@ -14,6 +14,10 @@ const openai = new OpenAI({
 
 export default async function main(base64code, stylePrompt) {
   try {
+    // Generate a description of the image
+
+    console.log(stylePrompt);
+
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -37,10 +41,12 @@ export default async function main(base64code, stylePrompt) {
       max_tokens: 500,
     });
 
+    console.log("Description made successfully");
+
     const imageDescription = response.choices[0].message.content;
+    console.log("Description:", imageDescription);
 
     const imgURL = await generateImage(imageDescription, stylePrompt); // Generate an image from the description
-    console.log("from main function:", imgURL);
     return imgURL;
   } catch (error) {
     if (error.response) {
@@ -53,6 +59,7 @@ export default async function main(base64code, stylePrompt) {
   }
 }
 
+// Generate art from the description
 async function generateImage(description, stylePrompt) {
   try {
     const response = await openai.images.generate({
@@ -61,15 +68,24 @@ async function generateImage(description, stylePrompt) {
       n: 1,
       size: "1024x1024",
     });
+    console.log("Image generated successfully");
 
+    // Determine file and directory paths
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = path.dirname(__filename);
+
+    // Save the image locally
     const image_url = response.data[0].url;
     const dateTtile = Date.now();
     const saveDirectory = path.join(__dirname, "images");
     const savePath = path.join(saveDirectory, dateTtile + ".png");
+
+    // Send releative URL to the client
     const URLtoSend = `http://localhost:5353/images/${dateTtile}.png`;
 
+    console.log("Image URL made:", image_url);
+
+    // generate image title
     const imageTitle = await generateImageTitle(image_url);
 
     const aiOBJ = {
@@ -78,7 +94,6 @@ async function generateImage(description, stylePrompt) {
       title: imageTitle,
     };
 
-    // Ensure the directory exists
     if (!fs.existsSync(saveDirectory)) {
       fs.mkdirSync(saveDirectory);
     }
@@ -98,6 +113,7 @@ async function generateImage(description, stylePrompt) {
   }
 }
 
+// Generate a title for the image
 async function generateImageTitle(img) {
   try {
     const response = await openai.chat.completions.create({
@@ -108,13 +124,13 @@ async function generateImageTitle(img) {
           content: [
             {
               type: "text",
-              text: "Based in the image, generate a creative and artistic title that reflects its mood, theme, or story. The title should be concise, evocative, and appropriate for an art gallery",
+              text: "Based in the image, generate a title that reflects its mood, theme, or story. The title should be appropriate for an art gallery. Return the title without the use of any punctuation.",
             },
             {
               type: "image_url",
               image_url: {
                 url: img,
-                detail: "high",
+                detail: "auto",
               },
             },
           ],
@@ -122,6 +138,8 @@ async function generateImageTitle(img) {
       ],
       max_tokens: 100,
     });
+
+    console.log("Image title generated successfully");
 
     const imageTitle = response.choices[0].message.content;
 
