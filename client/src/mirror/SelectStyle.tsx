@@ -139,8 +139,8 @@ const SelectStyle = ({
                     {selectedStyle.characteristics && (
                       <>
                        <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_paint.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[0]}</h4></div>
-                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_paint.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[1]}</h4></div>
-                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_paint.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[2]}</h4></div>                      
+                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_fibonacci.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[1]}</h4></div>
+                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_smileys.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[2]}</h4></div>                      
                       </>         
                       )}
                     
