@@ -263,6 +263,12 @@ export default function AiArtMirror() {
       });
     }, 1000);
   };
+  useEffect(() => {
+    if (imageData) {
+      handleConfirmScreenshot();
+    }
+  }, [imageData]);
+
 
   const triggerBlitzEffect = () => {
     setBlitz(true);
@@ -360,27 +366,28 @@ export default function AiArtMirror() {
 
   return (
     <>
-      {isProcessing && <Processing />}
+      {/* {isProcessing && <Processing />} */}
       <div className="grid h-screen bg-[#F0E8D9]" style={{ gridTemplateColumns: '40% 60%' }}>
       <div className="logo absolute w-[130px]  mt-[26px] ml-[36px]"><img src="assets/icons/logo.svg" alt="" /></div>
-    {!recievedImg && (
-      <SelectStyle
-      onCapturePhoto={startCountdown}
-      onCloseModal={() => setShowCapturePhotoButtons(false)}
-      onStyleSelect={handleStyleSelect}
-      voiceOptions={voiceOptions}
-      onResetVoiceOptions={() => setVoiceOptions(false)}
-      selectedStyleDrop={selectedStyle}
-      styleDropdownOpen={styleDropdownOpen}
-      onGoBack={handleGoBack}
-    />
-    ) }
+      {!recievedImg && (
+        <SelectStyle
+        onCapturePhoto={startCountdown}
+        onCloseModal={() => setShowCapturePhotoButtons(false)}
+        onStyleSelect={handleStyleSelect}
+        voiceOptions={voiceOptions}
+        onResetVoiceOptions={() => setVoiceOptions(false)}
+        selectedStyleDrop={selectedStyle}
+        styleDropdownOpen={styleDropdownOpen}
+        onGoBack={handleGoBack}
+        isProcessing={isProcessing}
+      />
+      ) }
         
         <div className={`relative h-full ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
-          {/* {showPreview && imageData ? <img className="object-cover w-full h-full" src={imageData || undefined} /> :  <video
+          {/* {showPreview && imageData ? <img className="object-cover w-full h-full pt-[40px] pr-[40px] pb-[40px]" src={imageData || undefined} /> :  <video
             ref={videoRef}
-            className='object-cover w-full h-full inverted-video'
+            className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
             autoPlay
             muted
             onPlay={handleVideoOnPlay}
@@ -402,7 +409,7 @@ export default function AiArtMirror() {
             </div>
           )}
 
-          {showPreview && imageData && (
+          {/* {showPreview && imageData && (
             <>
               <ImageModal
                 title={`Do you want to transform this image into "${
@@ -416,7 +423,7 @@ export default function AiArtMirror() {
                 confirmMoodScreenshot={handleConfirmScreenshot}
               />
             </>
-          )}
+          )} */}
 
           {isProcessing && <Processing />}
           {transcription && (

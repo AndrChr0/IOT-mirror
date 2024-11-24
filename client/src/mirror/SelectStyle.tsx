@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import "./SelectStyle.css";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { Style, styles } from "./styles";
 
 interface SelectStyleProps {
@@ -12,6 +11,7 @@ interface SelectStyleProps {
   selectedStyleDrop: Style | null;
   styleDropdownOpen: boolean;
   onGoBack: () => void;
+  isProcessing: boolean;
 }
 
 const SelectStyle = ({
@@ -22,6 +22,7 @@ const SelectStyle = ({
   selectedStyleDrop,
   styleDropdownOpen,
   onGoBack,
+  isProcessing,
 }: SelectStyleProps) => {
   const [selectedStyle, setSelectedStyle] = useState<Style | null>(
     selectedStyleDrop
@@ -107,7 +108,7 @@ const SelectStyle = ({
               </>
             )}
             
-            {selectedStyle && (
+            {selectedStyle && !isProcessing && (
               <>
                 <div className='selectedStyle pt-[100px] pl-[120px] pr-[120px] w-full'>
                   <div className='selectedStyle-content'>
@@ -175,6 +176,13 @@ const SelectStyle = ({
                       <div className="w-[90px] h-[90px] bg-black"></div>
                     </div>
                   </div>
+                </div>
+              </>
+            )}
+            {isProcessing && selectedStyle && (
+              <>
+               <div className='selectedStyle pt-[100px] pl-[120px] pr-[120px] w-full'>
+                  <p>processing</p>
                 </div>
               </>
             )}
