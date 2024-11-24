@@ -4,7 +4,7 @@ const confirmationButtons = document.querySelectorAll(
 );
 const powerOffButton = document.querySelector(".power-off-button");
 
-const socket = io("http://10.22.218.79:3000");
+const socket = io("http://:3000");
 
 confirmationButtons.forEach((button) => {
   button.addEventListener("click", () => {
