@@ -6,6 +6,8 @@ import Processing from "./Processing";
 import SelectStyle from "./SelectStyle";
 import { Style } from "./styles";
 import io from "socket.io-client";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const socket = io("http://10.22.218.79:3000");
 
@@ -367,8 +369,35 @@ export default function AiArtMirror() {
   console.log("ÆÆÆÆÆÆÆÆÆÆÆ recievedImg", recievedImg);
   console.log("ÆÆÆÆÆÆÆÆÆÆÆ imageData", imageData);
   console.log("ÆÆÆÆÆÆÆÆÆÆÆ showPreview", showPreview);
+
+  const runToastSuccess = () =>
+    toast.success("AI image sent to Gallery!", {
+      position: "top-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+      // transition: Bounce,
+    });
+
   return (
     <>
+      <ToastContainer
+        position='top-center'
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='colored'
+        // transition: Bounce,
+      />
       <div
         className='grid h-screen bg-[#F0E8D9]'
         style={{ gridTemplateColumns: "40% 60%" }}
@@ -395,6 +424,7 @@ export default function AiArtMirror() {
             artTitle={imageTitle || ""}
             handleImageData={handleRecievedImg}
             relativeImg={relativeImg || ""}
+            runToastSuccess={runToastSuccess}
           />
         )}
 

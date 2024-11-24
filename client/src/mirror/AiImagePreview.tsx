@@ -12,6 +12,7 @@ interface AiImagePreviewProps {
   relativeImg: string;
   openModule: boolean;
   artTitle: string;
+  runToastSuccess: () => void;
 }
 
 export default function AiImagePreview({
@@ -19,6 +20,7 @@ export default function AiImagePreview({
   artStyle,
   relativeImg,
   artTitle,
+  runToastSuccess,
 }: AiImagePreviewProps) {
   const handleSubmitArt = async () => {
     // The data object to be sent in the POST request
@@ -44,6 +46,7 @@ export default function AiImagePreview({
         console.log("AI art created successfully!");
         console.log(data); // The saved AI art object returned from the server
         handleImageData(null);
+        runToastSuccess();
       } else {
         console.log("Error creating AI art");
         console.error(data);
