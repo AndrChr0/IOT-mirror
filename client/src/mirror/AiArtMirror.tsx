@@ -181,7 +181,7 @@ export default function AiArtMirror() {
     };
 
     startVideo();
-  }, []);
+  }, [showPreview]);
 
   useEffect(() => {
     const SpeechRecognition = (window.SpeechRecognition ||
@@ -329,6 +329,9 @@ export default function AiArtMirror() {
 
   const handleRecievedImg = (img: string | null) => {
     setRecievedImg(img);
+    setImageData(null);
+    setShowPreview(false);
+    setSelectedStyle(null);
   };
 
   const handleStyleSelect = (style: Style) => {
@@ -361,7 +364,9 @@ export default function AiArtMirror() {
       }
     }
   }, [isProcessing]);
-
+  console.log("ÆÆÆÆÆÆÆÆÆÆÆ recievedImg", recievedImg);
+  console.log("ÆÆÆÆÆÆÆÆÆÆÆ imageData", imageData);
+  console.log("ÆÆÆÆÆÆÆÆÆÆÆ showPreview", showPreview);
   return (
     <>
       <div
@@ -393,19 +398,14 @@ export default function AiArtMirror() {
           />
         )}
 
-
         <div className={`relative h-full ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
-          {imageData ? <img className="object-cover w-full h-full pt-[40px] pr-[40px] pb-[40px]" src={imageData || undefined} /> :  <video
-            ref={videoRef}
-            className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
-            autoPlay
-            muted
-            onPlay={handleVideoOnPlay}
-          />
-
-            } */}
-          {!recievedImg && !showPreview ? (
+          {imageData ? (
+            <img
+              className='object-cover w-full h-full pt-[40px] pr-[40px] pb-[40px]'
+              src={imageData || undefined}
+            />
+          ) : !recievedImg && !showPreview ? (
             <video
               ref={videoRef}
               className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
@@ -420,7 +420,6 @@ export default function AiArtMirror() {
               className='object-cover h-[100dvh] pt-[40px] pl-[100px] pb-[40px]'
             />
           )}
-
 
           <canvas ref={canvasRef} className='hidden' />
           {countdown !== null && (
@@ -444,7 +443,6 @@ export default function AiArtMirror() {
               />
             </>
           )} */}
-
 
           {transcription && (
             <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
