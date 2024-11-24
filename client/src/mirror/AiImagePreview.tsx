@@ -74,33 +74,35 @@ export default function AiImagePreview({
         </div>
       )}
       <div className='pt-[15dvh]'>
-        <div className="w-[30dvw] bg-[#D4BD91] flex flex-col items-center p-4 border border-[#44361C] rounded-[12px]">
-          <div className="mb-[3dvh]">
-            <p className="aboreto-regular text-[24px] mb-[2dvh]">TODAYS GALLERY</p>
-            <p className="text-[19px]">We want to share your ai generated art to the smArt Gallery. The gallery is open to the public for 12 hours.</p>
+        <div className='w-[30dvw] bg-[#D4BD91] flex flex-col items-center p-4 border border-[#44361C] rounded-[12px]'>
+          <div className='mb-[3dvh]'>
+            <p className='aboreto-regular text-[24px] mb-[2dvh]'>
+              TODAYS GALLERY
+            </p>
+            <p className='text-[19px]'>
+              We want to share your ai generated art to the smArt Gallery. The
+              gallery is open to the public for 12 hours.
+            </p>
           </div>
-          <div className="flex gap-12">
-          <button
-            tabIndex={1}
-            type='button'
-            className='selectedTabIndex flex items-center w-[10dvw] justify-around text-[20px] text-[#7A0B0B] underline rounded'
-            onClick={() => handleImageData(null)}
-          >
-            <img src='assets/icons/arrow_left.png' alt='' className='' />{" "}
-            <span>BACK TO START</span>
-          </button>
-
-          <button
-            type='submit'
-            className='selectedTabIndex rounded w-[12dvw] flex items-center justify-between bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] text-[20px] px-[12px] py-[8px]'
-            onClick={() => handleSubmitArt()}
-          >
-            <span>SEND TO GALLERY</span>
-            <img src='assets/icons/shareArrow.png' alt='' className='' />{" "}
-          </button>
-
+          <div className='flex gap-12 flex-row-reverse'>
+            <button
+              type='submit'
+              className='selectedTabIndex rounded w-[12dvw] flex items-center justify-between bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] text-[20px] px-[12px] py-[8px]'
+              onClick={() => handleSubmitArt()}
+            >
+              <span>SEND TO GALLERY</span>
+              <img src='assets/icons/shareArrow.png' alt='' className='' />{" "}
+            </button>
+            <button
+              tabIndex={1}
+              type='button'
+              className='selectedTabIndex flex items-center w-[10dvw] justify-around text-[20px] text-[#7A0B0B] underline rounded'
+              onClick={() => handleImageData(null)}
+            >
+              <img src='assets/icons/arrow_left.png' alt='' className='' />{" "}
+              <span>BACK TO START</span>
+            </button>
           </div>
-        
         </div>
       </div>
 
