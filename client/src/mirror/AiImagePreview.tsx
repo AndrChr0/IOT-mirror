@@ -28,7 +28,7 @@ export default function AiImagePreview({
       generation_date: new Date(),
       url: relativeImg,
       art_style: artStyle,
-      art_title: artTitle,
+      art_title: artTitle.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ""),
     };
 
     try {
