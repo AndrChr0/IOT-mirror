@@ -263,6 +263,11 @@ export default function AiArtMirror() {
       });
     }, 1000);
   };
+  useEffect(() => {
+    if (imageData) {
+      handleConfirmScreenshot();
+    }
+  }, [imageData]);
 
   const triggerBlitzEffect = () => {
     setBlitz(true);
@@ -272,7 +277,6 @@ export default function AiArtMirror() {
   // SKAL BRUKES TIL Å SENDE IMG TIL BACKEND
   const handleConfirmScreenshot = async () => {
     setIsProcessing(true);
-    setShowPreview(false);
 
     if (imageData) {
       try {
@@ -360,7 +364,6 @@ export default function AiArtMirror() {
 
   return (
     <>
-      {isProcessing && <Processing />}
       <div
         className='grid h-screen bg-[#F0E8D9]'
         style={{ gridTemplateColumns: "40% 60%" }}
@@ -378,6 +381,7 @@ export default function AiArtMirror() {
             selectedStyleDrop={selectedStyle}
             styleDropdownOpen={styleDropdownOpen}
             onGoBack={handleGoBack}
+            isProcessing={isProcessing}
           />
         ) : (
           <AiImagePreview
@@ -389,11 +393,12 @@ export default function AiArtMirror() {
           />
         )}
 
+
         <div className={`relative h-full ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
-          {/* {showPreview && imageData ? <img className="object-cover w-full h-full" src={imageData || undefined} /> :  <video
+          {imageData ? <img className="object-cover w-full h-full pt-[40px] pr-[40px] pb-[40px]" src={imageData || undefined} /> :  <video
             ref={videoRef}
-            className='object-cover w-full h-full inverted-video'
+            className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
             autoPlay
             muted
             onPlay={handleVideoOnPlay}
@@ -416,6 +421,7 @@ export default function AiArtMirror() {
             />
           )}
 
+
           <canvas ref={canvasRef} className='hidden' />
           {countdown !== null && (
             <div className='absolute p-4 text-white transform -translate-x-1/2 -translate-y-1/2 text-9xl top-1/2 left-1/2'>
@@ -423,7 +429,7 @@ export default function AiArtMirror() {
             </div>
           )}
 
-          {showPreview && imageData && (
+          {/* {showPreview && imageData && (
             <>
               <ImageModal
                 title={`Do you want to transform this image into "${
@@ -437,9 +443,9 @@ export default function AiArtMirror() {
                 confirmMoodScreenshot={handleConfirmScreenshot}
               />
             </>
-          )}
+          )} */}
 
-          {isProcessing && <Processing />}
+
           {transcription && (
             <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
               <div className='h-auto text-white bg-black bg-opacity-50 transcription-container'>
