@@ -21,12 +21,13 @@ export default function AiImagePreview({
   artTitle,
 }: AiImagePreviewProps) {
   const handleSubmitArt = async () => {
+    // const AAAAAAA = artTitle;
     // The data object to be sent in the POST request
     const newArtData = {
       generation_date: new Date(),
       url: relativeImg,
       art_style: artStyle,
-      art_title: artTitle,
+      art_title: artTitle.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, ""),
     };
 
     try {
