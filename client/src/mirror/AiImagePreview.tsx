@@ -7,27 +7,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 interface AiImagePreviewProps {
-  absoluteImage: string;
   artStyle: string;
   handleImageData: (img: string | null) => void;
   relativeImg: string;
-  title: string;
   openModule: boolean;
   artTitle: string;
 }
 
 export default function AiImagePreview({
-  absoluteImage,
   handleImageData,
   artStyle,
   relativeImg,
-  title,
-  openModule,
   artTitle,
 }: AiImagePreviewProps) {
-  const [open, setOpen] = useState(openModule);
-
-
   const handleSubmitArt = async () => {
     // The data object to be sent in the POST request
     const newArtData = {
@@ -62,35 +54,48 @@ export default function AiImagePreview({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        aria-describedby={undefined}
-        className='sm:max-w-[525px] p-4 !rounded overflow-hidden'
-        onInteractOutside={(event) => event.preventDefault()}
-      >
-        <div className='relative'>
-          <img src={absoluteImage} alt='AI image' className='w-full h-auto' />
+    // <div  className=''>
+    <div
+      className='flex flex-col relative top-[20dvh] left-[2dvw] items-center'
+      aria-describedby={undefined}
+    >
+      <h1 className='text-5xl pb-[10dvh] albert-sans-regular'>
+        YOUR ART IS GENERATED
+      </h1>
+      {artTitle && (
+        <div className=' flex flex-col justify-center items-center gap-8'>
+          <p className='text-xl '>Title of the artwork</p>
+          <h2 className='text-5xl aboreto-regular text-center'>
+            “{artTitle.toLocaleUpperCase()}”
+          </h2>
         </div>
-        {title && <DialogTitle className='p-0 text-lg'>{title}</DialogTitle>}
-        <DialogFooter className='flex p-0 bg-white md:items-center sm:justify-end'>
-          <Button
-            type='submit'
-            className='text-white bg-blue-500 rounded hover:bg-blue-600 selectedTabIndex'
-            onClick={() => handleSubmitArt()}
-          >
-            Send to gallery
-          </Button>
-          <Button
-            tabIndex={1}
-            type='button'
-            variant='secondary'
-            className='rounded selectedTabIndex'
-            onClick={() => handleImageData(null)}
-          >
-            Cancel
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      )}
+      <div className='flex gap-12 pt-[20dvh]'>
+        <button
+          tabIndex={1}
+          type='button'
+          className='selectedTabIndex flex items-center w-[10dvw] justify-around text-[20px] text-[#7A0B0B] underline'
+          onClick={() => handleImageData(null)}
+        >
+          <img src='assets/icons/arrow_left.png' alt='' className='' />{" "}
+          <span>BACK TO START</span>
+        </button>
+
+        <button
+          type='submit'
+          className='selectedTabIndex rounded w-[12dvw] flex items-center justify-between bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] text-[20px] px-[12px] py-[8px]'
+          onClick={() => handleSubmitArt()}
+        >
+          <span>SEND TO GALLERY</span>
+          <img src='assets/icons/shareArrow.png' alt='' className='' />{" "}
+        </button>
+      </div>
+
+      <div className='flex flex-col justify-center items-center pt-[15dvh]'>
+        <h2 className='text-xl'>Want to see other paintings?</h2>
+        <p>more generated artworks are displayed on </p>
+        <p>the smArt gallery</p>
+      </div>
+    </div>
   );
 }

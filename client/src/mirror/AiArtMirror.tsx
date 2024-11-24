@@ -364,23 +364,36 @@ export default function AiArtMirror() {
 
   return (
     <>
-      {/* {isProcessing && <Processing />} */}
-      <div className="grid h-screen bg-[#F0E8D9]" style={{ gridTemplateColumns: '40% 60%' }}>
-      <div className="logo absolute w-[130px]  mt-[26px] ml-[36px]"><img src="assets/icons/logo.svg" alt="" /></div>
-      {!recievedImg && (
-        <SelectStyle
-        onCapturePhoto={startCountdown}
-        onCloseModal={() => setShowCapturePhotoButtons(false)}
-        onStyleSelect={handleStyleSelect}
-        voiceOptions={voiceOptions}
-        onResetVoiceOptions={() => setVoiceOptions(false)}
-        selectedStyleDrop={selectedStyle}
-        styleDropdownOpen={styleDropdownOpen}
-        onGoBack={handleGoBack}
-        isProcessing={isProcessing}
-      />
-      ) }
-        
+      <div
+        className='grid h-screen bg-[#F0E8D9]'
+        style={{ gridTemplateColumns: "40% 60%" }}
+      >
+        <div className='logo absolute w-[130px]  mt-[26px] ml-[36px]'>
+          <img src='assets/icons/logo.svg' alt='' />
+        </div>
+        {!recievedImg ? (
+          <SelectStyle
+            onCapturePhoto={startCountdown}
+            onCloseModal={() => setShowCapturePhotoButtons(false)}
+            onStyleSelect={handleStyleSelect}
+            voiceOptions={voiceOptions}
+            onResetVoiceOptions={() => setVoiceOptions(false)}
+            selectedStyleDrop={selectedStyle}
+            styleDropdownOpen={styleDropdownOpen}
+            onGoBack={handleGoBack}
+            isProcessing={isProcessing}
+          />
+        ) : (
+          <AiImagePreview
+            openModule
+            artStyle={selectedStyle ? selectedStyle.name : ""}
+            artTitle={imageTitle || ""}
+            handleImageData={handleRecievedImg}
+            relativeImg={relativeImg || ""}
+          />
+        )}
+
+
         <div className={`relative h-full ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
           {imageData ? <img className="object-cover w-full h-full pt-[40px] pr-[40px] pb-[40px]" src={imageData || undefined} /> :  <video
@@ -391,14 +404,23 @@ export default function AiArtMirror() {
             onPlay={handleVideoOnPlay}
           />
 
-            }
-          {/* <video
-            ref={videoRef}
-            className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
-            autoPlay
-            muted
-            onPlay={handleVideoOnPlay}
-          /> */}
+            } */}
+          {!recievedImg && !showPreview ? (
+            <video
+              ref={videoRef}
+              className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
+              autoPlay
+              muted
+              onPlay={handleVideoOnPlay}
+            />
+          ) : (
+            <img
+              src={recievedImg || ""}
+              alt='AI generated image'
+              className='object-cover h-[100dvh] pt-[40px] pl-[100px] pb-[40px]'
+            />
+          )}
+
 
           <canvas ref={canvasRef} className='hidden' />
           {countdown !== null && (
@@ -433,7 +455,7 @@ export default function AiArtMirror() {
           )}
         </div>
       </div>
-      {recievedImg && (
+      {/* {recievedImg && (
         <AiImagePreview
           openModule
           title='Send to gallery?'
@@ -443,7 +465,7 @@ export default function AiArtMirror() {
           handleImageData={handleRecievedImg}
           relativeImg={relativeImg || ""}
         />
-      )}
+      )} */}
     </>
   );
 }
