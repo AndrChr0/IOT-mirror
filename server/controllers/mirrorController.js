@@ -30,3 +30,13 @@ export const getAllAiArt = async (req, res) => {
     res.status(500).json({ message: "Error fetching AI art", error });
   }
 };
+
+// Controller to fetch only the newest AI art entry
+export const getLatestArt = async (req, res) => {
+  try {
+    const latestArt = await aiArt.findOne().sort({_id:-1}); // Sort documents so only the newest record is returned
+    res.status(200).json(latestArt);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching AI art", error });
+  }
+};
