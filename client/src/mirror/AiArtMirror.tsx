@@ -7,7 +7,7 @@ import SelectStyle from "./SelectStyle";
 import { Style } from "./styles";
 import io from "socket.io-client";
 
-const socket = io("http://10.22.216.152:3000");
+const socket = io("http://10.22.218.79:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -361,20 +361,21 @@ export default function AiArtMirror() {
   return (
     <>
       {isProcessing && <Processing />}
-      <div className="grid h-screen bg-[#F0E8D9]"
-  style={{ gridTemplateColumns: '40% 60%' }}>
-      <div className="logo absolute w-[60px] border-t-[1.5px] border-b-[1.5px] border-black mt-[26px] ml-[36px]">* smArt</div>
-
-        <SelectStyle
-          onCapturePhoto={startCountdown}
-          onCloseModal={() => setShowCapturePhotoButtons(false)}
-          onStyleSelect={handleStyleSelect}
-          voiceOptions={voiceOptions}
-          onResetVoiceOptions={() => setVoiceOptions(false)}
-          selectedStyleDrop={selectedStyle}
-          styleDropdownOpen={styleDropdownOpen}
-          onGoBack={handleGoBack}
-        />
+      <div className="grid h-screen bg-[#F0E8D9]" style={{ gridTemplateColumns: '40% 60%' }}>
+      <div className="logo absolute w-[130px]  mt-[26px] ml-[36px]"><img src="assets/icons/logo.svg" alt="" /></div>
+    {!recievedImg && (
+      <SelectStyle
+      onCapturePhoto={startCountdown}
+      onCloseModal={() => setShowCapturePhotoButtons(false)}
+      onStyleSelect={handleStyleSelect}
+      voiceOptions={voiceOptions}
+      onResetVoiceOptions={() => setVoiceOptions(false)}
+      selectedStyleDrop={selectedStyle}
+      styleDropdownOpen={styleDropdownOpen}
+      onGoBack={handleGoBack}
+    />
+    ) }
+        
         <div className={`relative h-full ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
           {/* {showPreview && imageData ? <img className="object-cover w-full h-full" src={imageData || undefined} /> :  <video
