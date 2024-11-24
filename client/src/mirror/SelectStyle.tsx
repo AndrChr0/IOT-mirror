@@ -203,11 +203,41 @@ const SelectStyle = ({
                       <p className='text-center'>Other peoples AI art</p>
                     </div>
                     <div className='flex gap-[17.5px]'>
-                      <div className='w-[90px] h-[90px] bg-black'></div>
-                      <div className='w-[90px] h-[90px] bg-black'></div>
-                      <div className='w-[90px] h-[90px] bg-black'></div>
-                      <div className='w-[90px] h-[90px] bg-black'></div>
-                      <div className='w-[90px] h-[90px] bg-black'></div>
+                      <div className='w-[90px] h-[90px]'>
+                        {" "}
+                        <img
+                          src='assets/images/ai-1.png'
+                          alt='AI generated image'
+                        />
+                      </div>
+                      <div className='w-[90px] h-[90px]'>
+                        {" "}
+                        <img
+                          src='assets/images/ai-2.png'
+                          alt='AI generated image'
+                        />
+                      </div>
+                      <div className='w-[90px] h-[90px]'>
+                        {" "}
+                        <img
+                          src='assets/images/ai-3.png'
+                          alt='AI generated image'
+                        />
+                      </div>
+                      <div className='w-[90px] h-[90px]'>
+                        {" "}
+                        <img
+                          src='assets/images/ai-4.png'
+                          alt='AI generated image'
+                        />
+                      </div>
+                      <div className='w-[90px] h-[90px]'>
+                        {" "}
+                        <img
+                          src='assets/images/ai-5.png'
+                          alt='AI generated image'
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -227,7 +257,7 @@ const SelectStyle = ({
 
                   <div>
                     <p className='text-center text-[24px] mb-[30px]'>
-                      Known artworks within expressionism
+                      Known artworks within {selectedStyle.name}
                     </p>
                     <div className='flex gap-[17.5px]'>
                       <figure className='w-[208px] h-[143px] bg-black'>
