@@ -9,7 +9,7 @@ import io from "socket.io-client";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const socket = io("http://10.22.218.79:3000");
+const socket = io("http://:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -431,11 +431,19 @@ export default function AiArtMirror() {
         <div className={`relative h-full ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
           {imageData ? (
+            <>
             <img
-              className='object-cover w-full h-full pt-[40px] pr-[40px] pb-[40px]'
+                className="object-cover w-full h-full pt-[40px] pr-[40px] pb-[40px] overlay-opacity"
               src={imageData || undefined}
             />
+            <div className="absolute top-0 w-full h-[90%] flex justify-center items-center  mt-[40px] mr-[40px] mb-[40px]">
+              <img className="w-auto" src="https://discuss.wxpython.org/uploads/default/original/2X/6/6d0ec30d8b8f77ab999f765edd8866e8a97d59a3.gif" alt="" />
+            </div>
+           
+            </>
+            
           ) : !recievedImg && !showPreview ? (
+            <>
             <video
               ref={videoRef}
               className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
@@ -443,6 +451,10 @@ export default function AiArtMirror() {
               muted
               onPlay={handleVideoOnPlay}
             />
+            
+            </>
+            
+            
           ) : (
             <img
               src={recievedImg || ""}

@@ -138,16 +138,16 @@ const SelectStyle = ({
 
                     {selectedStyle.characteristics && (
                       <>
-                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_paint.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[0]}</h4><p className="text-[14px] text-center">{selectedStyle.characteristics[1]}</p></div>
-                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_fibonacci.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[2]}</h4><p className="text-[14px] text-center">{selectedStyle.characteristics[3]}</p></div>
-                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_smileys.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[4]}</h4><p className="text-[14px] text-center">{selectedStyle.characteristics[5]}</p></div>                      
+                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_paint.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[0]}</h4></div>
+                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_paint.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[1]}</h4></div>
+                       <div className="w-full h-[200px] "><img className="mx-auto my-0" src="assets/images/icon_characteristics_paint.png" alt="" /><h4 className="font-bold text-center">{selectedStyle.characteristics[2]}</h4></div>                      
                       </>         
                       )}
                     
                     </div>
                   </div>
 
-                  <div className='selectedStyle-buttons'>
+                  <div className='selectedStyle-buttons '>
                     <button
                       tabIndex={1}
                       onClick={onGoBack}
@@ -168,9 +168,10 @@ const SelectStyle = ({
                   </div>
                   <div>
                     <div>
-                      other peoples ai art
+                      <p className="text-center">Other peoples AI art</p>
                     </div>
                     <div className="flex gap-[17.5px]">
+                      <div className="w-[90px] h-[90px] bg-black"></div>
                       <div className="w-[90px] h-[90px] bg-black"></div>
                       <div className="w-[90px] h-[90px] bg-black"></div>
                       <div className="w-[90px] h-[90px] bg-black"></div>
