@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./SelectStyle.css";
-import { FaArrowLeftLong } from "react-icons/fa6";
 import { Style, styles } from "./styles";
+import Processing from "./Processing";
 
 interface SelectStyleProps {
   onCapturePhoto: () => void;
@@ -12,6 +12,7 @@ interface SelectStyleProps {
   selectedStyleDrop: Style | null;
   styleDropdownOpen: boolean;
   onGoBack: () => void;
+  isProcessing: boolean;
 }
 
 const SelectStyle = ({
@@ -22,6 +23,7 @@ const SelectStyle = ({
   selectedStyleDrop,
   styleDropdownOpen,
   onGoBack,
+  isProcessing,
 }: SelectStyleProps) => {
   const [selectedStyle, setSelectedStyle] = useState<Style | null>(
     selectedStyleDrop
@@ -107,7 +109,7 @@ const SelectStyle = ({
               </>
             )}
             
-            {selectedStyle && (
+            {selectedStyle && !isProcessing && (
               <>
                 <div className='selectedStyle pt-[100px] pl-[120px] pr-[120px] w-full'>
                   <div className='selectedStyle-content'>
@@ -175,6 +177,43 @@ const SelectStyle = ({
                       <div className="w-[90px] h-[90px] bg-black"></div>
                     </div>
                   </div>
+                </div>
+              </>
+            )}
+            {isProcessing && selectedStyle && (
+              <>
+               <div className='selectedStyle pt-[100px] pl-[120px] pr-[120px] w-full '>
+                <div className="w-[150%] pt-[100px]">
+                  <p className="text-center text-[48px] albert-sans-regular">GENERATING YOUR ART</p>
+                  <p className="text-center akatab-regular">Just a moment, the Ai is generating your image</p>
+                </div>
+                  
+                  <div>
+                    <p className="text-center text-[24px] mb-[30px]">Known artworks within expressionism</p>
+                    <div className="flex gap-[17.5px]">
+                      <figure className="w-[208px] h-[143px] bg-black">
+                        <img className="w-full h-full" src="" alt="" />
+                        <figcaption>ydsdsao</figcaption>
+                      </figure>
+                      <figure className="w-[208px] h-[143px] bg-black">
+                        <img className="w-full h-full" src="" alt="" />
+                        <figcaption>ydsdsao</figcaption>
+                      </figure>
+                      <figure className="w-[208px] h-[143px] bg-black">
+                        <img className="w-full h-full" src="" alt="" />
+                        <figcaption>ydsdsao</figcaption>
+                      </figure>
+                    </div>
+                  </div>
+               
+
+                <div className="relative w-[501px] h-[107px] border-2 border-black">
+                  <div className="absolute p-2 pl-5 ml-[-2px] mt-[-21px] bg-[#F0E8D9] font-bold">Did you know</div>
+                  <div className="absolute w-[50px] h-[62px] ml-[-40px] mt-[-35px]"><img className="animate-pulse-icon" src="assets/icons/light_bulb.png" alt="" /></div>
+                  <div className="py-5 px-8"> <Processing/> </div>
+                </div>
+
+
                 </div>
               </>
             )}
