@@ -21,7 +21,6 @@ export default function AiImagePreview({
   artTitle,
 }: AiImagePreviewProps) {
   const handleSubmitArt = async () => {
-    // const AAAAAAA = artTitle;
     // The data object to be sent in the POST request
     const newArtData = {
       generation_date: new Date(),
