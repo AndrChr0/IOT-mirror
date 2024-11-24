@@ -11,14 +11,12 @@ interface AiArt {
 }
 
 export default function MuseumDisplay() {
-  const { imageState, DBImages, contextIndex } = useImage();
+  const { fetchLatestArt } = useImage();
+  // const { imageState, DBImages, contextIndex } = useImage();
   const [aiArtList, setAiArtList] = useState<AiArt[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const prevDataLengthRef = useRef<number>(0);
-  console.log(
-    `imageState = ${imageState}\nDBImages = ${DBImages}\ncurrentIndex = ${contextIndex}`
-  );
   // console.log("museum display", aiArtList);
 
   // Function to fetch AI art data
@@ -56,6 +54,8 @@ export default function MuseumDisplay() {
 
   // Update currentIndex every 15 seconds to show next image
   useEffect(() => {
+    // console.log(JSON.stringify(DBImages));
+    fetchLatestArt();
     const displayInterval = setInterval(() => {
       setCurrentIndex((prevIndex) =>
         aiArtList.length ? (prevIndex + 1) % aiArtList.length : 0
