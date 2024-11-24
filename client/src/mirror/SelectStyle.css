@@ -47,6 +47,22 @@
   }
 }
 
+@keyframes pulse-icon {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+.animate-pulse-icon {
+  animation: pulse-icon 1.5s infinite ease-in-out;
+}
+
+
 
 .selectedStyle {
   display: flex;

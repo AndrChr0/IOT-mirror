@@ -269,7 +269,6 @@ export default function AiArtMirror() {
     }
   }, [imageData]);
 
-
   const triggerBlitzEffect = () => {
     setBlitz(true);
     setTimeout(() => setBlitz(false), 500);
@@ -278,7 +277,6 @@ export default function AiArtMirror() {
   // SKAL BRUKES TIL Å SENDE IMG TIL BACKEND
   const handleConfirmScreenshot = async () => {
     setIsProcessing(true);
-    setShowPreview(false);
 
     if (imageData) {
       try {
@@ -385,7 +383,7 @@ export default function AiArtMirror() {
         
         <div className={`relative h-full ${blitz ? "blitz-effect" : ""}`}>
           <div className='absolute z-10 w-full mt-20'></div>
-          {/* {showPreview && imageData ? <img className="object-cover w-full h-full pt-[40px] pr-[40px] pb-[40px]" src={imageData || undefined} /> :  <video
+          {imageData ? <img className="object-cover w-full h-full pt-[40px] pr-[40px] pb-[40px]" src={imageData || undefined} /> :  <video
             ref={videoRef}
             className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
             autoPlay
@@ -393,14 +391,14 @@ export default function AiArtMirror() {
             onPlay={handleVideoOnPlay}
           />
 
-            } */}
-          <video
+            }
+          {/* <video
             ref={videoRef}
             className='object-cover w-full h-full inverted-video pt-[40px] pl-[40px] pb-[40px]'
             autoPlay
             muted
             onPlay={handleVideoOnPlay}
-          />
+          /> */}
 
           <canvas ref={canvasRef} className='hidden' />
           {countdown !== null && (
@@ -425,7 +423,7 @@ export default function AiArtMirror() {
             </>
           )} */}
 
-          {isProcessing && <Processing />}
+
           {transcription && (
             <div className='absolute bottom-0 right-0 w-full mb-4 transcription-wrapper'>
               <div className='h-auto text-white bg-black bg-opacity-50 transcription-container'>
