@@ -1,9 +1,16 @@
-import { useEffect, } from "react";
+import { useEffect } from "react";
 import GalleryMainCanvas from "./GalleryMainCanvas";
 import { useImage } from "./context/ImageContext";
 
 export default function MuseumDisplay() {
-  const { imageState, DBImages, currentIndex, setCurrentIndex, fetchLatestArt, loading } = useImage();
+  const {
+    imageState,
+    DBImages,
+    currentIndex,
+    setCurrentIndex,
+    fetchLatestArt,
+    loading,
+  } = useImage();
 
   // Update currentIndex every 15 seconds to show next image
   useEffect(() => {
@@ -12,13 +19,13 @@ export default function MuseumDisplay() {
       setCurrentIndex((prevIndex) =>
         DBImages.length ? (prevIndex + 1) % DBImages.length : 0
       );
-    }, 15*1000);
+    }, 7 * 1000);
     return () => clearInterval(displayInterval);
   }, [DBImages]);
 
   // Call function to add newest image to the gallery wall. When uploading a new image, call the setImageState context function to update the gallery
   useEffect(() => {
-      fetchLatestArt();
+    fetchLatestArt();
   }, [imageState]);
 
   if (loading) {
@@ -27,8 +34,10 @@ export default function MuseumDisplay() {
 
   // Find the three images currently displayed
   const currentArt = DBImages[currentIndex];
-  const leftImage = DBImages[currentIndex == 0 ? DBImages.length-1 : currentIndex-1];
-  const rightImage = DBImages[currentIndex == DBImages.length-1 ? 0 : currentIndex+1];
+  const leftImage =
+    DBImages[currentIndex == 0 ? DBImages.length - 1 : currentIndex - 1];
+  const rightImage =
+    DBImages[currentIndex == DBImages.length - 1 ? 0 : currentIndex + 1];
 
   return (
     <div>
