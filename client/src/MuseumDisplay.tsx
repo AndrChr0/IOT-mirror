@@ -21,6 +21,20 @@ export default function MuseumDisplay() {
       fetchLatestArt();
   }, [imageState]);
 
+  useEffect(() => {
+    const handleStorageEvent = (event: StorageEvent) => {
+      if (event.key === "imageStateUpdated") {
+        fetchLatestArt(); // Refetch art when the event occurs
+      }
+    };
+  
+    window.addEventListener("storage", handleStorageEvent);
+  
+    return () => {
+      window.removeEventListener("storage", handleStorageEvent);
+    };
+  }, []);
+
   if (loading) {
     return <p>Loading AI art...</p>;
   }

@@ -1,11 +1,4 @@
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogFooter,
-//   DialogTitle,
-// } from "@/components/ui/dialog";
-// import { Button } from "@/components/ui/button";
-// import { useState } from "react";
+import { useState } from "react";
 import { useImage } from "../context/ImageContext";
 
 interface AiImagePreviewProps {

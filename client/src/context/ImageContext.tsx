@@ -85,8 +85,10 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
     }
 
     const newArtUploaded = (): void => {
-      setImageState(!imageState);
-    }
+      const newState = !imageState;
+      setImageState(newState);
+      localStorage.setItem("imageStateUpdated", JSON.stringify(newState));
+    };
 
     // context value
     const value: ImageContextType = {
