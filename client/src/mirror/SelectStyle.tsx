@@ -86,7 +86,7 @@ const SelectStyle = ({
                 <div className='card-container h-full pl-[120px] pr-[120px]'>
                   <div className='flex flex-col items-center gap-[80px] pt-[60px] pb-[74px]'>
                     <span className='albert-sans-regular'>
-                      see yourself as famous paintings
+                      Choose an art style and watch AI transform you into art.{" "}
                     </span>
                     <span className='albert-sans-regular text-5xl text-center flex flex-col gap-[20px]'>
                       <span>SELECT</span> <span>ART STYLE</span>
@@ -107,7 +107,9 @@ const SelectStyle = ({
                             alt=''
                           />
                         </div>
-                        <span className='pl-[10px] pb-[10px] text-[24px]'>{style.name} </span>
+                        <span className='pl-[10px] pb-[10px] text-[24px]'>
+                          {style.name}{" "}
+                        </span>
                       </div>
                     ))}
                   </div>
@@ -131,7 +133,7 @@ const SelectStyle = ({
                     </h2>
                     {selectedStyle.description && (
                       <>
-                        <p className='text-[18px]'>
+                        <p className='text-[18px] text-center'>
                           {selectedStyle.description}
                         </p>
                       </>
@@ -181,66 +183,93 @@ const SelectStyle = ({
                   </div>
 
                   <div className='selectedStyle-buttons '>
-                  <button
-                    tabIndex={1}
-                    onClick={onCapturePhoto}
-                    onFocus={() => setIsFocusedIndex0(true)}
-                    onBlur={() => setIsFocusedIndex0(false)}
-                    className={`rounded w-full flex items-center justify-between px-[12px] py-[8px] border text-[20px] albert-sans-regular ${
-                      isFocusedIndex0
-                        ? 'selectedTabIndex bg-[#3B6246] border-[#0F281C] text-[#F0E8D9]'
-                        : 'selectedTabIndex bg-[#F0E8D9] text-[#0F281C] hover:bg-[#3B6246] hover:text-[#F0E8D9] underline'
-                    }`}
-                  >
-                    TAKE PICTURE
-                    {isFocusedIndex0 ? (<img src='assets/icons/camera.png' alt='' />): (<img src='assets/icons/camera-green.png' alt='' />)}
-                    
-                  </button>
                     <button
                       tabIndex={1}
-                      onClick={() => { onGoBack(); setIsFocusedIndex1(false); }}
+                      onClick={onCapturePhoto}
+                      onFocus={() => setIsFocusedIndex0(true)}
+                      onBlur={() => setIsFocusedIndex0(false)}
+                      className={`rounded w-full flex items-center justify-between px-[12px] py-[8px] border text-[20px] albert-sans-regular ${
+                        isFocusedIndex0
+                          ? "selectedTabIndex bg-[#3B6246] border-[#0F281C] text-[#F0E8D9]"
+                          : "selectedTabIndex bg-[#F0E8D9] text-[#0F281C] hover:bg-[#3B6246] hover:text-[#F0E8D9] underline"
+                      }`}
+                    >
+                      TAKE PICTURE
+                      {isFocusedIndex0 ? (
+                        <img src='assets/icons/camera.png' alt='' />
+                      ) : (
+                        <img src='assets/icons/camera-green.png' alt='' />
+                      )}
+                    </button>
+                    <button
+                      tabIndex={1}
+                      onClick={() => {
+                        onGoBack();
+                        setIsFocusedIndex1(false);
+                      }}
                       onFocus={() => setIsFocusedIndex1(true)}
                       onBlur={() => setIsFocusedIndex1(false)}
                       className={`flex items-center justify-between px-[12px] py-[8px] w-full rounded selectedTabIndex ${
-                        isFocusedIndex1 
-                        ? 'bg-[#7A0B0B] text-[#F0E8D9] border-[#7A0B0B]' 
-                        : 'bg-[#F0E8D9] text-[#7A0B0B] border-[#7A0B0B] hover:bg-[#7A0B0B] hover:text-[#F0E8D9] hover:border-[#7A0B0B] '
+                        isFocusedIndex1
+                          ? "bg-[#7A0B0B] text-[#F0E8D9] border-[#7A0B0B]"
+                          : "bg-[#F0E8D9] text-[#7A0B0B] border-[#7A0B0B] hover:bg-[#7A0B0B] hover:text-[#F0E8D9] hover:border-[#7A0B0B] "
                       } `}
                     >
-                      
-                      {isFocusedIndex1 ? (<img src='assets/icons/arrow-left-white.png' alt='' />): (<img src='assets/icons/arrow-left-red.png' alt='' />)}
-                      <span className={` albert-sans-regular text-[20px] underline ${isFocusedIndex1 ? 'text-[#F0E8D9]' :'text-[#7A0B0B]'}`}>
+                      {isFocusedIndex1 ? (
+                        <img src='assets/icons/arrow-left-white.png' alt='' />
+                      ) : (
+                        <img src='assets/icons/arrow-left-red.png' alt='' />
+                      )}
+                      <span
+                        className={` albert-sans-regular text-[20px] underline ${
+                          isFocusedIndex1 ? "text-[#F0E8D9]" : "text-[#7A0B0B]"
+                        }`}
+                      >
                         GO BACK
                       </span>
                     </button>
                   </div>
                   <div>
                     <div>
-                      <p className='text-center'>Other peoples AI art</p>
+                      <p className='text-center pb-4'>
+                        Other peoples AI art within {selectedStyle.name}
+                      </p>
                     </div>
                     <div className='flex gap-[17.5px]'>
-                      <div className='w-[90px] h-[90px]'>
+                      <div className='w-[150px] h-[150px]'>
                         {" "}
                         <img
-                          src='assets/images/ai-1.png'
+                          src={
+                            selectedStyle.ai_examples
+                              ? selectedStyle.ai_examples[0]
+                              : "assets/images/ai-1.png"
+                          }
                           alt='AI generated image'
                         />
                       </div>
-                      <div className='w-[90px] h-[90px]'>
+                      <div className='w-[150px] h-[150px]'>
                         {" "}
                         <img
-                          src='assets/images/ai-2.png'
+                          src={
+                            selectedStyle.ai_examples
+                              ? selectedStyle.ai_examples[1]
+                              : "assets/images/ai-1.png"
+                          }
                           alt='AI generated image'
                         />
                       </div>
-                      <div className='w-[90px] h-[90px]'>
+                      <div className='w-[150px] h-[150px]'>
                         {" "}
                         <img
-                          src='assets/images/ai-3.png'
+                          src={
+                            selectedStyle.ai_examples
+                              ? selectedStyle.ai_examples[2]
+                              : "assets/images/ai-1.png"
+                          }
                           alt='AI generated image'
                         />
                       </div>
-                      <div className='w-[90px] h-[90px]'>
+                      {/* <div className='w-[90px] h-[90px]'>
                         {" "}
                         <img
                           src='assets/images/ai-4.png'
@@ -253,7 +282,7 @@ const SelectStyle = ({
                           src='assets/images/ai-5.png'
                           alt='AI generated image'
                         />
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -288,7 +317,7 @@ const SelectStyle = ({
                     </div>
                   </div>
 
-                  <div className="translate-y-[-105px]">
+                  <div className='translate-y-[-105px]'>
                     <p className='text-center text-[24px] mb-[30px]'>
                       Known artworks within {selectedStyle.name}
                     </p>
@@ -296,40 +325,62 @@ const SelectStyle = ({
                       <figure className='w-[208px] h-[143px] bg-black'>
                         {selectedStyle.famous_paintings && (
                           <>
-                            <img className='w-full h-full' src={selectedStyle.famous_paintings[0]} alt='' />
+                            <img
+                              className='w-full h-full'
+                              src={selectedStyle.famous_paintings[0]}
+                              alt=''
+                            />
                             <figcaption>
-                              <div className="akatab-regular text-[18px] font-semibold uppercase"><p>{selectedStyle.famous_paintings[1]}</p></div>
-                              <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By {selectedStyle.famous_paintings[2]}</div>
+                              <div className='akatab-regular text-[18px] font-semibold uppercase'>
+                                <p>{selectedStyle.famous_paintings[1]}</p>
+                              </div>
+                              <div className='akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase'>
+                                By {selectedStyle.famous_paintings[2]}
+                              </div>
                             </figcaption>
                           </>
                         )}
                       </figure>
                       <figure className='w-[208px] h-[143px] bg-black'>
-                      {selectedStyle.famous_paintings && (
+                        {selectedStyle.famous_paintings && (
                           <>
-                            <img className='w-full h-full' src={selectedStyle.famous_paintings[3]} alt='' />
+                            <img
+                              className='w-full h-full'
+                              src={selectedStyle.famous_paintings[3]}
+                              alt=''
+                            />
                             <figcaption>
-                              <div className="akatab-regular text-[18px] font-semibold uppercase"><p>{selectedStyle.famous_paintings[4]}</p></div>
-                              <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By {selectedStyle.famous_paintings[5]}</div>
+                              <div className='akatab-regular text-[18px] font-semibold uppercase'>
+                                <p>{selectedStyle.famous_paintings[4]}</p>
+                              </div>
+                              <div className='akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase'>
+                                By {selectedStyle.famous_paintings[5]}
+                              </div>
                             </figcaption>
                           </>
                         )}
                       </figure>
                       <figure className='w-[208px] h-[143px] bg-black'>
-                      {selectedStyle.famous_paintings && (
+                        {selectedStyle.famous_paintings && (
                           <>
-                            <img className='w-full h-full' src={selectedStyle.famous_paintings[6]} alt='' />
+                            <img
+                              className='w-full h-full'
+                              src={selectedStyle.famous_paintings[6]}
+                              alt=''
+                            />
                             <figcaption>
-                              <div className="akatab-regular text-[18px] font-semibold uppercase"><p>{selectedStyle.famous_paintings[7]}</p></div>
-                              <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By {selectedStyle.famous_paintings[8]}</div>
+                              <div className='akatab-regular text-[18px] font-semibold uppercase'>
+                                <p>{selectedStyle.famous_paintings[7]}</p>
+                              </div>
+                              <div className='akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase'>
+                                By {selectedStyle.famous_paintings[8]}
+                              </div>
                             </figcaption>
                           </>
                         )}
                       </figure>
                     </div>
                   </div>
-
-                  
                 </div>
               </>
             )}
