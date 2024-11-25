@@ -379,7 +379,7 @@ export default function AiArtMirror() {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "colored",
+      theme: "light",
       // transition: Bounce,
     });
 
@@ -395,7 +395,7 @@ export default function AiArtMirror() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme='colored'
+        theme='light'
         // transition: Bounce,
       />
       <div

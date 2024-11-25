@@ -80,7 +80,7 @@ export default function AiImagePreview({
           
         </div>
       )}
-      <div className='pt-[15dvh]'>
+      <div className='pt-[10dvh]'>
         <div className='w-[30dvw] bg-[#D4BD91] flex flex-col items-center p-4 border border-[#44361C] rounded-[12px]'>
           <div className='mb-[3dvh]'>
             <p className='aboreto-regular text-[24px] mb-[2dvh]'>
@@ -112,7 +112,7 @@ export default function AiImagePreview({
               className={`selectedTabIndex albert-sans-regular flex items-center w-[10dvw] justify-around text-[20px] text-[#7A0B0B] rounded
                 ${isFocusedIndex1 ? "bg-[#7A0B0B] text-[#F0E8D9] border border-[#6c1b1b] animate-pulse-tab" : "border border-[#D4BD91] underline"}
                 `}
-              onClick={() => handleImageData(null)}
+              onClick={() => {handleImageData(null); setIsFocusedIndex1(false)}}
             >
               {isFocusedIndex1 ? <img src='assets/icons/arrow-left-white.png' alt='' className='' /> : <img src='assets/icons/arrow-left-red.png' alt='' className='' />}
               

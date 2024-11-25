@@ -11,11 +11,11 @@ export interface Style {
   export const styles: Style[] = [
     {
       id: 1,
-      name: "Post-Impressionism",
+      name: "Impressionism",
       img: ["https://magazine.artland.com/wp-content/uploads/2022/07/van-gogh-starry-night-min.jpg","https://cdn.britannica.com/89/196489-138-8770A1D5/Vincent-van-Gogh-life-work.jpg?w=800&h=450&c=crop", "https://www.theartstory.org/images20/works/post_impressionism_1.jpg","https://images.squarespace-cdn.com/content/v1/585caf95b8a79b1e4b00d643/1524228141696-2KOHIU0LRAC6GW7JVMCI/DSC_0194.jpg?format=1000w" ],
       description:
-        "A Post-Impressionism is an art movement that emerged in the late 19th century as a reaction to Impressionism." ,
-      style_prompt: "Post-Impressionist painting with vivid, expressive colors and bold, visible brushstrokes. The scene captures a landscape or still life, but with a more abstract, personal interpretation. The forms are slightly distorted, and the colors are exaggerated to create emotional intensity. The painting emphasizes texture and the artist's individual style, with less focus on naturalism and more on the expressive qualities of color and composition. The influence of artists like Van Gogh and Cézanne is evident.",
+        "A Impressionism is an art movement that emerged in the late 19th century as a reaction to Impressionism." ,
+      style_prompt: "Impressionist painting with vivid, expressive colors and bold, visible brushstrokes. The scene captures a landscape or still life, but with a more abstract, personal interpretation. The forms are slightly distorted, and the colors are exaggerated to create emotional intensity. The painting emphasizes texture and the artist's individual style, with less focus on naturalism and more on the expressive qualities of color and composition. The influence of artists like Van Gogh and Cézanne is evident.",
       characteristics: ["Focus on conveying emotions rather than realism.","Use of vivid, unnatural colors for dramatic effect.", "Unique, often exaggerated, styles and textures."]
     },
     {
