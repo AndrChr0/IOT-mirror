@@ -107,7 +107,7 @@ const SelectStyle = ({
                             alt=''
                           />
                         </div>
-                        <span className='pl-[10px] pb-[10px] text-[24px]'>{style.name} </span>
+                        <span className='pl-[10px] pb-[10px] text-[19px]'>{style.name} </span>
                       </div>
                     ))}
                   </div>
