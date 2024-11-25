@@ -5,6 +5,7 @@ export interface Style {
     description: string;
     style_prompt: string;
     characteristics: string[];
+    famous_paintings?: string[];
   }
 
   
@@ -16,7 +17,8 @@ export interface Style {
       description:
         "A Post-Impressionism is an art movement that emerged in the late 19th century as a reaction to Impressionism." ,
       style_prompt: "Post-Impressionist painting with vivid, expressive colors and bold, visible brushstrokes. The scene captures a landscape or still life, but with a more abstract, personal interpretation. The forms are slightly distorted, and the colors are exaggerated to create emotional intensity. The painting emphasizes texture and the artist's individual style, with less focus on naturalism and more on the expressive qualities of color and composition. The influence of artists like Van Gogh and Cézanne is evident.",
-      characteristics: ["Focus on conveying emotions rather than realism.","Use of vivid, unnatural colors for dramatic effect.", "Unique, often exaggerated, styles and textures."]
+      characteristics: ["Focus on conveying emotions rather than realism.","Use of vivid, unnatural colors for dramatic effect.", "Unique, often exaggerated, styles and textures."],
+      famous_paintings: ["assets/loadingArt/postIm-1.png", "The Starry Night (1889)", "By Vincent van Gogh", "assets/loadingArt/postIm-2.png", "A Sunday Afternoon on La Grande Jatte (1884)", "By Georges Seurat", "assets/loadingArt/postIm-3.png", "Montagne Saint-Victoire (1890)", "By Paul Cezanne"]
     },
     {
       id: 2,
