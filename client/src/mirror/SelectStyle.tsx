@@ -31,6 +31,8 @@ const SelectStyle = ({
 
   // Refactor
   const [dropdownOpen, setDropdownOpen] = useState(styleDropdownOpen);
+  const [isFocusedIndex0, setIsFocusedIndex0] = useState(false);
+  const [isFocusedIndex1, setIsFocusedIndex1] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -94,7 +96,7 @@ const SelectStyle = ({
                     {styles.map((style) => (
                       <div
                         key={style.id}
-                        className='w-[240px] p-1 overflow-hidden cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white aboreto-regular'
+                        className={`w-[240px] p-2 overflow-hidden cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white aboreto-regular focus-card-${style.id}`}
                         onClick={() => handleSelectStyle(style)}
                         tabIndex={1}
                       >
@@ -105,7 +107,7 @@ const SelectStyle = ({
                             alt=''
                           />
                         </div>
-                        <span className='pl-[10px]'>{style.name} </span>
+                        <span className='pl-[10px] pb-[10px] text-[24px]'>{style.name} </span>
                       </div>
                     ))}
                   </div>
@@ -179,21 +181,35 @@ const SelectStyle = ({
                   </div>
 
                   <div className='selectedStyle-buttons '>
+                  <button
+                    tabIndex={1}
+                    onClick={onCapturePhoto}
+                    onFocus={() => setIsFocusedIndex0(true)}
+                    onBlur={() => setIsFocusedIndex0(false)}
+                    className={`rounded w-full flex items-center justify-between px-[12px] py-[8px] border text-[20px] albert-sans-regular ${
+                      isFocusedIndex0
+                        ? 'selectedTabIndex bg-[#3B6246] border-[#0F281C] text-[#F0E8D9]'
+                        : 'selectedTabIndex bg-[#F0E8D9] text-[#0F281C] hover:bg-[#3B6246] hover:text-[#F0E8D9] underline'
+                    }`}
+                  >
+                    TAKE PICTURE
+                    {isFocusedIndex0 ? (<img src='assets/icons/camera.png' alt='' />): (<img src='assets/icons/camera-green.png' alt='' />)}
+                    
+                  </button>
                     <button
                       tabIndex={1}
-                      onClick={onCapturePhoto}
-                      className='selectedTabIndex rounded w-full flex items-center justify-between bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] text-[20px] px-[12px] py-[8px]'
+                      onClick={() => { onGoBack(); setIsFocusedIndex1(false); }}
+                      onFocus={() => setIsFocusedIndex1(true)}
+                      onBlur={() => setIsFocusedIndex1(false)}
+                      className={`flex items-center justify-between px-[12px] py-[8px] w-full rounded selectedTabIndex ${
+                        isFocusedIndex1 
+                        ? 'bg-[#7A0B0B] text-[#F0E8D9] border-[#7A0B0B]' 
+                        : 'bg-[#F0E8D9] text-[#7A0B0B] border-[#7A0B0B] hover:bg-[#7A0B0B] hover:text-[#F0E8D9] hover:border-[#7A0B0B] '
+                      } `}
                     >
-                      TAKE PICTURE
-                      <img src='assets/icons/camera.png' alt='' />
-                    </button>
-                    <button
-                      tabIndex={1}
-                      onClick={onGoBack}
-                      className='selectedTabIndex w-full flex items-center justify-around rounded'
-                    >
-                      <img src='assets/icons/arrow_left.png' alt='' />{" "}
-                      <span className='aboreto-regular text-[20px] text-[#7A0B0B] underline'>
+                      
+                      {isFocusedIndex1 ? (<img src='assets/icons/arrow-left-white.png' alt='' />): (<img src='assets/icons/arrow-left-red.png' alt='' />)}
+                      <span className={` albert-sans-regular text-[20px] underline ${isFocusedIndex1 ? 'text-[#F0E8D9]' :'text-[#7A0B0B]'}`}>
                         GO BACK
                       </span>
                     </button>
@@ -246,38 +262,18 @@ const SelectStyle = ({
             {isProcessing && selectedStyle && (
               <>
                 <div className='selectedStyle pt-[100px] pl-[120px] pr-[120px] w-full '>
-                  <div className='w-[150%] pt-[100px]'>
+                  <div className='w-[150%] pt-[50px]'>
                     <p className='text-center text-[48px] albert-sans-regular'>
                       GENERATING YOUR ART
                     </p>
                     <p className='text-center akatab-regular'>
-                      Just a moment, the Ai is generating your image
+                      Just a moment, the Ai is generating your image..
                     </p>
                   </div>
 
-                  <div>
-                    <p className='text-center text-[24px] mb-[30px]'>
-                      Known artworks within {selectedStyle.name}
-                    </p>
-                    <div className='flex gap-[17.5px]'>
-                      <figure className='w-[208px] h-[143px] bg-black'>
-                        <img className='w-full h-full' src='' alt='' />
-                        <figcaption>ydsdsao</figcaption>
-                      </figure>
-                      <figure className='w-[208px] h-[143px] bg-black'>
-                        <img className='w-full h-full' src='' alt='' />
-                        <figcaption>ydsdsao</figcaption>
-                      </figure>
-                      <figure className='w-[208px] h-[143px] bg-black'>
-                        <img className='w-full h-full' src='' alt='' />
-                        <figcaption>ydsdsao</figcaption>
-                      </figure>
-                    </div>
-                  </div>
-
-                  <div className='relative w-[501px] h-[107px] border-2 border-black'>
+                  <div className='relative mt-[-100px] w-[501px] h-[107px] border-2 border-black'>
                     <div className='absolute p-2 pl-5 ml-[-2px] mt-[-21px] bg-[#F0E8D9] font-bold'>
-                      Did you know
+                      Did you know?
                     </div>
                     <div className='absolute w-[50px] h-[62px] ml-[-40px] mt-[-35px]'>
                       <img
@@ -286,11 +282,54 @@ const SelectStyle = ({
                         alt=''
                       />
                     </div>
-                    <div className='py-5 px-8'>
+                    <div className='px-8 py-5'>
                       {" "}
                       <Processing />{" "}
                     </div>
                   </div>
+
+                  <div className="translate-y-[-105px]">
+                    <p className='text-center text-[24px] mb-[30px]'>
+                      Known artworks within {selectedStyle.name}
+                    </p>
+                    <div className='flex gap-[17.5px]'>
+                      <figure className='w-[208px] h-[143px] bg-black'>
+                        {selectedStyle.famous_paintings && (
+                          <>
+                            <img className='w-full h-full' src={selectedStyle.famous_paintings[0]} alt='' />
+                            <figcaption>
+                              <div className="akatab-regular text-[18px] font-semibold uppercase"><p>{selectedStyle.famous_paintings[1]}</p></div>
+                              <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By {selectedStyle.famous_paintings[2]}</div>
+                            </figcaption>
+                          </>
+                        )}
+                      </figure>
+                      <figure className='w-[208px] h-[143px] bg-black'>
+                      {selectedStyle.famous_paintings && (
+                          <>
+                            <img className='w-full h-full' src={selectedStyle.famous_paintings[3]} alt='' />
+                            <figcaption>
+                              <div className="akatab-regular text-[18px] font-semibold uppercase"><p>{selectedStyle.famous_paintings[4]}</p></div>
+                              <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By {selectedStyle.famous_paintings[5]}</div>
+                            </figcaption>
+                          </>
+                        )}
+                      </figure>
+                      <figure className='w-[208px] h-[143px] bg-black'>
+                      {selectedStyle.famous_paintings && (
+                          <>
+                            <img className='w-full h-full' src={selectedStyle.famous_paintings[6]} alt='' />
+                            <figcaption>
+                              <div className="akatab-regular text-[18px] font-semibold uppercase"><p>{selectedStyle.famous_paintings[7]}</p></div>
+                              <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By {selectedStyle.famous_paintings[8]}</div>
+                            </figcaption>
+                          </>
+                        )}
+                      </figure>
+                    </div>
+                  </div>
+
+                  
                 </div>
               </>
             )}

@@ -9,7 +9,7 @@ import io from "socket.io-client";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const socket = io("http://:3000");
+const socket = io("http://10.22.218.178:3000");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -379,7 +379,7 @@ export default function AiArtMirror() {
       pauseOnHover: true,
       draggable: true,
       progress: undefined,
-      theme: "colored",
+      theme: "light",
       // transition: Bounce,
     });
 
@@ -395,7 +395,7 @@ export default function AiArtMirror() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme='colored'
+        theme='light'
         // transition: Bounce,
       />
       <div
