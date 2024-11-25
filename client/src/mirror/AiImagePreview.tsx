@@ -1,11 +1,13 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { useState } from "react";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogFooter,
+//   DialogTitle,
+// } from "@/components/ui/dialog";
+// import { Button } from "@/components/ui/button";
+// import { useState } from "react";
+import { useImage } from "../context/ImageContext";
+
 interface AiImagePreviewProps {
   artStyle: string;
   handleImageData: (img: string | null) => void;
@@ -22,6 +24,7 @@ export default function AiImagePreview({
   artTitle,
   runToastSuccess,
 }: AiImagePreviewProps) {
+  const { newArtUploaded } = useImage();
   const [isFocusedIndex0, setIsFocusedIndex0] = useState(false);
   const [isFocusedIndex1, setIsFocusedIndex1] = useState(false);
   const handleSubmitArt = async () => {
@@ -49,6 +52,9 @@ export default function AiImagePreview({
         console.log(data); // The saved AI art object returned from the server
         handleImageData(null);
         runToastSuccess();
+
+        // Call the context function that initiates the process of adding a new picture to the gallery
+        newArtUploaded();
       } else {
         console.log("Error creating AI art");
         console.error(data);
