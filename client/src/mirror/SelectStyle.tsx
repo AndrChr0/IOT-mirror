@@ -262,7 +262,7 @@ const SelectStyle = ({
             {isProcessing && selectedStyle && (
               <>
                 <div className='selectedStyle pt-[100px] pl-[120px] pr-[120px] w-full '>
-                  <div className='w-[150%] pt-[100px]'>
+                  <div className='w-[150%] pt-[50px]'>
                     <p className='text-center text-[48px] albert-sans-regular'>
                       GENERATING YOUR ART
                     </p>
@@ -271,7 +271,7 @@ const SelectStyle = ({
                     </p>
                   </div>
 
-                  <div className='relative mt-[-50px] w-[501px] h-[107px] border-2 border-black'>
+                  <div className='relative mt-[-100px] w-[501px] h-[107px] border-2 border-black'>
                     <div className='absolute p-2 pl-5 ml-[-2px] mt-[-21px] bg-[#F0E8D9] font-bold'>
                       Did you know?
                     </div>
@@ -288,31 +288,43 @@ const SelectStyle = ({
                     </div>
                   </div>
 
-                  <div className="translate-y-[-55px]">
+                  <div className="translate-y-[-105px]">
                     <p className='text-center text-[24px] mb-[30px]'>
                       Known artworks within {selectedStyle.name}
                     </p>
                     <div className='flex gap-[17.5px]'>
                       <figure className='w-[208px] h-[143px] bg-black'>
-                        <img className='w-full h-full' src='' alt='' />
-                        <figcaption>
-                          <div className="flex gap-[10px] akatab-regular text-[18px] font-semibold uppercase"><p>tittel</p> <p>(År)</p></div>
-                          <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By Navn</div>
-                        </figcaption>
+                        {selectedStyle.famous_paintings && (
+                          <>
+                            <img className='w-full h-full' src={selectedStyle.famous_paintings[0]} alt='' />
+                            <figcaption>
+                              <div className="akatab-regular text-[18px] font-semibold uppercase"><p>{selectedStyle.famous_paintings[1]}</p></div>
+                              <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By {selectedStyle.famous_paintings[2]}</div>
+                            </figcaption>
+                          </>
+                        )}
                       </figure>
                       <figure className='w-[208px] h-[143px] bg-black'>
-                        <img className='w-full h-full' src='' alt='' />
-                        <figcaption>
-                          <div className="flex gap-[10px] akatab-regular text-[18px] font-semibold uppercase"><p>tittel</p> <p>(År)</p></div>
-                          <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By Navn</div>
-                        </figcaption>
+                      {selectedStyle.famous_paintings && (
+                          <>
+                            <img className='w-full h-full' src={selectedStyle.famous_paintings[3]} alt='' />
+                            <figcaption>
+                              <div className="akatab-regular text-[18px] font-semibold uppercase"><p>{selectedStyle.famous_paintings[4]}</p></div>
+                              <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By {selectedStyle.famous_paintings[5]}</div>
+                            </figcaption>
+                          </>
+                        )}
                       </figure>
                       <figure className='w-[208px] h-[143px] bg-black'>
-                        <img className='w-full h-full' src='' alt='' />
-                        <figcaption>
-                          <div className="flex gap-[10px] akatab-regular text-[18px] font-semibold uppercase"><p>tittel</p> <p>(År)</p></div>
-                          <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By Navn</div>
-                        </figcaption>
+                      {selectedStyle.famous_paintings && (
+                          <>
+                            <img className='w-full h-full' src={selectedStyle.famous_paintings[6]} alt='' />
+                            <figcaption>
+                              <div className="akatab-regular text-[18px] font-semibold uppercase"><p>{selectedStyle.famous_paintings[7]}</p></div>
+                              <div className="akatab-regular text-[18px] text-[#5B5B5B] mt-[-5px] uppercase">By {selectedStyle.famous_paintings[8]}</div>
+                            </figcaption>
+                          </>
+                        )}
                       </figure>
                     </div>
                   </div>
