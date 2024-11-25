@@ -19,7 +19,7 @@ const io = new Server(server, {
 // Serve static files from the public folder in the client directory
 app.use(express.static(path.join(__dirname, "../client/public")));
 
-app.get("/remote-classic", (req, res) => {
+app.get("/remote", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/public/remote-classic.html"));
 });
 
