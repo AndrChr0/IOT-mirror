@@ -18,7 +18,7 @@ export interface Style {
         "An Impressionism is an art movement that emerged in the late 19th century as a reaction to Impressionism." ,
       style_prompt: "Impressionist painting with vivid, expressive colors and bold, visible brushstrokes. The scene captures a landscape or still life, but with a more abstract, personal interpretation. The forms are slightly distorted, and the colors are exaggerated to create emotional intensity. The painting emphasizes texture and the artist's individual style, with less focus on naturalism and more on the expressive qualities of color and composition. The influence of artists like Van Gogh and Cézanne is evident.",
       characteristics: ["Focus on conveying emotions rather than realism.","Use of vivid, unnatural colors for dramatic effect.", "Unique, often exaggerated, styles and textures."],
-      famous_paintings: ["assets/loadingArt/postIm-1.png", "The Starry Night (1889)", "By Vincent van Gogh", "assets/loadingArt/postIm-2.png", "A Sunday Afternoon on La Grande Jatte (1884)", "By Georges Seurat", "assets/loadingArt/postIm-3.png", "Montagne Saint-Victoire (1890)", "By Paul Cezanne"]
+      famous_paintings: ["assets/loadingArt/postIm-1.png", "The Starry Night (1889)", "Vincent van Gogh", "assets/loadingArt/postIm-2.png", "A Sunday Afternoon on La Grande Jatte (1884)", "Georges Seurat", "assets/loadingArt/postIm-3.png", "Montagne Saint-Victoire (1890)", "Paul Cezanne"]
     },
     {
       id: 2,
@@ -27,7 +27,8 @@ export interface Style {
       description:
         "Characterized by a focus on realism, proportion, and humanism, Renaissance art emphasizes detail, perspective, and lifelike representations of figures.",
       style_prompt: "A highly detailed and realistic painting of a serene scene from the Renaissance period, featuring harmonious composition, precise human anatomy, soft shading, and balanced proportions. The setting is a lush landscape with classical architecture in the background, and the characters are dressed in flowing robes, engaging in a calm, religious or mythological scene. The painting exudes a sense of calm and intellectualism, with an emphasis on natural light and subtle, warm colors.",
-      characteristics: ["Focus on lifelike representation and perspective.","Emphasis on human experience, emotion, and classical themes.", "Symmetry and harmony in artwork."]
+      characteristics: ["Focus on lifelike representation and perspective.","Emphasis on human experience, emotion, and classical themes.", "Symmetry and harmony in artwork."],
+      famous_paintings:[]
       },
       
     {
@@ -37,7 +38,8 @@ export interface Style {
       description:
         "An avant-garde movement that fragments objects into geometric shapes, presenting multiple viewpoints simultaneously. Developed by Picasso and Braque.",
       style_prompt: "A fragmented, geometric representation of a subject in the style of Cubism, with sharp angles and overlapping shapes. The image breaks the subject into abstract planes and uses multiple perspectives, with distorted proportions and bold lines. The colors are muted earth tones and primary colors, creating a sense of both movement and dissonance. The image challenges traditional perspectives by flattening depth and form, reminiscent of Picasso and Braque.",
-      characteristics: ["Objects are simplified into cubes, spheres, and other geometric forms.","Subjects are broken into parts, showing multiple perspectives at once.", "Early works used neutral tones to highlight form; later included brighter colors and collage."]
+      characteristics: ["Objects are simplified into cubes, spheres, and other geometric forms.","Subjects are broken into parts, showing multiple perspectives at once.", "Early works used neutral tones to highlight form; later included brighter colors and collage."],
+      famous_paintings:[]
       },
     {
       id: 4,
@@ -46,7 +48,8 @@ export interface Style {
       description:
         "A movement that merges the dream world with reality, Surrealism features strange, dreamlike scenes and symbolic imagery that challenges logic.",
       style_prompt: "A dreamlike, surreal scene that defies logic and blends reality with fantasy. The painting features impossible, bizarre elements like melting clocks, floating objects, and unnatural landscapes. The scene is filled with strange, imaginative juxtapositions, with elements that provoke a sense of wonder and confusion. The colors are vivid, with a focus on strange, unexpected objects placed in a hyperrealistic or distorted environment, creating an eerie and fantastical atmosphere.",
-      characteristics: ["Scenes inspired by dreams and the unconscious mind.","Unusual combinations of objects and ideas.", "Use of abstract symbols to convey deeper meanings."]
+      characteristics: ["Scenes inspired by dreams and the unconscious mind.","Unusual combinations of objects and ideas.", "Use of abstract symbols to convey deeper meanings."],
+      famous_paintings:[]
       },
     {
       id: 5,
@@ -55,7 +58,8 @@ export interface Style {
       description:
         "Known for its dramatic lighting, intense emotions, and ornate details, Baroque art is characterized by grandeur, movement, and opulence.",
       style_prompt: "A dramatic and ornate Baroque-style painting with dynamic movement and intense contrasts of light and shadow (chiaroscuro). The scene is full of action, with rich, deep colors and strong emotional expressions on the characters’ faces. The composition is busy and dramatic, featuring religious or historical scenes with detailed costumes, flowing drapery, and luxurious textures. The use of lighting emphasizes the theatrical mood and depth.",
-      characteristics: ["Strong contrasts of light and shadow (chiaroscuro).","Focus on movement, passion, and grandeur.", "Rich details and elaborate decorations."]
+      characteristics: ["Strong contrasts of light and shadow (chiaroscuro).","Focus on movement, passion, and grandeur.", "Rich details and elaborate decorations."],
+      famous_paintings:[]
       },
     {
       id: 6,
@@ -64,7 +68,8 @@ export interface Style {
       description:
         "Abstract art breaks away from traditional representation, focusing on color, form, and line to create compositions that are non-representational and subjective.",
       style_prompt: "A vibrant and non-representational abstract painting, with bold shapes, dynamic lines, and splashes of color. The composition is fluid, featuring geometric or organic forms in a way that evokes emotions without depicting a clear subject. The colors are bright and contrasting, with spontaneous brushstrokes or carefully constructed patterns. The focus is on the interplay of forms, textures, and colors, evoking an emotional or expressive response rather than depicting real-world imagery.",
-      characteristics: ["Focus on shapes, colors, and forms, not realistic depictions.","Emphasis on conveying emotions or ideas over literal meaning.", "Use of unconventional techniques and styles."]
+      characteristics: ["Focus on shapes, colors, and forms, not realistic depictions.","Emphasis on conveying emotions or ideas over literal meaning.", "Use of unconventional techniques and styles."],
+      famous_paintings:[]
       },
   ];
   
