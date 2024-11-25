@@ -5,7 +5,7 @@
 //   DialogTitle,
 // } from "@/components/ui/dialog";
 // import { Button } from "@/components/ui/button";
-// import { useState } from "react";
+import { useState } from "react";
 import { useImage } from "../context/ImageContext";
 
 interface AiImagePreviewProps {
@@ -80,10 +80,11 @@ export default function AiImagePreview({
             “{artTitle.toLocaleUpperCase()}”
           </h2>
           <div>
-          <p className='text-xl text-center'>in the style of</p>
-          <h3 className='text-[28px] text-center aboreto-regular'>{artStyle}</h3>
+            <p className='text-xl text-center'>in the style of</p>
+            <h3 className='text-[28px] text-center aboreto-regular'>
+              {artStyle}
+            </h3>
           </div>
-          
         </div>
       )}
       <div className='pt-[10dvh]'>
@@ -103,12 +104,23 @@ export default function AiImagePreview({
               onFocus={() => setIsFocusedIndex0(true)}
               onBlur={() => setIsFocusedIndex0(false)}
               className={`selectedTabIndex albert-sans-regular rounded w-[12dvw] flex items-center justify-between  text-[20px] px-[12px] py-[8px] 
-                ${isFocusedIndex0 ? "bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] animate-pulse-tab" : "text-[#3B6246] underline border border-[#D4BD91]"}`}
+                ${
+                  isFocusedIndex0
+                    ? "bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] animate-pulse-tab"
+                    : "text-[#3B6246] underline border border-[#D4BD91]"
+                }`}
               onClick={() => handleSubmitArt()}
             >
               <span>SEND TO GALLERY</span>
-              {isFocusedIndex0 ? <img src='assets/icons/shareArrow.png' alt='' className='' /> : <img src='assets/icons/shareArrowGreen.png' alt='' className='' />}
-              
+              {isFocusedIndex0 ? (
+                <img src='assets/icons/shareArrow.png' alt='' className='' />
+              ) : (
+                <img
+                  src='assets/icons/shareArrowGreen.png'
+                  alt=''
+                  className=''
+                />
+              )}
             </button>
             <button
               tabIndex={1}
@@ -116,12 +128,31 @@ export default function AiImagePreview({
               onFocus={() => setIsFocusedIndex1(true)}
               onBlur={() => setIsFocusedIndex1(false)}
               className={`selectedTabIndex albert-sans-regular flex items-center w-[10dvw] justify-around text-[20px] text-[#7A0B0B] rounded
-                ${isFocusedIndex1 ? "bg-[#7A0B0B] text-[#F0E8D9] border border-[#6c1b1b] animate-pulse-tab" : "border border-[#D4BD91] underline"}
+                ${
+                  isFocusedIndex1
+                    ? "bg-[#7A0B0B] text-[#F0E8D9] border border-[#6c1b1b] animate-pulse-tab"
+                    : "border border-[#D4BD91] underline"
+                }
                 `}
-              onClick={() => {handleImageData(null); setIsFocusedIndex1(false)}}
+              onClick={() => {
+                handleImageData(null);
+                setIsFocusedIndex1(false);
+              }}
             >
-              {isFocusedIndex1 ? <img src='assets/icons/arrow-left-white.png' alt='' className='' /> : <img src='assets/icons/arrow-left-red.png' alt='' className='' />}
-              
+              {isFocusedIndex1 ? (
+                <img
+                  src='assets/icons/arrow-left-white.png'
+                  alt=''
+                  className=''
+                />
+              ) : (
+                <img
+                  src='assets/icons/arrow-left-red.png'
+                  alt=''
+                  className=''
+                />
+              )}
+
               <span>BACK TO START</span>
             </button>
           </div>
