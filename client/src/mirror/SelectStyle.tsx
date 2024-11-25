@@ -31,6 +31,8 @@ const SelectStyle = ({
 
   // Refactor
   const [dropdownOpen, setDropdownOpen] = useState(styleDropdownOpen);
+  const [isFocusedIndex0, setIsFocusedIndex0] = useState(false);
+  const [isFocusedIndex1, setIsFocusedIndex1] = useState(false);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
 
@@ -94,7 +96,7 @@ const SelectStyle = ({
                     {styles.map((style) => (
                       <div
                         key={style.id}
-                        className='w-[240px] p-1 overflow-hidden cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white aboreto-regular'
+                        className={`w-[240px] p-2 overflow-hidden cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white aboreto-regular focus-card-${style.id}`}
                         onClick={() => handleSelectStyle(style)}
                         tabIndex={1}
                       >
@@ -105,7 +107,7 @@ const SelectStyle = ({
                             alt=''
                           />
                         </div>
-                        <span className='pl-[10px]'>{style.name} </span>
+                        <span className='pl-[10px] pb-[10px]'>{style.name} </span>
                       </div>
                     ))}
                   </div>
@@ -179,21 +181,35 @@ const SelectStyle = ({
                   </div>
 
                   <div className='selectedStyle-buttons '>
+                  <button
+                    tabIndex={1}
+                    onClick={onCapturePhoto}
+                    onFocus={() => setIsFocusedIndex0(true)}
+                    onBlur={() => setIsFocusedIndex0(false)}
+                    className={`rounded w-full flex items-center justify-between px-[12px] py-[8px] border text-[20px] albert-sans-regular ${
+                      isFocusedIndex0
+                        ? 'selectedTabIndex bg-[#3B6246] border-[#0F281C] text-[#F0E8D9]'
+                        : 'selectedTabIndex bg-[#F0E8D9] text-[#0F281C] hover:bg-[#3B6246] hover:text-[#F0E8D9] underline'
+                    }`}
+                  >
+                    TAKE PICTURE
+                    {isFocusedIndex0 ? (<img src='assets/icons/camera.png' alt='' />): (<img src='assets/icons/camera-green.png' alt='' />)}
+                    
+                  </button>
                     <button
                       tabIndex={1}
-                      onClick={onCapturePhoto}
-                      className='selectedTabIndex rounded w-full flex items-center justify-between bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] text-[20px] px-[12px] py-[8px]'
+                      onClick={() => { onGoBack(); setIsFocusedIndex1(false); }}
+                      onFocus={() => setIsFocusedIndex1(true)}
+                      onBlur={() => setIsFocusedIndex1(false)}
+                      className={`flex items-center justify-between px-[12px] py-[8px] w-full rounded selectedTabIndex ${
+                        isFocusedIndex1 
+                        ? 'bg-[#7A0B0B] text-[#F0E8D9] border-[#7A0B0B]' 
+                        : 'bg-[#F0E8D9] text-[#7A0B0B] border-[#7A0B0B] hover:bg-[#7A0B0B] hover:text-[#F0E8D9] hover:border-[#7A0B0B] '
+                      } `}
                     >
-                      TAKE PICTURE
-                      <img src='assets/icons/camera.png' alt='' />
-                    </button>
-                    <button
-                      tabIndex={1}
-                      onClick={onGoBack}
-                      className='selectedTabIndex w-full flex items-center justify-around rounded'
-                    >
-                      <img src='assets/icons/arrow_left.png' alt='' />{" "}
-                      <span className='aboreto-regular text-[20px] text-[#7A0B0B] underline'>
+                      
+                      {isFocusedIndex1 ? (<img src='assets/icons/arrow-left-white.png' alt='' />): (<img src='assets/icons/arrow-left-red.png' alt='' />)}
+                      <span className={` albert-sans-regular text-[20px] underline ${isFocusedIndex1 ? 'text-[#F0E8D9]' :'text-[#7A0B0B]'}`}>
                         GO BACK
                       </span>
                     </button>
@@ -286,7 +302,7 @@ const SelectStyle = ({
                         alt=''
                       />
                     </div>
-                    <div className='py-5 px-8'>
+                    <div className='px-8 py-5'>
                       {" "}
                       <Processing />{" "}
                     </div>
