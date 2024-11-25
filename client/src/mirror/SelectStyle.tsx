@@ -94,7 +94,7 @@ const SelectStyle = ({
                   </div>
                   <div className='w-full justify-around gap-[40px] grid grid-cols-2 grid-rows-3'>
                     {styles.map((style) => (
-                      <div
+                      <button
                         key={style.id}
                         className={`w-[240px] p-2 overflow-hidden cursor-pointer card dropdown-item hover:bg-blue-500 hover:text-white aboreto-regular focus-card-${style.id}`}
                         onClick={() => handleSelectStyle(style)}
@@ -108,7 +108,7 @@ const SelectStyle = ({
                           />
                         </div>
                         <span className='pl-[10px] pb-[10px] text-[19px]'>{style.name} </span>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
