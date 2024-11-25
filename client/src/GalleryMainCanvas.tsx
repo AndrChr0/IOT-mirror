@@ -1,11 +1,15 @@
 interface GalleryMainCanvasProps {
-  generatedArt: string;
+  mainGeneratedArt: string;
+  leftGeneratedArt: string;
+  rightGeneratedArt: string;
   generatedArtStyle: string;
   dateGenerated: string;
   artTitle: string;
 }
 export default function GalleryMainCanvas({
-  generatedArt,
+  mainGeneratedArt,
+  leftGeneratedArt,
+  rightGeneratedArt,
   generatedArtStyle,
   dateGenerated,
   artTitle,
@@ -18,13 +22,13 @@ export default function GalleryMainCanvas({
       </div>
       <div className='flex justify-between items-center pt-16'>
         <img
-          src={generatedArt}
+          src={leftGeneratedArt}
           alt='AI generated image'
           className='max-w-4xl max-h-[35vh] object-contain '
         />
         <div className='relative'>
           <img
-            src={generatedArt}
+            src={mainGeneratedArt}
             alt='AI generated image'
             className='max-w-4xl max-h-[75vh] object-contain'
           />
@@ -36,7 +40,7 @@ export default function GalleryMainCanvas({
         </div>
 
         <img
-          src={generatedArt}
+          src={rightGeneratedArt}
           alt='AI generated image'
           className='max-w-4xl max-h-[35vh] object-contain '
         />
