@@ -72,17 +72,28 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
             "Content-Type": "application/json",
           },
         });
-        const data = await response.json();
+        const newImage = await response.json();
+    
+        // Append the new image to the existing gallery
+        setDBImages((prevDBImages) => {
+          const exists = prevDBImages.some((img) => img._id === newImage._id);
+          if (exists) return prevDBImages;
+        
+          const insertIndex = (currentIndex + 2) % (prevDBImages.length + 1);
 
-        // Update the DBImages state with the new image
-        const newList = [...DBImages];
-        newList.splice(currentIndex+2, 0, data); // Insert the image where we want it in the gallery
-        setDBImages(newList);
+          const updatedDBImages = [...prevDBImages];
+          updatedDBImages.splice(insertIndex, 0, newImage); // Insert at next index
 
+          return updatedDBImages;
+        });
+        
+        
+    
       } catch (error) {
         console.error("Error fetching latest AI art:", error);
       }
-    }
+    };
+    
 
     const newArtUploaded = (): void => {
       const newState = !imageState;
