@@ -22,6 +22,8 @@ export default function AiImagePreview({
   artTitle,
   runToastSuccess,
 }: AiImagePreviewProps) {
+  const [isFocusedIndex0, setIsFocusedIndex0] = useState(false);
+  const [isFocusedIndex1, setIsFocusedIndex1] = useState(false);
   const handleSubmitArt = async () => {
     // The data object to be sent in the POST request
     const newArtData = {
@@ -59,21 +61,26 @@ export default function AiImagePreview({
   return (
     // <div  className=''>
     <div
-      className='flex flex-col relative pt-[20dvh] left-[2dvw] items-center'
+      className='flex flex-col relative pt-[15dvh] left-[2dvw] items-center'
       aria-describedby={undefined}
     >
       <h1 className='text-5xl pb-[10dvh] albert-sans-regular'>
         YOUR ART IS GENERATED
       </h1>
       {artTitle && (
-        <div className=' flex flex-col justify-center items-center gap-8'>
+        <div className='flex flex-col items-center justify-center gap-8 '>
           <p className='text-xl '>Title of the artwork</p>
-          <h2 className='text-5xl aboreto-regular text-center'>
+          <h2 className='text-5xl text-center aboreto-regular'>
             “{artTitle.toLocaleUpperCase()}”
           </h2>
+          <div>
+          <p className='text-xl text-center'>in the style of</p>
+          <h3 className='text-[28px] text-center aboreto-regular'>{artStyle}</h3>
+          </div>
+          
         </div>
       )}
-      <div className='pt-[15dvh]'>
+      <div className='pt-[10dvh]'>
         <div className='w-[30dvw] bg-[#D4BD91] flex flex-col items-center p-4 border border-[#44361C] rounded-[12px]'>
           <div className='mb-[3dvh]'>
             <p className='aboreto-regular text-[24px] mb-[2dvh]'>
@@ -84,22 +91,31 @@ export default function AiImagePreview({
               gallery is open to the public for 12 hours.
             </p>
           </div>
-          <div className='flex gap-12 flex-row-reverse'>
+          <div className='flex flex-row-reverse gap-12'>
             <button
               type='submit'
-              className='selectedTabIndex rounded w-[12dvw] flex items-center justify-between bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] text-[20px] px-[12px] py-[8px]'
+              onFocus={() => setIsFocusedIndex0(true)}
+              onBlur={() => setIsFocusedIndex0(false)}
+              className={`selectedTabIndex albert-sans-regular rounded w-[12dvw] flex items-center justify-between  text-[20px] px-[12px] py-[8px] 
+                ${isFocusedIndex0 ? "bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] animate-pulse-tab" : "text-[#3B6246] underline border border-[#D4BD91]"}`}
               onClick={() => handleSubmitArt()}
             >
               <span>SEND TO GALLERY</span>
-              <img src='assets/icons/shareArrow.png' alt='' className='' />{" "}
+              {isFocusedIndex0 ? <img src='assets/icons/shareArrow.png' alt='' className='' /> : <img src='assets/icons/shareArrowGreen.png' alt='' className='' />}
+              
             </button>
             <button
               tabIndex={1}
               type='button'
-              className='selectedTabIndex flex items-center w-[10dvw] justify-around text-[20px] text-[#7A0B0B] underline rounded'
-              onClick={() => handleImageData(null)}
+              onFocus={() => setIsFocusedIndex1(true)}
+              onBlur={() => setIsFocusedIndex1(false)}
+              className={`selectedTabIndex albert-sans-regular flex items-center w-[10dvw] justify-around text-[20px] text-[#7A0B0B] rounded
+                ${isFocusedIndex1 ? "bg-[#7A0B0B] text-[#F0E8D9] border border-[#6c1b1b] animate-pulse-tab" : "border border-[#D4BD91] underline"}
+                `}
+              onClick={() => {handleImageData(null); setIsFocusedIndex1(false)}}
             >
-              <img src='assets/icons/arrow_left.png' alt='' className='' />{" "}
+              {isFocusedIndex1 ? <img src='assets/icons/arrow-left-white.png' alt='' className='' /> : <img src='assets/icons/arrow-left-red.png' alt='' className='' />}
+              
               <span>BACK TO START</span>
             </button>
           </div>

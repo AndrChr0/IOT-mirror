@@ -179,4 +179,55 @@
   font-weight: 400;
   font-style: normal;
 }
+
+.focus-card-1:focus,
+.focus-card-1:focus-visible {
+  background-color: #D95B5B;
+  outline: 0;
+}
+.focus-card-2:focus,
+.focus-card-2:focus-visible {
+  background-color: #DF8E53;
+  outline: 0;
+}
+.focus-card-3:focus,
+.focus-card-3:focus-visible {
+  background-color: #F3D758;
+  outline: 0;
+}
+
+.focus-card-4:focus,
+.focus-card-4:focus-visible {
+  background-color: #60AB49;
+  outline: 0;
+}
+
+.focus-card-5:focus,
+.focus-card-5:focus-visible {
+  background-color: #7D7FB2;
+  outline: 0;
+}
+
+.focus-card-6:focus,
+.focus-card-6:focus-visible {
+  background-color: #D255DD;
+  outline: 0;
+}
+
+@keyframes pulse-tab {
+  0%,
+  100% {
+    transform: scale(1);
+
+  }
+  50% {
+    transform: scale(0.95);
+
+  }
+}
+
+/* .animate-pulse-tab {
+  animation: pulse-tab 1.5s infinite ease-in-out;
+} */
+
 /* *{outline: 1px solid red;} */
