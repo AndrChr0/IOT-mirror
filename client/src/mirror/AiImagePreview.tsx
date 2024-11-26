@@ -21,16 +21,8 @@ export default function AiImagePreview({
   const { newArtUploaded } = useImage();
   const [isFocusedIndex0, setIsFocusedIndex0] = useState(false);
   const [isFocusedIndex1, setIsFocusedIndex1] = useState(false);
-  const socketRef = useRef<Socket | null>(null);
 
-  useEffect(() => {
-    socketRef.current = io("http://localhost:3000/gallery");
-
-    return () => {
-      socketRef.current?.disconnect();
-      socketRef.current = null;
-    }
-  }, []);
+  const socket = io("http://localhost:3000/gallery")
 
   const handleSubmitArt = async () => {
     // The data object to be sent in the POST request
@@ -59,9 +51,7 @@ export default function AiImagePreview({
         runToastSuccess();
 
         // Notify the WebSocket about the new image
-        if (socketRef.current) {
-          socketRef.current.emit("new-image", data);  // Emit new image data to the WebSocket server
-        }
+        socket.emit("new-image");  // Emit new image data to the WebSocket server
 
         // Call the context function that initiates the process of adding a new picture to the gallery
         newArtUploaded();

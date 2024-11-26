@@ -1,5 +1,5 @@
 import { useEffect, useState, createContext, useContext, useRef } from "react";
-import { io, Socket } from "socket.io-client";
+// import { io, Socket } from "socket.io-client";
 
 interface ImageProviderProps {
     children: React.ReactNode;
@@ -15,7 +15,7 @@ interface DBImage {
 
 interface ImageContextType {
     imageState: boolean;
-    // setImageState: React.Dispatch<React.SetStateAction<boolean>>;
+    setImageState: React.Dispatch<React.SetStateAction<boolean>>;
     DBImages: DBImage[];
     currentIndex: number;
     setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -40,7 +40,8 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
     const [DBImages, setDBImages] = useState<DBImage[]>([]);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
-    const socketRef = useRef<Socket | null>(null);
+    
+    // const socket = io("http://localhost:3000/gallery")
 
     // Only queries DB once when the gallery wall is opened
     useEffect(() => {
@@ -77,17 +78,9 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
         const newImage = await response.json();
     
         // Append the new image to the existing gallery
-        setDBImages((prevDBImages) => {
-          const exists = prevDBImages.some((img) => img._id === newImage._id);
-          if (exists) return prevDBImages;
-        
-          const insertIndex = (currentIndex + 2) % (prevDBImages.length + 1);
-
-          const updatedDBImages = [...prevDBImages];
-          updatedDBImages.splice(insertIndex, 0, newImage); // Insert at next index
-
-          return updatedDBImages;
-        });
+        const newList = [...DBImages];
+        newList.splice(currentIndex+2, 0, newImage); // Insert the image where we want it in the gallery
+        setDBImages(newList);
         
         
     
@@ -96,21 +89,11 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
       }
     };
     
-    useEffect(() => {
-      socketRef.current = io("http://localhost:3000/gallery");
+      // socket.on("gallery-update", () => {
+      //     console.log("Gallery updated");
+      //     fetchLatestArt();
+      //   });
 
-      if (socketRef.current) {
-        socketRef.current.on("new-image", () => {
-          fetchLatestArt();
-        });
-      }
-
-      return () => {
-        if (socketRef.current) {
-          socketRef.current.off("new-image");
-        }
-      }
-    }, [fetchLatestArt]);
 
     const newArtUploaded = (): void => {
       const newState = !imageState;
@@ -121,7 +104,7 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
     // context value
     const value: ImageContextType = {
         imageState,
-        // setImageState,
+        setImageState,
         DBImages,
         currentIndex,
         setCurrentIndex,

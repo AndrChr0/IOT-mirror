@@ -143,9 +143,9 @@ const galleryNamespace = io.of("/gallery");
 galleryNamespace.on("connection", (socket) => {
   console.log("A gallery user connected:", socket.id);
 
-  socket.on("new-image", (imageData) => {
-    console.log("New image received for the gallery:", imageData);
-    galleryNamespace.emit("gallery-update", imageData); // Notify all gallery clients
+  socket.on("new-image", () => {
+    console.log("New image received for the gallery:");
+    galleryNamespace.emit("gallery-update"); // Notify all gallery clients
   });
 
   socket.on("disconnect", () => {
