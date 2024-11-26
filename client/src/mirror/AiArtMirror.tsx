@@ -249,7 +249,7 @@ export default function AiArtMirror() {
   };
 
   const startCountdown = () => {
-    setCountdown(3);
+    setCountdown(5);
     setShowCapturePhotoButtons(false);
     const interval = setInterval(() => {
       setCountdown((prevCountdown) => {

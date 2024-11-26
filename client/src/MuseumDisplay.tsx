@@ -6,7 +6,6 @@ import { io, Socket } from "socket.io-client";
 export default function MuseumDisplay() {
   const { imageState, DBImages, currentIndex, setCurrentIndex, fetchLatestArt, loading, setImageState } = useImage();
   const hasMounted = useRef(false);
-  const socket = io("http://localhost:3000/gallery")
 
   // Update currentIndex every 15 seconds to show next image
   useEffect(() => {
@@ -31,10 +30,19 @@ export default function MuseumDisplay() {
   //     hasMounted.current = true;
   //   }
   // }, []);
-  socket.on("gallery-update", () => {
-    console.log("Gallery updated");
-    setImageState(!imageState);
-  });
+  useEffect(() => {
+    const socket = io("http://localhost:3000/gallery");
+
+    socket.on("gallery-update", () => {
+      console.log("Gallery updated");
+      setImageState((prevState) => !prevState);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+  
 
   // Call function to add newest image to the gallery wall. When uploading a new image, call the setImageState context function to update the gallery
   useEffect(() => {

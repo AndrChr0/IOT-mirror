@@ -84,13 +84,17 @@ const SelectStyle = ({
             {!selectedStyle && (
               <>
                 <div className='card-container h-full pl-[120px] pr-[120px]'>
-                  <div className='flex flex-col items-center gap-[80px] pt-[60px] pb-[74px]'>
-                    <span className='albert-sans-regular'>
+                  <div className='flex flex-col items-center gap-[80px] pt-[80px] pb-[74px]'>
+                    <span className='albert-sans-regular text-[20px]'>
                       Choose an art style and watch AI transform you into art.{" "}
                     </span>
                     <span className='albert-sans-regular text-5xl text-center flex flex-col gap-[20px]'>
                       <span>SELECT</span> <span>ART STYLE</span>
                     </span>
+                    <div className="flex items-center gap-2 mt-[-45px]">
+                      <img src="assets/icons/remote.png" alt="" />
+                      <p className="akatab-regular text-[20px]">use the controller to navigate</p>
+                    </div>
                   </div>
                   <div className='w-full justify-around gap-[40px] grid grid-cols-2 grid-rows-3'>
                     {styles.map((style) => (
@@ -181,24 +185,7 @@ const SelectStyle = ({
                   </div>
 
                   <div className='selectedStyle-buttons '>
-                    <button
-                      tabIndex={1}
-                      onClick={onCapturePhoto}
-                      onFocus={() => setIsFocusedIndex0(true)}
-                      onBlur={() => setIsFocusedIndex0(false)}
-                      className={`rounded w-full flex items-center justify-between px-[12px] py-[8px] border text-[20px] albert-sans-regular ${
-                        isFocusedIndex0
-                          ? "selectedTabIndex bg-[#3B6246] border-[#0F281C] text-[#F0E8D9]"
-                          : "selectedTabIndex bg-[#F0E8D9] text-[#0F281C] hover:bg-[#3B6246] hover:text-[#F0E8D9] underline"
-                      }`}
-                    >
-                      TAKE PICTURE
-                      {isFocusedIndex0 ? (
-                        <img src='assets/icons/camera.png' alt='' />
-                      ) : (
-                        <img src='assets/icons/camera-green.png' alt='' />
-                      )}
-                    </button>
+                    
                     <button
                       tabIndex={1}
                       onClick={() => {
@@ -225,6 +212,24 @@ const SelectStyle = ({
                       >
                         GO BACK
                       </span>
+                    </button>
+                    <button
+                      tabIndex={1}
+                      onClick={onCapturePhoto}
+                      onFocus={() => setIsFocusedIndex0(true)}
+                      onBlur={() => setIsFocusedIndex0(false)}
+                      className={`rounded w-full flex items-center justify-between px-[12px] py-[8px] border text-[20px] albert-sans-regular ${
+                        isFocusedIndex0
+                          ? "selectedTabIndex bg-[#3B6246] border-[#0F281C] text-[#F0E8D9]"
+                          : "selectedTabIndex bg-[#F0E8D9] text-[#0F281C] hover:bg-[#3B6246] hover:text-[#F0E8D9] underline"
+                      }`}
+                    >
+                      TAKE PICTURE
+                      {isFocusedIndex0 ? (
+                        <img src='assets/icons/camera.png' alt='' />
+                      ) : (
+                        <img src='assets/icons/camera-green.png' alt='' />
+                      )}
                     </button>
                   </div>
                   <div>
@@ -294,11 +299,11 @@ const SelectStyle = ({
                       GENERATING YOUR ART
                     </p>
                     <p className='text-center akatab-regular'>
-                      Just a moment, the Ai is generating your image..
+                      Just a moment, the Ai is generating your image
                     </p>
                   </div>
 
-                  <div className='relative mt-[-100px] w-[501px] h-[107px] border-2 border-black'>
+                  <div className='relative mt-[-100px] w-[618px] h-[127px] ml-[20px] border-2 border-black'>
                     <div className='absolute p-2 pl-5 ml-[-2px] mt-[-21px] bg-[#F0E8D9] font-bold'>
                       Did you know?
                     </div>
@@ -309,7 +314,7 @@ const SelectStyle = ({
                         alt=''
                       />
                     </div>
-                    <div className='px-8 py-5'>
+                    <div className='px-8 py-5 text-[20px]'>
                       {" "}
                       <Processing />{" "}
                     </div>

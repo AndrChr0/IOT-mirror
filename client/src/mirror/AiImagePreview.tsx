@@ -21,7 +21,6 @@ export default function AiImagePreview({
   const { newArtUploaded } = useImage();
   const [isFocusedIndex0, setIsFocusedIndex0] = useState(false);
   const [isFocusedIndex1, setIsFocusedIndex1] = useState(false);
-
   const socket = io("http://localhost:3000/gallery")
 
   const handleSubmitArt = async () => {
@@ -51,7 +50,7 @@ export default function AiImagePreview({
         runToastSuccess();
 
         // Notify the WebSocket about the new image
-        socket.emit("new-image");  // Emit new image data to the WebSocket server
+          socket.emit("new-image");  // Emit new image data to the WebSocket server
 
         // Call the context function that initiates the process of adding a new picture to the gallery
         newArtUploaded();
@@ -98,31 +97,8 @@ export default function AiImagePreview({
               gallery is open to the public for 12 hours.
             </p>
           </div>
-          <div className='flex flex-row-reverse gap-12'>
-            <button
-              type='submit'
-              onFocus={() => setIsFocusedIndex0(true)}
-              onBlur={() => setIsFocusedIndex0(false)}
-              className={`selectedTabIndex albert-sans-regular rounded w-[12dvw] flex items-center justify-between  text-[20px] px-[12px] py-[8px] 
-                ${
-                  isFocusedIndex0
-                    ? "bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] animate-pulse-tab"
-                    : "text-[#3B6246] underline border border-[#D4BD91]"
-                }`}
-              onClick={() => handleSubmitArt()}
-            >
-              <span>SEND TO GALLERY</span>
-              {isFocusedIndex0 ? (
-                <img src='assets/icons/shareArrow.png' alt='' className='' />
-              ) : (
-                <img
-                  src='assets/icons/shareArrowGreen.png'
-                  alt=''
-                  className=''
-                />
-              )}
-            </button>
-            <button
+          <div className='flex gap-12'>
+          <button
               tabIndex={1}
               type='button'
               onFocus={() => setIsFocusedIndex1(true)}
@@ -155,6 +131,30 @@ export default function AiImagePreview({
 
               <span>BACK TO START</span>
             </button>
+            <button
+              type='submit'
+              onFocus={() => setIsFocusedIndex0(true)}
+              onBlur={() => setIsFocusedIndex0(false)}
+              className={`selectedTabIndex albert-sans-regular rounded w-[12dvw] flex items-center justify-between  text-[20px] px-[12px] py-[8px] 
+                ${
+                  isFocusedIndex0
+                    ? "bg-[#3B6246] border border-[#0F281C] text-[#F0E8D9] animate-pulse-tab"
+                    : "text-[#3B6246] underline border border-[#D4BD91]"
+                }`}
+              onClick={() => handleSubmitArt()}
+            >
+              <span>SEND TO GALLERY</span>
+              {isFocusedIndex0 ? (
+                <img src='assets/icons/shareArrow.png' alt='' className='' />
+              ) : (
+                <img
+                  src='assets/icons/shareArrowGreen.png'
+                  alt=''
+                  className=''
+                />
+              )}
+            </button>
+           
           </div>
         </div>
       </div>
