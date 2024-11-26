@@ -225,6 +225,22 @@
   }
 }
 
+.spinner {
+  width: 116px;
+  height: 116px;
+  border-radius: 50%;
+  border: 9px solid;
+  border-color: #dbdcef;
+  border-right-color: #3eafff;
+  animation: spinner-d3wgkg 1s infinite linear;
+}
+
+@keyframes spinner-d3wgkg {
+  to {
+     transform: rotate(1turn);
+  }
+}
+
 /* .animate-pulse-tab {
   animation: pulse-tab 1.5s infinite ease-in-out;
 } */

@@ -451,11 +451,12 @@ export default function AiArtMirror() {
                 src={imageData || undefined}
               />
               <div className='absolute top-0 w-full h-[90%] flex justify-center items-center  mt-[40px] mr-[40px] mb-[40px]'>
-                <img
+                {/* <img
                   className='w-auto'
                   src='https://discuss.wxpython.org/uploads/default/original/2X/6/6d0ec30d8b8f77ab999f765edd8866e8a97d59a3.gif'
                   alt=''
-                />
+                /> */}
+                <div className="spinner"></div>
               </div>
             </>
           ) : !recievedImg && !showPreview ? (
