@@ -71,6 +71,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* gap: 3dvh; */
   justify-content: space-between;
   /* position: absolute;
   top: 0; */
@@ -87,7 +88,7 @@
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
   }
 }
 
@@ -182,7 +183,7 @@
 
 .focus-card-1:focus,
 .focus-card-1:focus-visible {
-  background-color: #D95B5B;
+  background-color: #E28585;
   outline: 0;
 }
 .focus-card-2:focus,
@@ -192,25 +193,25 @@
 }
 .focus-card-3:focus,
 .focus-card-3:focus-visible {
-  background-color: #F3D758;
+  background-color: #F2D759;
   outline: 0;
 }
 
 .focus-card-4:focus,
 .focus-card-4:focus-visible {
-  background-color: #60AB49;
+  background-color: #7DBF68;
   outline: 0;
 }
 
 .focus-card-5:focus,
 .focus-card-5:focus-visible {
-  background-color: #7D7FB2;
+  background-color: #9D9FC5;
   outline: 0;
 }
 
 .focus-card-6:focus,
 .focus-card-6:focus-visible {
-  background-color: #D255DD;
+  background-color: #D8A7E4;
   outline: 0;
 }
 
@@ -218,11 +219,9 @@
   0%,
   100% {
     transform: scale(1);
-
   }
   50% {
     transform: scale(0.95);
-
   }
 }
 

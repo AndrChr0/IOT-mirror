@@ -17,7 +17,7 @@ export default function MuseumDisplay() {
       );
       console.log("Current index: ", currentIndex);
     }, 5 * 1000);
-  
+
     return () => clearInterval(displayInterval);
   }, [DBImages]); // Ensure this updates when DBImages changes
   
@@ -38,7 +38,7 @@ export default function MuseumDisplay() {
 
   // Call function to add newest image to the gallery wall. When uploading a new image, call the setImageState context function to update the gallery
   useEffect(() => {
-      fetchLatestArt();
+    fetchLatestArt();
   }, [imageState]);
 
   if (loading) {
@@ -47,8 +47,10 @@ export default function MuseumDisplay() {
 
   // Find the three images currently displayed
   const currentArt = DBImages[currentIndex];
-  const leftImage = DBImages[currentIndex == 0 ? DBImages.length-1 : currentIndex-1];
-  const rightImage = DBImages[currentIndex == DBImages.length-1 ? 0 : currentIndex+1];
+  const leftImage =
+    DBImages[currentIndex == 0 ? DBImages.length - 1 : currentIndex - 1];
+  const rightImage =
+    DBImages[currentIndex == DBImages.length - 1 ? 0 : currentIndex + 1];
 
   return (
     <div>
