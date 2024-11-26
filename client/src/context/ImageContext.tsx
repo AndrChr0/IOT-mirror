@@ -1,4 +1,5 @@
-import { useEffect, useState, createContext, useContext } from "react";
+import { useEffect, useState, createContext, useContext, useRef } from "react";
+import { io, Socket } from "socket.io-client";
 
 interface ImageProviderProps {
     children: React.ReactNode;
@@ -39,6 +40,7 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
     const [DBImages, setDBImages] = useState<DBImage[]>([]);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
+    const socketRef = useRef<Socket | null>(null);
 
     // Only queries DB once when the gallery wall is opened
     useEffect(() => {
@@ -94,6 +96,21 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
       }
     };
     
+    useEffect(() => {
+      socketRef.current = io("http://localhost:3000/gallery");
+
+      if (socketRef.current) {
+        socketRef.current.on("new-image", () => {
+          fetchLatestArt();
+        });
+      }
+
+      return () => {
+        if (socketRef.current) {
+          socketRef.current.off("new-image");
+        }
+      }
+    }, [fetchLatestArt]);
 
     const newArtUploaded = (): void => {
       const newState = !imageState;

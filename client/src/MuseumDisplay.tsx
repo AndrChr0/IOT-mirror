@@ -1,4 +1,4 @@
-import { useEffect, } from "react";
+import { useEffect } from "react";
 import GalleryMainCanvas from "./GalleryMainCanvas";
 import { useImage } from "./context/ImageContext";
 
@@ -22,20 +22,6 @@ export default function MuseumDisplay() {
   useEffect(() => {
       fetchLatestArt();
   }, [imageState]);
-
-  useEffect(() => {
-    const handleStorageEvent = (event: StorageEvent) => {
-      if (event.key === "imageStateUpdated") {
-        fetchLatestArt(); // Refetch art when the event occurs
-      }
-    };
-  
-    window.addEventListener("storage", handleStorageEvent);
-  
-    return () => {
-      window.removeEventListener("storage", handleStorageEvent);
-    };
-  }, []);
 
   if (loading) {
     return <p>Loading AI art...</p>;
