@@ -15,12 +15,12 @@ export default function GalleryMainCanvas({
   artTitle,
 }: GalleryMainCanvasProps) {
   return (
-    <div className='bg-neutral-200 h-screen w-screen fixed'>
+    <div className='fixed w-screen h-screen bg-[#F0E8D9]'>
       <div className='flex items-center justify-between w-[98%] mx-auto my-0 pt-3'>
         <img src='./logo-new.png' alt='smArt gallery logo' className='h-16' />
-        <p>An interactive art exibition</p>
+        <p>An Interactive Art Exhibition</p>
       </div>
-      <div className='flex justify-between items-center pt-16'>
+      <div className='flex items-center justify-between pt-16'>
         <img
           src={leftGeneratedArt}
           alt='AI generated image'
@@ -32,7 +32,7 @@ export default function GalleryMainCanvas({
             alt='AI generated image'
             className='max-w-4xl max-h-[75vh] object-contain'
           />
-          <div className='absolute bottom-0 right-0 translate-x-[16dvw] w-[15dvw]'>
+          <div className='pt-2'>
             <h2 className='text-base'>{artTitle}</h2>
             <p className='text-xs'>{generatedArtStyle}</p>
             <p className='text-xs'>{dateGenerated}</p>
@@ -46,7 +46,7 @@ export default function GalleryMainCanvas({
         />
       </div>
 
-      <div className='flex flex-col justify-center text-center pt-[4.5dvh]'>
+      <div className='flex flex-col justify-center text-center pt-[.5dvh]'>
         <p className='text-lg'>Want to create your own?</p>
         <p className='text-lg'>Go find our smArt installation!</p>
       </div>
