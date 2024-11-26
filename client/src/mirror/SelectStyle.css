@@ -88,7 +88,7 @@
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
   }
 }
 
@@ -183,35 +183,35 @@
 
 .focus-card-1:focus,
 .focus-card-1:focus-visible {
-  background-color: #d95b5b;
+  background-color: #E28585;
   outline: 0;
 }
 .focus-card-2:focus,
 .focus-card-2:focus-visible {
-  background-color: #df8e53;
+  background-color: #DF8E53;
   outline: 0;
 }
 .focus-card-3:focus,
 .focus-card-3:focus-visible {
-  background-color: #f3d758;
+  background-color: #F2D759;
   outline: 0;
 }
 
 .focus-card-4:focus,
 .focus-card-4:focus-visible {
-  background-color: #60ab49;
+  background-color: #7DBF68;
   outline: 0;
 }
 
 .focus-card-5:focus,
 .focus-card-5:focus-visible {
-  background-color: #7d7fb2;
+  background-color: #9D9FC5;
   outline: 0;
 }
 
 .focus-card-6:focus,
 .focus-card-6:focus-visible {
-  background-color: #d255dd;
+  background-color: #D8A7E4;
   outline: 0;
 }
 

@@ -64,7 +64,7 @@ export interface Style {
         "Known for its dramatic lighting, intense emotions, and ornate details, Baroque art is characterized by grandeur, movement, and opulence.",
       style_prompt: "A dramatic and ornate Baroque-style painting with dynamic movement and intense contrasts of light and shadow (chiaroscuro). The scene is full of action, with rich, deep colors and strong emotional expressions on the characters’ faces. The composition is busy and dramatic, featuring religious or historical scenes with detailed costumes, flowing drapery, and luxurious textures. The use of lighting emphasizes the theatrical mood and depth.",
       characteristics: ["Dramatic lighting and intense contrasts.","Movement and emotional expression.", "Ornate details and elaborate compositions."],
-      famous_paintings:["assets/loadingArt/bar-1.png", "Gypsy Girl (1628-30)", "Frans Hals", "assets/loadingArt/bar-2.png", "The Nigh Watch (1642)", "Rembrandt van Rijn", "assets/loadingArt/bar-3.png", "Milkmaid (1660)", "Johannes Vermeer" ],
+      famous_paintings:["assets/loadingArt/bar-1.png", "Gypsy Girl (1628-30)", "Frans Hals", "assets/loadingArt/bar-2.png", "The Night Watch (1642)", "Rembrandt van Rijn", "assets/loadingArt/bar-3.png", "Milkmaid (1660)", "Johannes Vermeer" ],
       ai_examples: ["assets/AIexamples/bar1.png", "assets/AIexamples/bar2.png", "assets/AIexamples/bar3.png"]  
     },
     {
