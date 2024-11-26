@@ -60,7 +60,7 @@
 }
 
 .animate-pulse-icon {
-  animation: pulse-icon 1.5s infinite ease-in-out;
+  /* animation: pulse-icon 2s infinite ease-in-out; */
 }
 
 .overlay-opacity {
@@ -228,5 +228,5 @@
 /* .animate-pulse-tab {
   animation: pulse-tab 1.5s infinite ease-in-out;
 } */
-
+ 
 /* *{outline: 1px solid red;} */

@@ -298,13 +298,13 @@ const SelectStyle = ({
                     <p className='text-center text-[48px] albert-sans-regular'>
                       GENERATING YOUR ART
                     </p>
-                    <p className='text-center akatab-regular'>
+                    <p className='text-center text-[24px] akatab-regular'>
                       Just a moment, the Ai is generating your image
                     </p>
                   </div>
 
-                  <div className='relative mt-[-100px] w-[618px] h-[127px] ml-[20px] border-2 border-black'>
-                    <div className='absolute p-2 pl-5 ml-[-2px] mt-[-21px] bg-[#F0E8D9] font-bold'>
+                  <div className='relative mt-[-100px] w-[618px] h-[157px] border-2 border-black'>
+                    <div className='absolute p-2 pl-5 ml-[-2px] mt-[-21px] bg-[#F0E8D9] font-bold text-[22px]'>
                       Did you know?
                     </div>
                     <div className='absolute w-[50px] h-[62px] ml-[-40px] mt-[-35px]'>
@@ -314,7 +314,7 @@ const SelectStyle = ({
                         alt=''
                       />
                     </div>
-                    <div className='px-8 py-5 text-[20px]'>
+                    <div className='h-full w-full flex items-center text-[20px] px-8'>
                       {" "}
                       <Processing />{" "}
                     </div>

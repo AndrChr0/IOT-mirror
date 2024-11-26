@@ -47,7 +47,7 @@ export default function Processing() {
     //   />
     // </div>
 
-    <span className="w-full">
+    <span>
       {currentMessage}
     </span>
 
