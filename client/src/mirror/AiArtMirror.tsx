@@ -9,7 +9,7 @@ import io from "socket.io-client";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const socket = io("http://10.22.218.178:3000");
+const socket = io("http://10.22.218.178:3000/controller");
 
 export default function AiArtMirror() {
   const videoRef = useRef<HTMLVideoElement>(null);

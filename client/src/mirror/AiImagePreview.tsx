@@ -1,12 +1,6 @@
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogFooter,
-//   DialogTitle,
-// } from "@/components/ui/dialog";
-// import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useImage } from "../context/ImageContext";
+import { io, Socket } from "socket.io-client";
 
 interface AiImagePreviewProps {
   artStyle: string;
@@ -27,6 +21,9 @@ export default function AiImagePreview({
   const { newArtUploaded } = useImage();
   const [isFocusedIndex0, setIsFocusedIndex0] = useState(false);
   const [isFocusedIndex1, setIsFocusedIndex1] = useState(false);
+
+  const socket = io("http://localhost:3000/gallery")
+
   const handleSubmitArt = async () => {
     // The data object to be sent in the POST request
     const newArtData = {
@@ -52,6 +49,9 @@ export default function AiImagePreview({
         console.log(data); // The saved AI art object returned from the server
         handleImageData(null);
         runToastSuccess();
+
+        // Notify the WebSocket about the new image
+        socket.emit("new-image");  // Emit new image data to the WebSocket server
 
         // Call the context function that initiates the process of adding a new picture to the gallery
         newArtUploaded();

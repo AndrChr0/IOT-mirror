@@ -1,4 +1,5 @@
-import { useEffect, useState, createContext, useContext } from "react";
+import { useEffect, useState, createContext, useContext, useRef } from "react";
+// import { io, Socket } from "socket.io-client";
 
 interface ImageProviderProps {
     children: React.ReactNode;
@@ -14,7 +15,7 @@ interface DBImage {
 
 interface ImageContextType {
     imageState: boolean;
-    // setImageState: React.Dispatch<React.SetStateAction<boolean>>;
+    setImageState: React.Dispatch<React.SetStateAction<boolean>>;
     DBImages: DBImage[];
     currentIndex: number;
     setCurrentIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -39,6 +40,8 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
     const [DBImages, setDBImages] = useState<DBImage[]>([]);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(true);
+    
+    // const socket = io("http://localhost:3000/gallery")
 
     // Only queries DB once when the gallery wall is opened
     useEffect(() => {
@@ -72,26 +75,36 @@ export const ImageProvider: React.FC<ImageProviderProps> = ({ children }) => {
             "Content-Type": "application/json",
           },
         });
-        const data = await response.json();
-
-        // Update the DBImages state with the new image
+        const newImage = await response.json();
+    
+        // Append the new image to the existing gallery
         const newList = [...DBImages];
-        newList.splice(currentIndex+2, 0, data); // Insert the image where we want it in the gallery
+        newList.splice(currentIndex+2, 0, newImage); // Insert the image where we want it in the gallery
         setDBImages(newList);
-
+        
+        
+    
       } catch (error) {
         console.error("Error fetching latest AI art:", error);
       }
-    }
+    };
+    
+      // socket.on("gallery-update", () => {
+      //     console.log("Gallery updated");
+      //     fetchLatestArt();
+      //   });
+
 
     const newArtUploaded = (): void => {
-      setImageState(!imageState);
-    }
+      const newState = !imageState;
+      setImageState(newState);
+      localStorage.setItem("imageStateUpdated", JSON.stringify(newState));
+    };
 
     // context value
     const value: ImageContextType = {
         imageState,
-        // setImageState,
+        setImageState,
         DBImages,
         currentIndex,
         setCurrentIndex,
