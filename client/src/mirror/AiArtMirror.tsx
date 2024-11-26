@@ -279,6 +279,7 @@ export default function AiArtMirror() {
   // SKAL BRUKES TIL Å SENDE IMG TIL BACKEND
   const handleConfirmScreenshot = async () => {
     setIsProcessing(true);
+    runToastProcessing();
 
     if (imageData) {
       try {
@@ -372,7 +373,7 @@ export default function AiArtMirror() {
 
   const runToastSuccess = () =>
     toast.success("AI image sent to Gallery!", {
-      position: "top-center",
+      position: "bottom-center",
       autoClose: 5000,
       hideProgressBar: false,
       closeOnClick: true,
@@ -383,10 +384,23 @@ export default function AiArtMirror() {
       // transition: Bounce,
     });
 
+    const runToastProcessing = () =>
+      toast.info("Photo captured! This will not be saved.", {
+        position: "bottom-center",
+        autoClose: 10000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        // transition: Bounce,
+      });
+
   return (
     <>
       <ToastContainer
-        position='top-center'
+      className={"ml-[400px]"}
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -458,7 +472,7 @@ export default function AiArtMirror() {
             <img
               src={recievedImg || ""}
               alt='AI generated image'
-              className='object-cover h-[100dvh] pt-[40px] pl-[100px] pb-[40px]'
+              className='object-cover h-full p-[40px]'
             />
           )}
 
