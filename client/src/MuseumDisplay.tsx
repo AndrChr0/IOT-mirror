@@ -4,7 +4,15 @@ import { useImage } from "./context/ImageContext";
 import { io, Socket } from "socket.io-client";
 
 export default function MuseumDisplay() {
-  const { imageState, DBImages, currentIndex, setCurrentIndex, fetchLatestArt, loading, setImageState } = useImage();
+  const {
+    imageState,
+    DBImages,
+    currentIndex,
+    setCurrentIndex,
+    fetchLatestArt,
+    loading,
+    setImageState,
+  } = useImage();
   const hasMounted = useRef(false);
 
   // Update currentIndex every 15 seconds to show next image
@@ -19,7 +27,7 @@ export default function MuseumDisplay() {
 
     return () => clearInterval(displayInterval);
   }, [DBImages]); // Ensure this updates when DBImages changes
-  
+
   // useEffect(() => {
   //   if (hasMounted.current) {
   //     const displayInterval = setInterval(() => {
@@ -42,7 +50,6 @@ export default function MuseumDisplay() {
       socket.disconnect();
     };
   }, []);
-  
 
   // Call function to add newest image to the gallery wall. When uploading a new image, call the setImageState context function to update the gallery
   useEffect(() => {
@@ -70,7 +77,9 @@ export default function MuseumDisplay() {
           leftGeneratedArt={leftImage.url}
           rightGeneratedArt={rightImage.url}
           generatedArtStyle={currentArt.art_style}
-          dateGenerated={new Date(currentArt.generation_date)
+          dateGenerated={new Date(
+            new Date(currentArt.generation_date).getTime() + 60 * 60 * 1000
+          )
             .toISOString()
             .slice(0, 16)
             .replace("T", " ")

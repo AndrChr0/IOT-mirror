@@ -59,10 +59,6 @@
   }
 }
 
-.animate-pulse-icon {
-  /* animation: pulse-icon 2s infinite ease-in-out; */
-}
-
 .overlay-opacity {
   filter: opacity(0.7) brightness(0.5);
 }
@@ -183,35 +179,35 @@
 
 .focus-card-1:focus,
 .focus-card-1:focus-visible {
-  background-color: #E28585;
+  background-color: #e28585;
   outline: 0;
 }
 .focus-card-2:focus,
 .focus-card-2:focus-visible {
-  background-color: #DF8E53;
+  background-color: #df8e53;
   outline: 0;
 }
 .focus-card-3:focus,
 .focus-card-3:focus-visible {
-  background-color: #F2D759;
+  background-color: #f2d759;
   outline: 0;
 }
 
 .focus-card-4:focus,
 .focus-card-4:focus-visible {
-  background-color: #7DBF68;
+  background-color: #7dbf68;
   outline: 0;
 }
 
 .focus-card-5:focus,
 .focus-card-5:focus-visible {
-  background-color: #9D9FC5;
+  background-color: #9d9fc5;
   outline: 0;
 }
 
 .focus-card-6:focus,
 .focus-card-6:focus-visible {
-  background-color: #D8A7E4;
+  background-color: #d8a7e4;
   outline: 0;
 }
 
@@ -237,12 +233,12 @@
 
 @keyframes spinner-d3wgkg {
   to {
-     transform: rotate(1turn);
+    transform: rotate(1turn);
   }
 }
 
 /* .animate-pulse-tab {
   animation: pulse-tab 1.5s infinite ease-in-out;
 } */
- 
+
 /* *{outline: 1px solid red;} */
