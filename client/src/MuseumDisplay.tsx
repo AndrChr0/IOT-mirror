@@ -23,7 +23,7 @@ export default function MuseumDisplay() {
         DBImages.length ? (prevIndex + 1) % DBImages.length : 0
       );
       console.log("Current index: ", currentIndex);
-    }, 5 * 1000);
+    }, 15 * 1000);
 
     return () => clearInterval(displayInterval);
   }, [DBImages]); // Ensure this updates when DBImages changes
